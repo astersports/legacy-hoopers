@@ -186,12 +186,14 @@ export default function Academy() {
           <p className="text-white/50 text-sm max-w-md mx-auto mb-8">
             If this resonates with your family's values, we'd love to have you.
           </p>
-          <Link
-            href="/register"
+          <a
+            href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 bg-cobalt text-white font-display font-800 text-sm uppercase tracking-wider rounded-lg shadow-xl shadow-cobalt/30 hover:bg-cobalt-light transition-all duration-200 hover:-translate-y-0.5"
           >
             Register Now <ChevronRight className="w-4 h-4" />
-          </Link>
+          </a>
         </div>
       </section>
     </div>

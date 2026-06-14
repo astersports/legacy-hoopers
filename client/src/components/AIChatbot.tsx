@@ -15,7 +15,7 @@ interface Message {
 
 // Knowledge base for the AI assistant
 const KNOWLEDGE_BASE = {
-  registration: "Spring 2026 season is currently underway with 5 teams competing. For registration inquiries for upcoming seasons, visit the Aster Sports app or email info@legacyhoopers.org. Roster spots are limited to 10 players per team.",
+  registration: "Spring 2026 season is currently underway with 5 teams competing. To register or join the prospective player interest list, visit: https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list. Roster spots are limited to 10 players per team.",
   teams: "Legacy Hoopers has 5 teams: 8U, 9U, 10U Black (elite), 10U Blue, and 11U Girls. Each team competes in AAU circuits and local leagues.",
   schedule: "Practices are held 3 days per week across our facilities. Mondays at St. Patrick's in Armonk (7:35–8:35 PM Skills Lab). Tuesdays at Rippowam Cisqua in Bedford (5:30–8:30 PM). Wednesdays at Westchester CC (PEB) in Valhalla (5:00–8:00 PM).",
   cost: "For current pricing and payment plans, please visit our registration page on the Aster Sports app or email info@legacyhoopers.org for details.",

@@ -70,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
             <a
-              href="https://www.legacyhoopers.org/register"
+              href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list"
               target="_blank"
               rel="noopener noreferrer"
               className="ml-4 px-5 py-2.5 bg-cobalt text-white font-display font-800 text-sm uppercase tracking-wider rounded-md shadow-lg shadow-cobalt/30 hover:bg-cobalt-light hover:shadow-cobalt/50 transition-all duration-200 hover:-translate-y-0.5"
@@ -107,7 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               ))}
               <a
-                href="https://www.legacyhoopers.org/register"
+                href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 px-4 py-3 bg-cobalt text-white font-display font-800 text-base uppercase tracking-wider rounded-lg text-center"
@@ -166,7 +166,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 Connect
               </h4>
               <div className="flex flex-col gap-2">
-                <a href="https://www.legacyhoopers.org/register" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Register Now</a>
+                <a href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm transition-colors">Register Now</a>
                 <Link href="/mission" className="text-white/50 hover:text-white text-sm transition-colors">Our Mission</Link>
                 <a href="mailto:info@legacyhoopers.org" className="text-white/50 hover:text-white text-sm transition-colors">Contact Us</a>
               </div>
