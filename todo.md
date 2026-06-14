@@ -27,3 +27,7 @@
 - [x] Add Championship Wall / Hardware section on homepage
 - [x] Update Records page "Last Updated" date to June 14, 2026
 - [x] Explore SE Tourney / Tourney Machine for live score integration
+- [x] Add "Live Scores" button/badge on homepage and Records page linking to Tourney Machine
+- [x] Build embedded tournament section showing current weekend games/scores
+- [x] Build server-side scraping to fetch Tourney Machine data
+- [x] Sync game logs from spring league and ZG NY Hoop Festival into Records

@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
+import { fetchAllTournamentData, fetchLiveTournamentData, getTournamentLinks } from "./tournament";
 
 const LEGACY_HOOPERS_SYSTEM_PROMPT = `You are the Legacy Hoopers AI Assistant — a helpful, knowledgeable guide for parents and players interested in the Legacy Hoopers Basketball Academy in Westchester County, New York.
 
@@ -61,6 +62,20 @@ export const appRouter = router({
       return {
         success: true,
       } as const;
+    }),
+  }),
+
+  tournament: router({
+    live: publicProcedure.query(async () => {
+      const data = await fetchLiveTournamentData();
+      return data;
+    }),
+    all: publicProcedure.query(async () => {
+      const data = await fetchAllTournamentData();
+      return data;
+    }),
+    links: publicProcedure.query(() => {
+      return getTournamentLinks();
     }),
   }),
 

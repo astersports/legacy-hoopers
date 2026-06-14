@@ -8,6 +8,8 @@ import { Link } from "wouter";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Trophy, Target, Users, Zap, ChevronRight, MapPin, Star } from "lucide-react";
+import LiveScoresBadge from "@/components/LiveScoresBadge";
+import ThisWeekend from "@/components/ThisWeekend";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -152,7 +154,7 @@ export default function Home() {
               Built by educators. Proven by results. Defined by standards no one else will hold.
             </p>
 
-            <div className="hero-cta flex flex-wrap gap-4">
+            <div className="hero-cta flex flex-wrap gap-4 items-center">
               <a
                 href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list"
                 target="_blank"
@@ -167,6 +169,12 @@ export default function Home() {
               >
                 View Records
               </Link>
+              <LiveScoresBadge variant="compact" />
+            </div>
+
+            {/* Live Tournament Banner */}
+            <div className="mt-6">
+              <LiveScoresBadge variant="full" />
             </div>
           </div>
         </div>
@@ -192,6 +200,9 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* This Weekend — Live Tournament */}
+      <ThisWeekend />
 
       {/* Championship Wall */}
       <section className="py-16 md:py-24 relative overflow-hidden">

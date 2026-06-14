@@ -5,6 +5,8 @@
  */
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import LiveScoresBadge from "@/components/LiveScoresBadge";
+import TournamentHistory from "@/components/TournamentHistory";
 
 const HERO_IMG = "/manus-storage/girls-triple-threat_8866dbbd.jpeg";
 
@@ -232,6 +234,9 @@ export default function Records() {
             ))}
           </div>
           <p className="text-white/40 text-xs italic mt-4">Last Updated: June 14, 2026</p>
+          <div className="mt-5">
+            <LiveScoresBadge variant="full" />
+          </div>
         </div>
       </section>
 
@@ -516,6 +521,10 @@ export default function Records() {
                 </div>
               </div>
             </div>
+          )}
+          {/* Tourney Machine Game Log Sync */}
+          {activeSeason === "spring" && (
+            <TournamentHistory />
           )}
         </div>
       </section>
