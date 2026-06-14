@@ -11,8 +11,15 @@ import { Trophy, Target, Users, Zap, ChevronRight, MapPin, Star } from "lucide-r
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/hero-main-haWcuXqCFTmVn83zSjde9V.webp";
-const ACADEMY_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/hero-academy-NCSGX238WLGJTTJZgPTK9y.webp";
+const HERO_IMG = "/manus-storage/girls-drive_61b44d33.jpeg";
+const ACADEMY_IMG = "/manus-storage/boys-rebound_d11067d2.jpeg";
+const ACTION_PHOTOS = [
+  { src: "/manus-storage/girls-drive_61b44d33.jpeg", alt: "11U Girls — Driving to the basket", label: "11U Girls" },
+  { src: "/manus-storage/boys-rebound_d11067d2.jpeg", alt: "10U Boys — Boxing out for the rebound", label: "10U Black" },
+  { src: "/manus-storage/girls-pass_43e337f0.jpeg", alt: "11U Girls — Finding the open teammate", label: "11U Girls" },
+  { src: "/manus-storage/girls-triple-threat_8866dbbd.jpeg", alt: "11U Girls — Triple threat position", label: "11U Girls" },
+  { src: "/manus-storage/girls-court-vision_85b7e4a7.jpeg", alt: "11U Girls — Court vision", label: "11U Girls" },
+];
 
 const stats = [
   { value: "5", label: "Teams", color: "text-cobalt" },
@@ -328,6 +335,44 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Action Gallery */}
+      <section className="py-24 md:py-32 bg-navy relative overflow-hidden">
+        <span className="watermark top-10 left-[-5%] opacity-[0.03]">ACTION</span>
+        <div className="container relative z-10">
+          <div className="text-center mb-12">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
+              On The Court
+            </span>
+            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+              Game Day <span className="text-cobalt">Moments</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {ACTION_PHOTOS.map((photo, i) => (
+              <div
+                key={i}
+                className={`relative overflow-hidden rounded-xl group ${
+                  i === 0 ? "col-span-2 md:col-span-2 row-span-2" : ""
+                }`}
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  className="w-full h-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="px-2 py-1 bg-cobalt/90 rounded text-white font-display font-700 text-[10px] uppercase tracking-wider">
+                    {photo.label}
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
