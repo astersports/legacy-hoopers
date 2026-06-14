@@ -1,7 +1,7 @@
 /*
- * DESIGN: Court Noir — Cinematic Sports Editorial
- * Dark canvas, electric cobalt accents, Barlow Condensed display type
- * Scroll-triggered reveals, watermark typography, glow-line accents
+ * DESIGN: Hybrid Dark/Light — Cinematic hero + readable info sections
+ * Dark: hero, stat bar, championship wall, photo gallery, CTA
+ * Light: differentiators, testimonials, locations, development lab
  */
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Trophy, Target, Users, Zap, ChevronRight, MapPin, Star } from "lucide-react";
 import LiveScoresBadge from "@/components/LiveScoresBadge";
 import ThisWeekend from "@/components/ThisWeekend";
+import { CURRENT_SEASON } from "@shared/season";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -24,10 +25,10 @@ const ACTION_PHOTOS = [
 ];
 
 const stats = [
-  { value: "5", label: "Teams", color: "text-cobalt" },
-  { value: "3", label: "Championships", color: "text-gold" },
-  { value: "60+", label: "Players", color: "text-white" },
-  { value: "5", label: "Finals Appearances", color: "text-success" },
+  { value: String(CURRENT_SEASON.teamCount), label: "Teams", color: "text-cobalt" },
+  { value: String(CURRENT_SEASON.championships), label: "Championships", color: "text-gold" },
+  { value: CURRENT_SEASON.playerCount, label: "Players", color: "text-white" },
+  { value: String(CURRENT_SEASON.finalsAppearances), label: "Finals Appearances", color: "text-success" },
 ];
 
 const differentiators = [
@@ -35,25 +36,25 @@ const differentiators = [
     icon: <Target className="w-6 h-6" />,
     title: "Teaching-First Coaching",
     description: "Every session is structured by a Master's-level educator who differentiates instruction based on each player's learning style.",
-    accent: "border-cobalt",
+    accent: "border-l-cobalt",
   },
   {
     icon: <Trophy className="w-6 h-6" />,
     title: "Competitive Excellence",
     description: "AAU circuits and league play provide real competition. 3 championships and 5 finals appearances this spring prove the system works at the highest level.",
-    accent: "border-gold",
+    accent: "border-l-gold",
   },
   {
     icon: <Users className="w-6 h-6" />,
     title: "Small Rosters, Big Impact",
     description: "Maximum 10 players per team ensures every athlete gets meaningful reps, personal attention, and game minutes.",
-    accent: "border-success",
+    accent: "border-l-success",
   },
   {
     icon: <Zap className="w-6 h-6" />,
     title: "90-Minute Development Labs",
     description: "Structured practice blocks covering skill work, game concepts, live play, and film review — not just scrimmages.",
-    accent: "border-cobalt-light",
+    accent: "border-l-cobalt-light",
   },
 ];
 
@@ -120,21 +121,16 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* ═══════════════ DARK: Hero Section ═══════════════ */}
       <section ref={heroRef} className="relative min-h-[100vh] flex items-end overflow-hidden pb-20">
-        {/* Background Image */}
         <img
           src={HERO_IMG}
           alt=""
           className="absolute inset-0 w-full h-full object-cover object-[70%_center] md:object-center"
         />
-        {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-arena/40 via-arena/70 to-arena" />
-
-        {/* Watermark */}
         <span className="watermark top-1/2 -translate-y-1/2 right-[-5%]">LEGACY</span>
 
-        {/* Content */}
         <div className="relative z-10 container pt-24">
           <div className="max-w-3xl">
             <div className="hero-tag inline-block px-4 py-1.5 bg-cobalt/20 border border-cobalt/40 rounded-full mb-6">
@@ -144,7 +140,7 @@ export default function Home() {
             </div>
 
             <h1 className="hero-title font-display font-800 text-5xl md:text-7xl lg:text-8xl uppercase leading-[0.9] text-white mb-6">
-              Five Teams.<br />
+              {CURRENT_SEASON.teamCount === 5 ? "Five" : String(CURRENT_SEASON.teamCount)} Teams.<br />
               <span className="text-cobalt">One Standard.</span><br />
               Zero Shortcuts.
             </h1>
@@ -172,7 +168,6 @@ export default function Home() {
               <LiveScoresBadge variant="compact" />
             </div>
 
-            {/* Live Tournament Banner */}
             <div className="mt-6">
               <LiveScoresBadge variant="full" />
             </div>
@@ -180,7 +175,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stat Bar */}
+      {/* ═══════════════ DARK: Stat Bar ═══════════════ */}
       <div ref={statsRef} className="relative bg-navy border-b-[3px] border-cobalt">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4">
@@ -201,10 +196,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* This Weekend — Live Tournament */}
+      {/* ═══════════════ DARK: This Weekend — Live Tournament ═══════════════ */}
       <ThisWeekend />
 
-      {/* Championship Wall */}
+      {/* ═══════════════ DARK: Championship Wall ═══════════════ */}
       <section className="py-16 md:py-24 relative overflow-hidden">
         <span className="watermark top-1/2 -translate-y-1/2 right-[-5%]">HARDWARE</span>
         <div className="container relative z-10">
@@ -218,7 +213,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* 10U Black - Chase for the Chain */}
             <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
               <div className="text-4xl mb-3">🏆</div>
               <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
@@ -226,8 +220,6 @@ export default function Home() {
               <p className="text-white/50 text-xs">10U Boys Black</p>
               <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">April 2026</p>
             </div>
-
-            {/* 10U Black - Rumble for the Ring */}
             <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
               <div className="text-4xl mb-3">🏆</div>
               <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
@@ -235,8 +227,6 @@ export default function Home() {
               <p className="text-white/50 text-xs">10U Boys Black</p>
               <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">May 2026</p>
             </div>
-
-            {/* 11U Girls - Chase for the Chain */}
             <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
               <div className="text-4xl mb-3">🏆</div>
               <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
@@ -246,7 +236,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Additional Achievements */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="bg-navy-light border border-white/10 rounded-xl p-5 flex items-center gap-4 card-hover">
               <div className="text-3xl">🥈</div>
@@ -266,15 +255,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* What Makes Us Different */}
-      <section ref={diffRef} className="py-24 md:py-32 relative overflow-hidden">
+      {/* ═══════════════ LIGHT: What Makes Us Different ═══════════════ */}
+      <section ref={diffRef} className="section-light py-24 md:py-32 relative overflow-hidden">
         <span className="watermark top-10 left-[-5%]">ELITE</span>
         <div className="container relative z-10">
           <div className="text-center mb-16">
             <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
               The Difference
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
               Not a Rec League.<br /><span className="text-cobalt">An Academy.</span>
             </h2>
           </div>
@@ -283,17 +272,17 @@ export default function Home() {
             {differentiators.map((item, i) => (
               <div
                 key={i}
-                className={`diff-card bg-navy-light border border-white/5 border-l-4 ${item.accent} rounded-xl p-6 md:p-8 card-hover`}
+                className={`diff-card light-card border-l-4 ${item.accent} p-6 md:p-8`}
               >
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
                     {item.icon}
                   </div>
                   <div>
-                    <h3 className="font-display font-800 text-lg uppercase text-white mb-2">
+                    <h3 className="font-display font-800 text-lg uppercase text-light-text mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-white/60 text-sm leading-relaxed">
+                    <p className="text-light-muted text-sm leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -304,7 +293,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Academy Preview Section */}
+      {/* ═══════════════ DARK: Academy Preview (photo bg) ═══════════════ */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <img
           src={ACADEMY_IMG}
@@ -335,15 +324,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section ref={testimonialsRef} className="py-24 md:py-32 bg-navy relative overflow-hidden">
+      {/* ═══════════════ LIGHT: Testimonials ═══════════════ */}
+      <section ref={testimonialsRef} className="section-light py-24 md:py-32 relative overflow-hidden">
         <span className="watermark bottom-10 right-[-5%]">TRUST</span>
         <div className="container relative z-10">
           <div className="text-center mb-16">
             <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
               From Our Families
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
               Earned Trust.<br /><span className="text-cobalt">Real Results.</span>
             </h2>
           </div>
@@ -352,7 +341,7 @@ export default function Home() {
             {testimonials.map((item, i) => (
               <div
                 key={i}
-                className="test-card bg-white/[0.03] border border-white/10 border-t-[3px] border-t-cobalt rounded-xl p-6 md:p-8 flex flex-col justify-between"
+                className="test-card light-card border-t-[3px] border-t-cobalt p-6 md:p-8 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex gap-1 text-gold mb-4">
@@ -360,7 +349,7 @@ export default function Home() {
                       <Star key={j} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-white/80 text-sm italic leading-relaxed mb-6">
+                  <p className="text-light-muted text-sm italic leading-relaxed mb-6">
                     "{item.quote}"
                   </p>
                 </div>
@@ -373,14 +362,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Locations Preview */}
-      <section className="py-24 md:py-32">
+      {/* ═══════════════ LIGHT: Locations Preview ═══════════════ */}
+      <section className="section-light py-24 md:py-32 border-t border-light-border">
         <div className="container">
           <div className="text-center mb-12">
             <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
               Where We Train
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
               Three Home Courts
             </h2>
           </div>
@@ -394,18 +383,18 @@ export default function Home() {
               <Link
                 key={i}
                 href="/locations"
-                className="group bg-navy-light border border-white/5 border-l-4 border-l-cobalt rounded-xl p-6 card-hover"
+                className="group light-card border-l-4 border-l-cobalt p-6"
               >
                 <div className="flex items-start gap-4">
                   <div className="p-2.5 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-display font-800 text-base uppercase text-white group-hover:text-cobalt transition-colors">
+                    <h3 className="font-display font-800 text-base uppercase text-light-text group-hover:text-cobalt transition-colors">
                       {loc.name}
                     </h3>
-                    <p className="text-white/40 text-xs mt-1">{loc.city}</p>
-                    <p className="text-cobalt-light text-xs mt-2 font-600">{loc.teams}</p>
+                    <p className="text-light-muted text-xs mt-1">{loc.city}</p>
+                    <p className="text-cobalt text-xs mt-2 font-600">{loc.teams}</p>
                   </div>
                 </div>
               </Link>
@@ -414,7 +403,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Action Gallery */}
+      {/* ═══════════════ DARK: Action Gallery ═══════════════ */}
       <section className="py-24 md:py-32 bg-navy relative overflow-hidden">
         <span className="watermark top-10 left-[-5%] opacity-[0.03]">ACTION</span>
         <div className="container relative z-10">
@@ -452,7 +441,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ═══════════════ DARK: CTA Section ═══════════════ */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-navy to-arena border-t border-cobalt/10">
         <div className="container text-center">
           <h2 className="font-display font-800 text-4xl md:text-6xl uppercase text-white mb-4">

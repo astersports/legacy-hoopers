@@ -31,3 +31,6 @@
 - [x] Build embedded tournament section showing current weekend games/scores
 - [x] Build server-side scraping to fetch Tourney Machine data
 - [x] Sync game logs from spring league and ZG NY Hoop Festival into Records
+- [x] Implement hybrid dark/light theme (dark hero/championship, light info sections)
+- [x] Compact mobile game cards (reduce height/padding)
+- [x] Make team count dynamic (not hardcoded to 5)
