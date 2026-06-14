@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import LiveScoresBadge from "@/components/LiveScoresBadge";
 import TournamentHistory from "@/components/TournamentHistory";
+import SeasonLeaderboard from "@/components/SeasonLeaderboard";
 
 const HERO_IMG = "/manus-storage/girls-triple-threat_8866dbbd.jpeg";
 
@@ -285,6 +286,12 @@ export default function Records() {
               Winter 2025–26
             </button>
           </div>
+
+          {/* Season Leaderboard */}
+          <SeasonLeaderboard
+            teams={teams}
+            seasonLabel={activeSeason === "spring" ? "Spring 2026" : "Winter 2025–26"}
+          />
 
           {/* Winter Summary Banner */}
           {activeSeason === "winter" && (

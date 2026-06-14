@@ -51,3 +51,4 @@
 - [x] Add point differential indicator next to final scores of completed games (e.g. +12, -3)
 - [x] Persist collapsed division state in localStorage so parents' preferences are remembered across visits
 - [x] Automatically badge the game with the largest point differential (win) in each division with a trophy icon
+- [x] Create compact season-long leaderboard showing cumulative stats (total wins, avg point differential, longest win streak) per team across all tournaments
