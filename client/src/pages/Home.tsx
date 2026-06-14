@@ -200,55 +200,54 @@ export default function Home() {
       <ThisWeekend />
 
       {/* ═══════════════ DARK: Championship Wall ═══════════════ */}
-      <section className="py-16 md:py-24 relative overflow-hidden">
+      <section className="py-10 md:py-24 relative overflow-hidden">
         <span className="watermark top-1/2 -translate-y-1/2 right-[-5%]">HARDWARE</span>
         <div className="container relative z-10">
-          <div className="text-center mb-12">
-            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-gold mb-3 block">
+          <div className="text-center mb-6 md:mb-12">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-gold mb-2 block">
               Spring 2026 Hardware
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+            <h2 className="font-display font-800 text-3xl md:text-5xl uppercase text-white">
               Championship <span className="text-gold">Wall</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
-              <div className="text-4xl mb-3">🏆</div>
-              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
-              <p className="font-display font-700 text-sm text-white mb-2">ZG Chase for the Chain NY</p>
-              <p className="text-white/50 text-xs">10U Boys Black</p>
-              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">April 2026</p>
+          {/* Championships - horizontal scroll on mobile */}
+          <div className="flex md:grid md:grid-cols-3 gap-3 overflow-x-auto pb-2 snap-x snap-mandatory -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible">
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-lg p-4 text-center card-hover min-w-[200px] snap-start flex-shrink-0 md:min-w-0">
+              <div className="text-2xl md:text-4xl mb-1">🏆</div>
+              <h3 className="font-display font-800 text-sm md:text-lg uppercase text-gold">Champions</h3>
+              <p className="font-display font-700 text-xs md:text-sm text-white">ZG Chase for the Chain NY</p>
+              <p className="text-white/50 text-[10px] md:text-xs">10U Boys Black · Apr 2026</p>
             </div>
-            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
-              <div className="text-4xl mb-3">🏆</div>
-              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
-              <p className="font-display font-700 text-sm text-white mb-2">ZG Rumble for the Ring CT</p>
-              <p className="text-white/50 text-xs">10U Boys Black</p>
-              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">May 2026</p>
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-lg p-4 text-center card-hover min-w-[200px] snap-start flex-shrink-0 md:min-w-0">
+              <div className="text-2xl md:text-4xl mb-1">🏆</div>
+              <h3 className="font-display font-800 text-sm md:text-lg uppercase text-gold">Champions</h3>
+              <p className="font-display font-700 text-xs md:text-sm text-white">ZG Rumble for the Ring CT</p>
+              <p className="text-white/50 text-[10px] md:text-xs">10U Boys Black · May 2026</p>
             </div>
-            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
-              <div className="text-4xl mb-3">🏆</div>
-              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
-              <p className="font-display font-700 text-sm text-white mb-2">ZG Chase for the Chain NY</p>
-              <p className="text-white/50 text-xs">11U Girls</p>
-              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">April 2026</p>
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-lg p-4 text-center card-hover min-w-[200px] snap-start flex-shrink-0 md:min-w-0">
+              <div className="text-2xl md:text-4xl mb-1">🏆</div>
+              <h3 className="font-display font-800 text-sm md:text-lg uppercase text-gold">Champions</h3>
+              <p className="font-display font-700 text-xs md:text-sm text-white">ZG Chase for the Chain NY</p>
+              <p className="text-white/50 text-[10px] md:text-xs">11U Girls · Apr 2026</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="bg-navy-light border border-white/10 rounded-xl p-5 flex items-center gap-4 card-hover">
-              <div className="text-3xl">🥈</div>
+          {/* Finals/Final Four - compact on mobile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mt-3 md:mt-4">
+            <div className="bg-navy-light border border-white/10 rounded-lg p-3 md:p-5 flex items-center gap-3 card-hover">
+              <div className="text-xl md:text-3xl">🥈</div>
               <div>
-                <h4 className="font-display font-800 text-sm uppercase text-white">Finalists — ZG Rumble for the Ring CT</h4>
-                <p className="text-white/50 text-xs mt-0.5">11U Girls · May 2026</p>
+                <h4 className="font-display font-800 text-xs md:text-sm uppercase text-white">Finalists — ZG Rumble for the Ring CT</h4>
+                <p className="text-white/50 text-[10px] md:text-xs mt-0.5">11U Girls · May 2026</p>
               </div>
             </div>
-            <div className="bg-navy-light border border-white/10 rounded-xl p-5 flex items-center gap-4 card-hover">
-              <div className="text-3xl">🏅</div>
+            <div className="bg-navy-light border border-white/10 rounded-lg p-3 md:p-5 flex items-center gap-3 card-hover">
+              <div className="text-xl md:text-3xl">🏅</div>
               <div>
-                <h4 className="font-display font-800 text-sm uppercase text-white">Final Four — ZG National Finals MA</h4>
-                <p className="text-white/50 text-xs mt-0.5">11U Girls · 3–0 Pool Play · May 2026</p>
+                <h4 className="font-display font-800 text-xs md:text-sm uppercase text-white">Final Four — ZG National Finals MA</h4>
+                <p className="text-white/50 text-[10px] md:text-xs mt-0.5">11U Girls · 3–0 Pool Play · May 2026</p>
               </div>
             </div>
           </div>
@@ -256,33 +255,33 @@ export default function Home() {
       </section>
 
       {/* ═══════════════ LIGHT: What Makes Us Different ═══════════════ */}
-      <section ref={diffRef} className="section-light py-24 md:py-32 relative overflow-hidden">
+      <section ref={diffRef} className="section-light py-12 md:py-32 relative overflow-hidden">
         <span className="watermark top-10 left-[-5%]">ELITE</span>
         <div className="container relative z-10">
-          <div className="text-center mb-16">
-            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
+          <div className="text-center mb-8 md:mb-16">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-2 block">
               The Difference
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
+            <h2 className="font-display font-800 text-3xl md:text-5xl uppercase text-light-text">
               Not a Rec League.<br /><span className="text-cobalt">An Academy.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
             {differentiators.map((item, i) => (
               <div
                 key={i}
-                className={`diff-card light-card border-l-4 ${item.accent} p-6 md:p-8`}
+                className={`diff-card light-card border-l-4 ${item.accent} p-4 md:p-8`}
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="p-2 md:p-3 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
                     {item.icon}
                   </div>
                   <div>
-                    <h3 className="font-display font-800 text-lg uppercase text-light-text mb-2">
+                    <h3 className="font-display font-800 text-sm md:text-lg uppercase text-light-text mb-1 md:mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-light-muted text-sm leading-relaxed">
+                    <p className="text-light-muted text-xs md:text-sm leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -325,35 +324,35 @@ export default function Home() {
       </section>
 
       {/* ═══════════════ LIGHT: Testimonials ═══════════════ */}
-      <section ref={testimonialsRef} className="section-light py-24 md:py-32 relative overflow-hidden">
+      <section ref={testimonialsRef} className="section-light py-12 md:py-32 relative overflow-hidden">
         <span className="watermark bottom-10 right-[-5%]">TRUST</span>
         <div className="container relative z-10">
-          <div className="text-center mb-16">
-            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
+          <div className="text-center mb-8 md:mb-16">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-2 block">
               From Our Families
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
+            <h2 className="font-display font-800 text-3xl md:text-5xl uppercase text-light-text">
               Earned Trust.<br /><span className="text-cobalt">Real Results.</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 md:gap-4">
             {testimonials.map((item, i) => (
               <div
                 key={i}
-                className="test-card light-card border-t-[3px] border-t-cobalt p-6 md:p-8 flex flex-col justify-between"
+                className="test-card light-card border-t-[3px] border-t-cobalt p-4 md:p-8 flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex gap-1 text-gold mb-4">
+                  <div className="flex gap-1 text-gold mb-2 md:mb-4">
                     {[...Array(5)].map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 fill-current" />
+                      <Star key={j} className="w-3 h-3 md:w-3.5 md:h-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-light-muted text-sm italic leading-relaxed mb-6">
+                  <p className="text-light-muted text-xs md:text-sm italic leading-relaxed mb-3 md:mb-6">
                     "{item.quote}"
                   </p>
                 </div>
-                <span className="font-display font-800 text-xs uppercase tracking-wider text-cobalt">
+                <span className="font-display font-800 text-[10px] md:text-xs uppercase tracking-wider text-cobalt">
                   {item.author}
                 </span>
               </div>
@@ -363,18 +362,18 @@ export default function Home() {
       </section>
 
       {/* ═══════════════ LIGHT: Locations Preview ═══════════════ */}
-      <section className="section-light py-24 md:py-32 border-t border-light-border">
+      <section className="section-light py-10 md:py-32 border-t border-light-border">
         <div className="container">
-          <div className="text-center mb-12">
-            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-3 block">
+          <div className="text-center mb-6 md:mb-12">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-cobalt mb-2 block">
               Where We Train
             </span>
-            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-light-text">
+            <h2 className="font-display font-800 text-3xl md:text-5xl uppercase text-light-text">
               Three Home Courts
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
             {[
               { name: "St. Patrick's", teams: "Skills Lab · Mondays", city: "Armonk, NY" },
               { name: "Rippowam Cisqua", teams: "All Teams · Tuesdays", city: "Bedford, NY" },
@@ -383,18 +382,18 @@ export default function Home() {
               <Link
                 key={i}
                 href="/locations"
-                className="group light-card border-l-4 border-l-cobalt p-6"
+                className="group light-card border-l-4 border-l-cobalt p-3 md:p-6"
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-2.5 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
-                    <MapPin className="w-5 h-5" />
+                <div className="flex items-center md:items-start gap-3 md:gap-4">
+                  <div className="p-2 bg-cobalt/10 rounded-lg text-cobalt flex-shrink-0">
+                    <MapPin className="w-4 h-4 md:w-5 md:h-5" />
                   </div>
-                  <div>
-                    <h3 className="font-display font-800 text-base uppercase text-light-text group-hover:text-cobalt transition-colors">
+                  <div className="flex-1 flex md:block items-center gap-2">
+                    <h3 className="font-display font-800 text-sm md:text-base uppercase text-light-text group-hover:text-cobalt transition-colors">
                       {loc.name}
                     </h3>
-                    <p className="text-light-muted text-xs mt-1">{loc.city}</p>
-                    <p className="text-cobalt text-xs mt-2 font-600">{loc.teams}</p>
+                    <p className="hidden md:block text-light-muted text-xs mt-1">{loc.city}</p>
+                    <p className="text-cobalt text-xs font-600 md:mt-2">{loc.teams}</p>
                   </div>
                 </div>
               </Link>

@@ -17,10 +17,10 @@ export default function ThisWeekend() {
   if (!liveTournament) return null;
 
   return (
-    <section className="py-12 md:py-20 relative overflow-hidden">
+    <section className="py-8 md:py-20 relative overflow-hidden">
       <div className="container relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 md:mb-8">
+        <div className="flex items-center justify-between mb-4 md:mb-8">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <span className="relative flex h-3 w-3">
@@ -31,10 +31,10 @@ export default function ThisWeekend() {
                 This Weekend
               </span>
             </div>
-            <h2 className="font-display font-800 text-2xl md:text-4xl uppercase text-white">
+            <h2 className="font-display font-800 text-xl md:text-4xl uppercase text-white">
               {liveTournament.name}
             </h2>
-            <p className="text-white/50 text-xs md:text-sm mt-1">{liveTournament.dates}</p>
+            <p className="text-white/50 text-[10px] md:text-sm mt-0.5">{liveTournament.dates}</p>
           </div>
           <a
             href={liveTournament.url}
@@ -57,7 +57,7 @@ export default function ThisWeekend() {
             {liveData.games.map((game, i) => (
               <div
                 key={i}
-                className={`bg-navy-light border rounded-lg md:rounded-xl px-3 py-2.5 md:p-4 ${
+                className={`bg-navy-light border rounded-lg md:rounded-xl px-3 py-2 md:p-4 ${
                   game.result === "W"
                     ? "border-green-500/30 bg-green-500/[0.03]"
                     : game.result === "L"
@@ -66,7 +66,7 @@ export default function ThisWeekend() {
                 }`}
               >
                 {/* Game Header + Teams in one compact row on mobile */}
-                <div className="flex items-center justify-between mb-1.5 md:mb-3">
+                <div className="flex items-center justify-between mb-1 md:mb-3">
                   <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
                     {game.gameId}
                   </span>
@@ -88,7 +88,7 @@ export default function ThisWeekend() {
                 </div>
 
                 {/* Teams & Score - compact */}
-                <div className="space-y-1 md:space-y-2">
+                <div className="space-y-0.5 md:space-y-2">
                   <div className="flex items-center justify-between">
                     <span className={`text-xs md:text-sm font-700 ${game.legacyTeam.includes("Legacy") ? "text-cobalt" : "text-white/80"}`}>
                       {game.legacyTeam}
@@ -108,7 +108,7 @@ export default function ThisWeekend() {
                 </div>
 
                 {/* Game Meta - single line on mobile */}
-                <div className="mt-2 md:mt-3 pt-2 md:pt-3 border-t border-white/5 flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
+                <div className="mt-1.5 md:mt-3 pt-1.5 md:pt-3 border-t border-white/5 flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
                   <span className="flex items-center gap-1 flex-shrink-0">
                     <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
                     {game.date}
