@@ -48,3 +48,4 @@
 - [x] Add vitest for isGameLive/parseGameDate time-window behavior including Eastern time handling
 - [x] Sort games chronologically within each division (next upcoming game first)
 - [x] Add relative countdown timer showing "Starts in X min" for next upcoming game in each division
+- [x] Add point differential indicator next to final scores of completed games (e.g. +12, -3)

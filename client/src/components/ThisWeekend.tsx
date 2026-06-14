@@ -286,7 +286,7 @@ export default function ThisWeekend() {
                                   Legacy
                                 </span>
                                 <span className="font-display font-800 text-base md:text-lg text-white ml-2">
-                                  {game.legacyScore !== null ? game.legacyScore : "–"}
+                                  {game.legacyScore !== null ? game.legacyScore : "\u2013"}
                                 </span>
                               </div>
                               <div className="flex items-center justify-between mt-0.5">
@@ -294,9 +294,29 @@ export default function ThisWeekend() {
                                   {game.opponent}
                                 </span>
                                 <span className="font-display font-800 text-base md:text-lg text-white/50 ml-2">
-                                  {game.opponentScore !== null ? game.opponentScore : "–"}
+                                  {game.opponentScore !== null ? game.opponentScore : "\u2013"}
                                 </span>
                               </div>
+                              {/* Point differential for completed games */}
+                              {game.result !== "upcoming" && game.legacyScore !== null && game.opponentScore !== null && (() => {
+                                const diff = game.legacyScore - game.opponentScore;
+                                const sign = diff > 0 ? "+" : "";
+                                return (
+                                  <div className="mt-1 flex justify-end">
+                                    <span
+                                      className={`font-display font-800 text-[10px] md:text-xs px-1.5 py-0.5 rounded ${
+                                        diff > 0
+                                          ? "text-green-400 bg-green-500/10"
+                                          : diff < 0
+                                          ? "text-red-400 bg-red-500/10"
+                                          : "text-white/50 bg-white/5"
+                                      }`}
+                                    >
+                                      {sign}{diff}
+                                    </span>
+                                  </div>
+                                );
+                              })()}
                             </div>
 
                             {/* Meta: time + location */}
