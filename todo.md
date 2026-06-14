@@ -52,3 +52,4 @@
 - [x] Persist collapsed division state in localStorage so parents' preferences are remembered across visits
 - [x] Automatically badge the game with the largest point differential (win) in each division with a trophy icon
 - [x] Create compact season-long leaderboard showing cumulative stats (total wins, avg point differential, longest win streak) per team across all tournaments
+- [x] Make leaderboard team rows clickable to open a modal showing recent game history and upcoming schedule
