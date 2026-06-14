@@ -47,7 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <img
               src={LOGO_URL}
               alt="Legacy Hoopers"
-              className="w-9 h-9 md:w-11 md:h-11 transition-transform duration-200 group-hover:scale-105"
+              className="w-9 h-9 md:w-11 md:h-11 rounded-full object-contain drop-shadow-[0_0_8px_rgba(74,143,212,0.4)] transition-transform duration-200 group-hover:scale-105"
             />
             <span className="font-display font-800 text-lg md:text-xl uppercase tracking-tight text-white">
               Legacy<span className="text-cobalt"> Hoopers</span>

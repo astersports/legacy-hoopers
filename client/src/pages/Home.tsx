@@ -123,7 +123,7 @@ export default function Home() {
         <img
           src={HERO_IMG}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-[70%_center] md:object-center"
         />
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-arena/40 via-arena/70 to-arena" />
