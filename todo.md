@@ -17,3 +17,6 @@
 - [x] Add video thumbnail previews and better visual hierarchy
 - [x] Optimize play-by-play UX with timestamp click-to-seek
 - [x] Mobile-optimize the Film page layout
+- [x] Generate poster thumbnails from each video and upload as static assets
+- [x] Add player filter toggle in play-by-play (#5, #24, #14)
+- [x] Add share/link button with timestamp deep-linking for individual plays

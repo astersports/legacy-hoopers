@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from "react";
-import { Play, Film, Zap, Clock, Users, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { Play, Film, Zap, Clock, Users, ChevronDown, ChevronUp, Share2, Link2, Check, Filter } from "lucide-react";
+import { useLocation } from "wouter";
 
 interface PlayBreakdown {
   time: string;
@@ -14,6 +15,7 @@ interface HighlightVideo {
   title: string;
   subtitle: string;
   videoUrl: string;
+  posterUrl: string;
   team: string;
   opponent: string;
   duration: string;
@@ -24,17 +26,13 @@ interface HighlightVideo {
   statLine: string;
 }
 
-function timeToSeconds(t: string): number {
-  const parts = t.split(":");
-  return parseInt(parts[0]) * 60 + parseInt(parts[1]);
-}
-
 const highlights: HighlightVideo[] = [
   {
     id: "1",
     title: "#5 & #24 — Scoring Clinic",
     subtitle: "vs Castle",
     videoUrl: "/manus-storage/highlight-reel-1_a4969791.mov",
+    posterUrl: "/manus-storage/poster-reel-1_7c93f5d1.jpg",
     team: "Legacy 11U Girls",
     opponent: "Castle",
     duration: "2:22",
@@ -63,6 +61,7 @@ const highlights: HighlightVideo[] = [
     title: "#5 Fast-Break Masterclass",
     subtitle: "vs Teal Team",
     videoUrl: "/manus-storage/highlight-reel-2_4335b14b.mov",
+    posterUrl: "/manus-storage/poster-reel-2_9859f27e.jpg",
     team: "Legacy 11U Girls",
     opponent: "Teal Team",
     duration: "1:45",
@@ -89,6 +88,7 @@ const highlights: HighlightVideo[] = [
     title: "#5 Three-Point Shooting & #24 Drives",
     subtitle: "vs New Paltz",
     videoUrl: "/manus-storage/highlight-reel-3_147bea1e.mov",
+    posterUrl: "/manus-storage/poster-reel-3_061a0919.jpg",
     team: "Legacy 11U Girls",
     opponent: "New Paltz",
     duration: "1:38",
@@ -114,6 +114,7 @@ const highlights: HighlightVideo[] = [
     title: "#14 Scoring Reel (ft. #5 & #24 Assists)",
     subtitle: "vs Multiple Opponents",
     videoUrl: "/manus-storage/girls-14-highlights_de1bbacc.mov",
+    posterUrl: "/manus-storage/poster-reel-4_9e3d6cf3.jpg",
     team: "Legacy 11U Girls",
     opponent: "Multiple Opponents",
     duration: "2:45",
@@ -160,10 +161,42 @@ const typeConfig: Record<string, { color: string; label: string }> = {
   "free-throw": { color: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30", label: "FT" },
 };
 
+// All unique players across all videos
+const ALL_PLAYERS = ["#5", "#24", "#14"];
+
 export default function Highlights() {
+  const [location] = useLocation();
   const [activeVideo, setActiveVideo] = useState<HighlightVideo>(highlights[0]);
   const [expandedBreakdown, setExpandedBreakdown] = useState(true);
+  const [playerFilter, setPlayerFilter] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Parse URL params for deep-linking: ?reel=2&t=30
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const reelId = params.get("reel");
+    const time = params.get("t");
+    
+    if (reelId) {
+      const video = highlights.find(h => h.id === reelId);
+      if (video) {
+        setActiveVideo(video);
+        if (time && videoRef.current) {
+          const seconds = parseInt(time);
+          if (!isNaN(seconds)) {
+            // Wait for video to load then seek
+            const handleLoaded = () => {
+              videoRef.current!.currentTime = seconds;
+              videoRef.current!.play();
+              videoRef.current!.removeEventListener("loadedmetadata", handleLoaded);
+            };
+            videoRef.current.addEventListener("loadedmetadata", handleLoaded);
+          }
+        }
+      }
+    }
+  }, []);
 
   const seekTo = useCallback((seconds: number) => {
     if (videoRef.current) {
@@ -175,13 +208,62 @@ export default function Highlights() {
   const selectVideo = useCallback((video: HighlightVideo) => {
     setActiveVideo(video);
     setExpandedBreakdown(true);
+    setPlayerFilter(null);
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = 0;
     }
-    // Scroll to top of video player
     document.getElementById("film-player")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
+
+  const sharePlay = useCallback((video: HighlightVideo, play: PlayBreakdown) => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?reel=${video.id}&t=${play.seconds}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopiedLink(`${video.id}-${play.time}`);
+      setTimeout(() => setCopiedLink(null), 2000);
+    }).catch(() => {
+      // Fallback: select text in a temporary input
+      const input = document.createElement("input");
+      input.value = shareUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopiedLink(`${video.id}-${play.time}`);
+      setTimeout(() => setCopiedLink(null), 2000);
+    });
+  }, []);
+
+  const shareReel = useCallback((video: HighlightVideo) => {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?reel=${video.id}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      setCopiedLink(`reel-${video.id}`);
+      setTimeout(() => setCopiedLink(null), 2000);
+    }).catch(() => {
+      const input = document.createElement("input");
+      input.value = shareUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      setCopiedLink(`reel-${video.id}`);
+      setTimeout(() => setCopiedLink(null), 2000);
+    });
+  }, []);
+
+  // Filter plays by selected player
+  const filteredPlays = useMemo(() => {
+    if (!playerFilter) return activeVideo.plays;
+    return activeVideo.plays.filter(p => p.player === playerFilter);
+  }, [activeVideo, playerFilter]);
+
+  // Available players for current video
+  const videoPlayers = useMemo(() => {
+    const players = new Set(activeVideo.plays.map(p => p.player).filter(Boolean));
+    return ALL_PLAYERS.filter(p => players.has(p));
+  }, [activeVideo]);
 
   return (
     <div className="pt-20 min-h-screen">
@@ -224,7 +306,7 @@ export default function Highlights() {
         </div>
       </section>
 
-      {/* Video Grid — All 4 Videos Always Visible */}
+      {/* Video Grid — All 4 Videos with Poster Thumbnails */}
       <section className="border-y border-white/5 bg-navy/50">
         <div className="container py-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -238,22 +320,26 @@ export default function Highlights() {
                     : "border-white/5 hover:border-white/20 hover:scale-[1.01]"
                 }`}
               >
-                {/* Video thumbnail placeholder with gradient */}
-                <div className="aspect-[16/10] bg-gradient-to-br from-navy-light to-arena relative overflow-hidden">
-                  <video
-                    src={video.videoUrl}
-                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-                    muted
-                    preload="metadata"
+                <div className="aspect-[16/10] relative overflow-hidden">
+                  {/* Poster thumbnail */}
+                  <img
+                    src={video.posterUrl}
+                    alt={video.title}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   
-                  {/* Play indicator */}
+                  {/* Active indicator */}
                   {activeVideo.id === video.id && (
-                    <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-cobalt flex items-center justify-center">
+                    <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-cobalt flex items-center justify-center animate-pulse">
                       <Play className="w-3 h-3 text-white ml-0.5" />
                     </div>
                   )}
+
+                  {/* Duration badge */}
+                  <div className="absolute top-2 left-2 px-1.5 py-0.5 bg-black/70 rounded text-[9px] font-mono text-white/80">
+                    {video.duration}
+                  </div>
 
                   {/* Info overlay */}
                   <div className="absolute bottom-0 left-0 right-0 p-3">
@@ -261,12 +347,12 @@ export default function Highlights() {
                       <span className="px-1.5 py-0.5 bg-cobalt/80 rounded text-[9px] font-display font-800 text-white uppercase">
                         {video.featuredPlayer}
                       </span>
-                      <span className="text-[9px] text-white/60 font-mono">{video.duration}</span>
+                      <span className="text-[9px] text-white/60">{video.plays.length} plays</span>
                     </div>
-                    <h4 className="font-display font-700 text-xs text-white leading-tight line-clamp-1">
+                    <h4 className="font-display font-700 text-[11px] text-white leading-tight line-clamp-1">
                       {video.title}
                     </h4>
-                    <p className="text-[10px] text-white/40 mt-0.5">{video.subtitle}</p>
+                    <p className="text-[9px] text-white/40 mt-0.5">{video.subtitle}</p>
                   </div>
                 </div>
               </button>
@@ -286,6 +372,7 @@ export default function Highlights() {
                 <video
                   ref={videoRef}
                   src={activeVideo.videoUrl}
+                  poster={activeVideo.posterUrl}
                   className="w-full aspect-video"
                   controls
                   playsInline
@@ -297,15 +384,35 @@ export default function Highlights() {
                 <h2 className="font-display font-800 text-lg md:text-xl uppercase text-white flex-1 min-w-0">
                   {activeVideo.title}
                 </h2>
-                <div className="flex items-center gap-3 text-xs text-white/40">
-                  <span className="flex items-center gap-1">
-                    <Users className="w-3.5 h-3.5" />
-                    {activeVideo.opponent}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" />
-                    {activeVideo.duration}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3 text-xs text-white/40">
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5" />
+                      {activeVideo.opponent}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5" />
+                      {activeVideo.duration}
+                    </span>
+                  </div>
+                  {/* Share Reel Button */}
+                  <button
+                    onClick={() => shareReel(activeVideo)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-cobalt/10 border border-cobalt/20 rounded-lg text-cobalt text-xs font-display font-700 uppercase tracking-wider hover:bg-cobalt/20 transition-colors"
+                    title="Copy link to this reel"
+                  >
+                    {copiedLink === `reel-${activeVideo.id}` ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        Copied
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-3 h-3" />
+                        Share
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 
@@ -339,63 +446,121 @@ export default function Highlights() {
             <div className="xl:col-span-2">
               <div className="bg-navy-light border border-white/5 rounded-xl overflow-hidden sticky top-20">
                 {/* Header */}
-                <button
-                  onClick={() => setExpandedBreakdown(!expandedBreakdown)}
-                  className="w-full flex items-center gap-2 p-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors"
-                >
+                <div className="flex items-center gap-2 p-4 border-b border-white/5">
                   <Film className="w-4 h-4 text-cobalt" />
                   <span className="font-display font-800 text-sm uppercase text-white">
                     Play-by-Play
                   </span>
-                  <span className="ml-auto flex items-center gap-2">
-                    <span className="text-[10px] text-white/40 font-mono">
-                      {activeVideo.plays.length} plays
-                    </span>
+                  <span className="text-[10px] text-white/40 font-mono ml-1">
+                    {filteredPlays.length}/{activeVideo.plays.length}
+                  </span>
+                  <button
+                    onClick={() => setExpandedBreakdown(!expandedBreakdown)}
+                    className="ml-auto p-1 hover:bg-white/5 rounded transition-colors"
+                  >
                     {expandedBreakdown ? (
                       <ChevronUp className="w-4 h-4 text-white/30" />
                     ) : (
                       <ChevronDown className="w-4 h-4 text-white/30" />
                     )}
-                  </span>
-                </button>
+                  </button>
+                </div>
 
-                {/* Play List */}
+                {/* Player Filter Bar */}
                 {expandedBreakdown && (
-                  <div className="max-h-[60vh] overflow-y-auto scrollbar-hide">
-                    <div className="p-2 space-y-1">
-                      {activeVideo.plays.map((play, i) => (
+                  <div className="px-3 py-2.5 border-b border-white/5 bg-white/[0.01]">
+                    <div className="flex items-center gap-2">
+                      <Filter className="w-3 h-3 text-white/30" />
+                      <span className="text-[10px] text-white/40 uppercase tracking-wider font-display font-700">
+                        Filter:
+                      </span>
+                      <button
+                        onClick={() => setPlayerFilter(null)}
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-display font-700 uppercase tracking-wider transition-all ${
+                          playerFilter === null
+                            ? "bg-cobalt text-white"
+                            : "bg-white/5 text-white/50 hover:bg-white/10"
+                        }`}
+                      >
+                        All
+                      </button>
+                      {videoPlayers.map(player => (
                         <button
-                          key={i}
-                          onClick={() => seekTo(play.seconds)}
-                          className="w-full text-left flex items-start gap-2.5 p-2.5 rounded-lg hover:bg-cobalt/5 border border-transparent hover:border-cobalt/15 transition-all group/play cursor-pointer"
-                          title={`Jump to ${play.time}`}
+                          key={player}
+                          onClick={() => setPlayerFilter(playerFilter === player ? null : player)}
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-display font-700 uppercase tracking-wider transition-all ${
+                            playerFilter === player
+                              ? "bg-cobalt text-white"
+                              : "bg-white/5 text-white/50 hover:bg-white/10"
+                          }`}
                         >
-                          {/* Timestamp */}
-                          <span className="font-mono text-[11px] text-cobalt bg-cobalt/10 px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5 group-hover/play:bg-cobalt/20 transition-colors">
-                            {play.time}
-                          </span>
-
-                          {/* Description */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white/75 text-xs leading-relaxed group-hover/play:text-white/90 transition-colors">
-                              {play.description}
-                            </p>
-                          </div>
-
-                          {/* Type Badge */}
-                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-display font-800 uppercase tracking-wider border flex-shrink-0 ${typeConfig[play.type]?.color || ""}`}>
-                            {typeConfig[play.type]?.label || play.type}
-                          </span>
+                          {player}
                         </button>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Seek Hint */}
+                {/* Play List */}
+                {expandedBreakdown && (
+                  <div className="max-h-[55vh] overflow-y-auto scrollbar-hide">
+                    {filteredPlays.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <p className="text-white/30 text-xs">No plays found for this filter.</p>
+                      </div>
+                    ) : (
+                      <div className="p-2 space-y-1">
+                        {filteredPlays.map((play, i) => (
+                          <div
+                            key={i}
+                            className="flex items-start gap-2 p-2.5 rounded-lg hover:bg-cobalt/5 border border-transparent hover:border-cobalt/15 transition-all group/play"
+                          >
+                            {/* Timestamp — clickable to seek */}
+                            <button
+                              onClick={() => seekTo(play.seconds)}
+                              className="font-mono text-[11px] text-cobalt bg-cobalt/10 px-1.5 py-0.5 rounded flex-shrink-0 mt-0.5 hover:bg-cobalt/25 transition-colors cursor-pointer"
+                              title={`Jump to ${play.time}`}
+                            >
+                              {play.time}
+                            </button>
+
+                            {/* Description */}
+                            <div className="flex-1 min-w-0">
+                              <p className="text-white/75 text-xs leading-relaxed group-hover/play:text-white/90 transition-colors">
+                                {play.description}
+                              </p>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                              {/* Type Badge */}
+                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-display font-800 uppercase tracking-wider border ${typeConfig[play.type]?.color || ""}`}>
+                                {typeConfig[play.type]?.label || play.type}
+                              </span>
+                              {/* Share button */}
+                              <button
+                                onClick={() => sharePlay(activeVideo, play)}
+                                className="p-1 rounded hover:bg-white/10 transition-colors opacity-60 md:opacity-0 md:group-hover/play:opacity-100"
+                                title="Copy link to this play"
+                              >
+                                {copiedLink === `${activeVideo.id}-${play.time}` ? (
+                                  <Check className="w-3 h-3 text-green-400" />
+                                ) : (
+                                  <Link2 className="w-3 h-3 text-white/30" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Footer */}
                 <div className="p-3 border-t border-white/5 bg-white/[0.01]">
                   <p className="text-[10px] text-white/30 text-center font-display tracking-wider uppercase">
-                    Click any timestamp to jump to that play
+                    Click timestamp to seek &middot; Hover play to share link
                   </p>
                 </div>
               </div>
