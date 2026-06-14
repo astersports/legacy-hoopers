@@ -23,9 +23,9 @@ const ACTION_PHOTOS = [
 
 const stats = [
   { value: "5", label: "Teams", color: "text-cobalt" },
+  { value: "3", label: "Championships", color: "text-gold" },
   { value: "60+", label: "Players", color: "text-white" },
-  { value: "7", label: "Tournaments", color: "text-gold" },
-  { value: "85%", label: "Win Rate", color: "text-success" },
+  { value: "5", label: "Finals Appearances", color: "text-success" },
 ];
 
 const differentiators = [
@@ -38,7 +38,7 @@ const differentiators = [
   {
     icon: <Trophy className="w-6 h-6" />,
     title: "Competitive Excellence",
-    description: "AAU circuits and league play provide real competition. Our 85% win rate proves the system works at the highest level.",
+    description: "AAU circuits and league play provide real competition. 3 championships and 5 finals appearances this spring prove the system works at the highest level.",
     accent: "border-gold",
   },
   {
@@ -137,7 +137,7 @@ export default function Home() {
           <div className="max-w-3xl">
             <div className="hero-tag inline-block px-4 py-1.5 bg-cobalt/20 border border-cobalt/40 rounded-full mb-6">
               <span className="font-display font-700 text-xs uppercase tracking-widest text-cobalt">
-                Spring 2026 · Season In Progress
+                Spring 2026 · 3 Championships
               </span>
             </div>
 
@@ -386,7 +386,7 @@ export default function Home() {
             Ready to <span className="text-cobalt">Compete?</span>
           </h2>
           <p className="text-white/50 text-base max-w-md mx-auto mb-8">
-            Spring 2026 season underway. 5 teams competing across AAU Circuit and League Play.
+            Spring 2026: 3 championships. 5 finals appearances. The standard has been set.
           </p>
           <a
             href="https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list"

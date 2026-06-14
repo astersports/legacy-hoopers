@@ -20,3 +20,6 @@
 - [x] Generate poster thumbnails from each video and upload as static assets
 - [x] Add player filter toggle in play-by-play (#5, #24, #14)
 - [x] Add share/link button with timestamp deep-linking for individual plays
+- [x] Update season results: 10U Black Boys 2 championships, Girls 1 championship + 1 finals + 1 Final Four at nationals
+- [x] Update homepage stats/ticker with correct championship counts
+- [x] Update Records page with accurate spring 2026 results

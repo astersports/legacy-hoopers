@@ -40,7 +40,7 @@ const springTeams: TeamData[] = [
     stats: { ppg: "24.0", allowed: "21.3", diff: "+2.8", winPct: "69%", games: "16" },
     offensive: { ppg: "24.0", totalPts: "384", high: "40 pts", low: "10 pts", largestW: "+31" },
     defensive: { apg: "21.3", totalAllowed: "340", heldUnder20: "8 games", avgDiff: "+2.8" },
-    runOfPlay: ["🏆 Chase for the Chain NY — Champions", "🥈 Rumble for the Ring CT — Finalists", "National Finals · 3–0 pool play · SF exit vs NE Storm Black", "1–2 NY Metro Showdown"],
+    runOfPlay: ["🏆 Chase for the Chain NY — Champions", "🥈 Rumble for the Ring CT — Finalists", "🏅 National Finals — Final Four · 3–0 pool play · SF exit vs NE Storm Black", "1–2 NY Metro Showdown"],
     games: [
       { date: "Apr 11", opponent: "vs Level Up", score: "29 – 12", result: "W" },
       { date: "Apr 12", opponent: "vs Showtime Elite", score: "40 – 9", result: "W" },
@@ -222,7 +222,7 @@ export default function Records() {
             The Legacy<br /><span className="text-cobalt">Record Book.</span>
           </h1>
           <p className="text-white/60 text-base mt-3 max-w-md">
-            Every game. Every score. Every stat. Spring 2026 underway. Winter 2025–26 complete.
+            Every game. Every score. Every stat. Spring 2026 complete. Winter 2025–26 complete.
           </p>
           <div className="flex flex-wrap gap-2 mt-5">
             {["Westchester, NY", "5 Teams", "AAU Circuit", "League", "2025–2026"].map((tag) => (
@@ -478,7 +478,8 @@ export default function Records() {
               <div className="bg-gradient-to-br from-navy-light to-[#142f56] border border-purple-400/30 border-l-4 border-l-purple-400 rounded-xl p-4">
                 <h5 className="font-display font-800 text-lg uppercase text-white mb-2">ZG National Finals MA</h5>
                 <div className="space-y-1 text-sm font-600">
-                  <p className="text-purple-400">11U Girls · 3–0 Pool Play · Semifinalists</p>
+                  <p className="text-purple-400">🏅 11U Girls · 3–0 Pool Play · Final Four (SF)</p>
+                  <p className="text-white/50">10U Boys Black · 1–2</p>
                 </div>
               </div>
             </div>
