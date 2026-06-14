@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/mission", label: "Mission" },
   { href: "/coach-kenny", label: "Coach Kenny" },
   { href: "/locations", label: "Locations" },
+  { href: "/highlights", label: "Film" },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {

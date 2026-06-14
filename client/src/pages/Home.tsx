@@ -71,6 +71,7 @@ const testimonials = [
 ];
 
 export default function Home() {
+
   const heroRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const diffRef = useRef<HTMLDivElement>(null);

@@ -11,9 +11,10 @@ import Mission from "./pages/Mission";
 import CoachKenny from "./pages/CoachKenny";
 import Locations from "./pages/Locations";
 import Register from "./pages/Register";
+import Highlights from "./pages/Highlights";
 import Layout from "./components/Layout";
-
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Layout>
       <Switch>
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/mission" component={Mission} />
         <Route path="/coach-kenny" component={CoachKenny} />
         <Route path="/locations" component={Locations} />
+        <Route path="/highlights" component={Highlights} />
         <Route path="/register" component={Register} />
         <Route path="/404" component={NotFound} />
         <Route component={NotFound} />
