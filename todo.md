@@ -44,3 +44,5 @@
 - [x] Break up live scores (ThisWeekend) by team so parents can follow their kid's team
 - [x] Redesign live scores grouping by division: 8U Boys (2nd/3rd grade), 11U Girls (5th grade), 10U Black (4th grade boys) with visually appealing section headers and compact cards
 - [x] Add tap-to-collapse on division headers so parents can hide divisions they aren't following
+- [x] Add pulsing LIVE badge to games currently in progress based on scheduled time
+- [x] Add vitest for isGameLive/parseGameDate time-window behavior including Eastern time handling

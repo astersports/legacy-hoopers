@@ -3,10 +3,12 @@
  * Three divisions: 8U Boys (2nd/3rd grade), 10U Black (4th grade), 11U Girls (5th grade)
  * Uses the `division` field from the API to group games correctly
  * Division headers are tappable to collapse/expand game cards
+ * Games currently in progress show a pulsing LIVE badge
  */
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { ExternalLink, Trophy, Clock, MapPin, Loader2, ChevronDown } from "lucide-react";
+import { isGameLive } from "@shared/gameTime";
 
 /** Division display config — keyed by the division name from Tourney Machine */
 const DIVISION_CONFIG: Record<string, { name: string; grade: string; color: string; order: number }> = {
@@ -38,6 +40,13 @@ export default function ThisWeekend() {
 
   // Track which divisions are collapsed (all expanded by default)
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  // Current time — updated every 30s to re-evaluate live status
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(new Date()), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleDivision = (name: string) => {
     setCollapsed((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -64,9 +73,10 @@ export default function ThisWeekend() {
       .map(({ config, games }) => {
         const wins = games.filter((g) => g.result === "W").length;
         const losses = games.filter((g) => g.result === "L").length;
-        return { ...config, games, wins, losses };
+        const liveCount = games.filter((g) => isGameLive(g, now)).length;
+        return { ...config, games, wins, losses, liveCount };
       });
-  }, [liveData]);
+  }, [liveData, now]);
 
   if (!liveTournament) return null;
 
@@ -132,6 +142,18 @@ export default function ThisWeekend() {
                           {division.grade} · {division.games.length} game{division.games.length !== 1 ? "s" : ""}
                         </span>
                       </div>
+                      {/* Live indicator in header when division has active games */}
+                      {division.liveCount > 0 && (
+                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/15 border border-red-500/30">
+                          <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                          </span>
+                          <span className="font-display font-800 text-[9px] md:text-[10px] uppercase tracking-wider text-red-400">
+                            {division.liveCount} Live
+                          </span>
+                        </span>
+                      )}
                       {/* Record badge */}
                       <div
                         className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
@@ -165,74 +187,89 @@ export default function ThisWeekend() {
                     }}
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-3">
-                      {division.games.map((game: GameResult, i: number) => (
-                        <div
-                          key={i}
-                          className={`bg-navy-light border rounded-lg px-3 py-2 md:px-4 md:py-3 ${
-                            game.result === "W"
-                              ? "border-green-500/30 bg-green-500/[0.03]"
-                              : game.result === "L"
-                              ? "border-red-500/20 bg-red-500/[0.02]"
-                              : "border-white/10"
-                          }`}
-                        >
-                          {/* Top row: game ID + result */}
-                          <div className="flex items-center justify-between mb-1 md:mb-2">
-                            <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
-                              {game.gameId}
-                            </span>
-                            {game.result !== "upcoming" ? (
-                              <span
-                                className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] font-display font-800 uppercase ${
-                                  game.result === "W"
-                                    ? "bg-green-500/20 text-green-400"
-                                    : "bg-red-500/20 text-red-400"
-                                }`}
-                              >
-                                {game.result === "W" ? "Win" : "Loss"}
+                      {division.games.map((game: GameResult, i: number) => {
+                        const gameLive = isGameLive(game, now);
+                        return (
+                          <div
+                            key={i}
+                            className={`bg-navy-light border rounded-lg px-3 py-2 md:px-4 md:py-3 relative ${
+                              gameLive
+                                ? "border-red-500/40 bg-red-500/[0.04] ring-1 ring-red-500/20"
+                                : game.result === "W"
+                                ? "border-green-500/30 bg-green-500/[0.03]"
+                                : game.result === "L"
+                                ? "border-red-500/20 bg-red-500/[0.02]"
+                                : "border-white/10"
+                            }`}
+                          >
+                            {/* Top row: game ID + result/LIVE badge */}
+                            <div className="flex items-center justify-between mb-1 md:mb-2">
+                              <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
+                                {game.gameId}
                               </span>
-                            ) : (
-                              <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
-                                Upcoming
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Matchup: Legacy vs Opponent */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs md:text-sm font-700 text-cobalt truncate">
-                                Legacy
-                              </span>
-                              <span className="font-display font-800 text-base md:text-lg text-white ml-2">
-                                {game.legacyScore !== null ? game.legacyScore : "–"}
-                              </span>
+                              {gameLive ? (
+                                <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-500/20 border border-red-500/30">
+                                  <span className="relative flex h-1.5 w-1.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500" />
+                                  </span>
+                                  <span className="font-display font-800 text-[9px] md:text-[10px] uppercase tracking-wider text-red-400">
+                                    Live
+                                  </span>
+                                </span>
+                              ) : game.result !== "upcoming" ? (
+                                <span
+                                  className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] font-display font-800 uppercase ${
+                                    game.result === "W"
+                                      ? "bg-green-500/20 text-green-400"
+                                      : "bg-red-500/20 text-red-400"
+                                  }`}
+                                >
+                                  {game.result === "W" ? "Win" : "Loss"}
+                                </span>
+                              ) : (
+                                <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
+                                  Upcoming
+                                </span>
+                              )}
                             </div>
-                            <div className="flex items-center justify-between mt-0.5">
-                              <span className="text-[11px] md:text-sm font-600 text-white/60 truncate mr-2">
-                                {game.opponent}
+
+                            {/* Matchup: Legacy vs Opponent */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between">
+                                <span className="text-xs md:text-sm font-700 text-cobalt truncate">
+                                  Legacy
+                                </span>
+                                <span className="font-display font-800 text-base md:text-lg text-white ml-2">
+                                  {game.legacyScore !== null ? game.legacyScore : "–"}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between mt-0.5">
+                                <span className="text-[11px] md:text-sm font-600 text-white/60 truncate mr-2">
+                                  {game.opponent}
+                                </span>
+                                <span className="font-display font-800 text-base md:text-lg text-white/50 ml-2">
+                                  {game.opponentScore !== null ? game.opponentScore : "–"}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Meta: time + location */}
+                            <div className="mt-1.5 md:mt-2.5 pt-1.5 md:pt-2 border-t border-white/5 flex items-center gap-2 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
+                              <span className="flex items-center gap-1 flex-shrink-0">
+                                <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                                {game.date}
                               </span>
-                              <span className="font-display font-800 text-base md:text-lg text-white/50 ml-2">
-                                {game.opponentScore !== null ? game.opponentScore : "–"}
-                              </span>
+                              {game.location && (
+                                <span className="flex items-center gap-1 truncate">
+                                  <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
+                                  <span className="truncate">{game.location}</span>
+                                </span>
+                              )}
                             </div>
                           </div>
-
-                          {/* Meta: time + location */}
-                          <div className="mt-1.5 md:mt-2.5 pt-1.5 md:pt-2 border-t border-white/5 flex items-center gap-2 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
-                            <span className="flex items-center gap-1 flex-shrink-0">
-                              <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                              {game.date}
-                            </span>
-                            {game.location && (
-                              <span className="flex items-center gap-1 truncate">
-                                <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
-                                <span className="truncate">{game.location}</span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

@@ -257,13 +257,36 @@ export function getLiveTournament() {
   return TOURNAMENTS.find((t) => t.status === "live") || null;
 }
 
+// In-memory cache for live tournament data (avoids scraping on every request)
+let liveCache: { data: TournamentData; fetchedAt: number } | null = null;
+const LIVE_CACHE_TTL_MS = 45_000; // 45 seconds — fresh enough for game day
+
 /**
- * Fetch live tournament data (only the active one for real-time display)
+ * Fetch live tournament data with server-side caching.
+ * Returns cached data if fresh, otherwise scrapes Tourney Machine.
+ * If a fresh scrape returns 0 games (e.g. Cloudflare 403), retains stale cache.
  */
 export async function fetchLiveTournamentData(): Promise<TournamentData | null> {
   const live = getLiveTournament();
   if (!live) return null;
-  return fetchTournamentData(live);
+
+  const now = Date.now();
+  if (liveCache && now - liveCache.fetchedAt < LIVE_CACHE_TTL_MS) {
+    return liveCache.data;
+  }
+
+  const data = await fetchTournamentData(live);
+
+  // Only update cache if we actually got games, or if there's no existing cache
+  if (data.games.length > 0 || !liveCache) {
+    liveCache = { data, fetchedAt: now };
+  } else {
+    // Scrape failed (likely Cloudflare 403) — serve stale cache but update timestamp
+    // so we don't hammer the server every request
+    liveCache = { data: liveCache.data, fetchedAt: now };
+  }
+
+  return liveCache.data;
 }
 
 /**
