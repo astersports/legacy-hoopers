@@ -1,10 +1,51 @@
 /**
  * TournamentHistory — Shows full game log synced from all Tourney Machine tournaments
  * Displays on the Records page as an expandable section
+ * Includes per-team win/loss record breakdown in the header
  */
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import { ChevronDown, ChevronUp, ExternalLink, Loader2, Trophy } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, Loader2, Trophy, Users } from "lucide-react";
+
+interface TeamRecord {
+  team: string;
+  wins: number;
+  losses: number;
+  ties: number;
+}
+
+function aggregateTeamRecords(
+  data: { games: { legacyTeam: string; result: string }[] }[]
+): TeamRecord[] {
+  const map = new Map<string, TeamRecord>();
+
+  for (const tournament of data) {
+    for (const game of tournament.games) {
+      if (game.result === "upcoming") continue;
+
+      // Normalize team name
+      let teamName = game.legacyTeam
+        .replace(/\[\d+\]\s*/, "")
+        .replace("Legacy Hoopers (NY)", "Legacy")
+        .replace("Legacy Hoopers", "Legacy")
+        .trim();
+      if (!teamName || teamName === "Legacy") teamName = "Legacy";
+
+      if (!map.has(teamName)) {
+        map.set(teamName, { team: teamName, wins: 0, losses: 0, ties: 0 });
+      }
+      const rec = map.get(teamName)!;
+      if (game.result === "W") rec.wins++;
+      else if (game.result === "L") rec.losses++;
+      else if (game.result === "T") rec.ties++;
+    }
+  }
+
+  // Sort by total games descending
+  return Array.from(map.values()).sort(
+    (a, b) => b.wins + b.losses + b.ties - (a.wins + a.losses + a.ties)
+  );
+}
 
 export default function TournamentHistory() {
   const { data, isLoading } = trpc.tournament.all.useQuery(undefined, {
@@ -31,6 +72,9 @@ export default function TournamentHistory() {
   const totalWins = allGames.filter((g) => g.result === "W").length;
   const totalLosses = allGames.filter((g) => g.result === "L").length;
   const totalGames = allGames.filter((g) => g.result !== "upcoming").length;
+
+  // Per-team records
+  const teamRecords = aggregateTeamRecords(data);
 
   return (
     <div className="mt-8">
@@ -61,8 +105,54 @@ export default function TournamentHistory() {
         </div>
       </button>
 
+      {/* Per-Team Records Summary — always visible */}
+      {teamRecords.length > 1 && (
+        <div className="mt-3 bg-navy-light border border-cobalt/10 rounded-xl p-3 md:p-4">
+          <div className="flex items-center gap-2 mb-2 md:mb-3">
+            <Users className="w-4 h-4 text-cobalt" />
+            <span className="font-display font-800 text-xs uppercase tracking-wider text-white/60">
+              Record by Team
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 md:gap-2">
+            {teamRecords.map((rec, i) => {
+              const total = rec.wins + rec.losses + rec.ties;
+              const winPct = total > 0 ? Math.round((rec.wins / total) * 100) : 0;
+              return (
+                <div
+                  key={i}
+                  className="flex items-center justify-between px-2.5 py-1.5 md:px-3 md:py-2 bg-arena/50 rounded-lg border border-white/5"
+                >
+                  <span className="text-[10px] md:text-xs font-700 text-white/80 truncate mr-1.5">
+                    {rec.team}
+                  </span>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <span className="font-display font-800 text-xs md:text-sm text-white">
+                      {rec.wins}–{rec.losses}
+                      {rec.ties > 0 ? `–${rec.ties}` : ""}
+                    </span>
+                    <span
+                      className={`text-[9px] md:text-[10px] font-700 px-1 md:px-1.5 py-0.5 rounded ${
+                        winPct >= 70
+                          ? "bg-green-500/20 text-green-400"
+                          : winPct >= 50
+                          ? "bg-cobalt/20 text-cobalt"
+                          : "bg-white/10 text-white/50"
+                      }`}
+                    >
+                      {winPct}%
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {expanded && (
         <div className="mt-3 space-y-4">
+          {/* Tournament Game Logs */}
           {data.map((tournament, tIdx) => {
             if (tournament.games.length === 0) return null;
 

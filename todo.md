@@ -38,6 +38,6 @@
 - [x] Compact differentiator cards on mobile (less padding/spacing)
 - [x] Compact gym location cards on mobile
 - [x] Compact game cards (This Weekend) further on mobile
-- [ ] Auto-refresh live scores (60-second polling interval in ThisWeekend component)
-- [ ] Win/Loss record per team aggregated in Tournament History section header
-- [ ] Push notifications for game results (periodic check of Tourney Machine)
+- [x] Auto-refresh live scores (60-second polling interval in ThisWeekend component)
+- [x] Win/Loss record per team aggregated in Tournament History section header
+- [x] Push notifications for game results (periodic check of Tourney Machine)
