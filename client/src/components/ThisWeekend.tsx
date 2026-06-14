@@ -8,7 +8,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
 import { ExternalLink, Trophy, Clock, MapPin, Loader2, ChevronDown } from "lucide-react";
-import { isGameLive } from "@shared/gameTime";
+import { isGameLive, parseGameDate } from "@shared/gameTime";
 
 /** Division display config — keyed by the division name from Tourney Machine */
 const DIVISION_CONFIG: Record<string, { name: string; grade: string; color: string; order: number }> = {
@@ -71,10 +71,27 @@ export default function ThisWeekend() {
     return Array.from(divMap.values())
       .sort((a, b) => a.config.order - b.config.order)
       .map(({ config, games }) => {
-        const wins = games.filter((g) => g.result === "W").length;
-        const losses = games.filter((g) => g.result === "L").length;
-        const liveCount = games.filter((g) => isGameLive(g, now)).length;
-        return { ...config, games, wins, losses, liveCount };
+        // Sort: LIVE games first, then upcoming (nearest start), then completed (most recent first)
+        const sortedGames = [...games].sort((a, b) => {
+          const aLive = isGameLive(a, now) ? 0 : 1;
+          const bLive = isGameLive(b, now) ? 0 : 1;
+          if (aLive !== bLive) return aLive - bLive;
+
+          const aUpcoming = a.result === "upcoming" ? 0 : 1;
+          const bUpcoming = b.result === "upcoming" ? 0 : 1;
+          if (aUpcoming !== bUpcoming) return aUpcoming - bUpcoming;
+
+          const aTime = parseGameDate(a.date)?.getTime() ?? 0;
+          const bTime = parseGameDate(b.date)?.getTime() ?? 0;
+
+          // Upcoming: nearest start first; Completed: most recent first
+          if (a.result === "upcoming" && b.result === "upcoming") return aTime - bTime;
+          return bTime - aTime;
+        });
+        const wins = sortedGames.filter((g) => g.result === "W").length;
+        const losses = sortedGames.filter((g) => g.result === "L").length;
+        const liveCount = sortedGames.filter((g) => isGameLive(g, now)).length;
+        return { ...config, games: sortedGames, wins, losses, liveCount };
       });
   }, [liveData, now]);
 

@@ -46,3 +46,4 @@
 - [x] Add tap-to-collapse on division headers so parents can hide divisions they aren't following
 - [x] Add pulsing LIVE badge to games currently in progress based on scheduled time
 - [x] Add vitest for isGameLive/parseGameDate time-window behavior including Eastern time handling
+- [x] Sort games chronologically within each division (next upcoming game first)
