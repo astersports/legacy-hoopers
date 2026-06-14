@@ -23,3 +23,7 @@
 - [x] Update season results: 10U Black Boys 2 championships, Girls 1 championship + 1 finals + 1 Final Four at nationals
 - [x] Update homepage stats/ticker with correct championship counts
 - [x] Update Records page with accurate spring 2026 results
+- [x] Add specific tournament names to ticker and Records (championship, finals, Final Four)
+- [x] Add Championship Wall / Hardware section on homepage
+- [x] Update Records page "Last Updated" date to June 14, 2026
+- [x] Explore SE Tourney / Tourney Machine for live score integration

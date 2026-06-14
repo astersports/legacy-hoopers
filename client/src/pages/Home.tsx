@@ -193,6 +193,68 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Championship Wall */}
+      <section className="py-16 md:py-24 relative overflow-hidden">
+        <span className="watermark top-1/2 -translate-y-1/2 right-[-5%]">HARDWARE</span>
+        <div className="container relative z-10">
+          <div className="text-center mb-12">
+            <span className="font-display font-700 text-xs uppercase tracking-[0.2em] text-gold mb-3 block">
+              Spring 2026 Hardware
+            </span>
+            <h2 className="font-display font-800 text-4xl md:text-5xl uppercase text-white">
+              Championship <span className="text-gold">Wall</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* 10U Black - Chase for the Chain */}
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
+              <div className="text-4xl mb-3">🏆</div>
+              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
+              <p className="font-display font-700 text-sm text-white mb-2">ZG Chase for the Chain NY</p>
+              <p className="text-white/50 text-xs">10U Boys Black</p>
+              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">April 2026</p>
+            </div>
+
+            {/* 10U Black - Rumble for the Ring */}
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
+              <div className="text-4xl mb-3">🏆</div>
+              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
+              <p className="font-display font-700 text-sm text-white mb-2">ZG Rumble for the Ring CT</p>
+              <p className="text-white/50 text-xs">10U Boys Black</p>
+              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">May 2026</p>
+            </div>
+
+            {/* 11U Girls - Chase for the Chain */}
+            <div className="bg-gradient-to-br from-navy-light to-[#1a2f4a] border border-gold/30 rounded-xl p-6 text-center card-hover">
+              <div className="text-4xl mb-3">🏆</div>
+              <h3 className="font-display font-800 text-lg uppercase text-gold mb-1">Champions</h3>
+              <p className="font-display font-700 text-sm text-white mb-2">ZG Chase for the Chain NY</p>
+              <p className="text-white/50 text-xs">11U Girls</p>
+              <p className="text-white/30 text-[10px] mt-2 uppercase tracking-wider">April 2026</p>
+            </div>
+          </div>
+
+          {/* Additional Achievements */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div className="bg-navy-light border border-white/10 rounded-xl p-5 flex items-center gap-4 card-hover">
+              <div className="text-3xl">🥈</div>
+              <div>
+                <h4 className="font-display font-800 text-sm uppercase text-white">Finalists — ZG Rumble for the Ring CT</h4>
+                <p className="text-white/50 text-xs mt-0.5">11U Girls · May 2026</p>
+              </div>
+            </div>
+            <div className="bg-navy-light border border-white/10 rounded-xl p-5 flex items-center gap-4 card-hover">
+              <div className="text-3xl">🏅</div>
+              <div>
+                <h4 className="font-display font-800 text-sm uppercase text-white">Final Four — ZG National Finals MA</h4>
+                <p className="text-white/50 text-xs mt-0.5">11U Girls · 3–0 Pool Play · May 2026</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* What Makes Us Different */}
       <section ref={diffRef} className="py-24 md:py-32 relative overflow-hidden">
         <span className="watermark top-10 left-[-5%]">ELITE</span>

@@ -1,7 +1,7 @@
 /*
  * DESIGN: Court Noir — Team Records
  * Accurate data from Spring 2026 + Winter 2025-26 seasons
- * Last Updated: June 7, 2026
+ * Last Updated: June 14, 2026
  */
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -231,7 +231,7 @@ export default function Records() {
               </span>
             ))}
           </div>
-          <p className="text-white/40 text-xs italic mt-4">Last Updated: June 7, 2026</p>
+          <p className="text-white/40 text-xs italic mt-4">Last Updated: June 14, 2026</p>
         </div>
       </section>
 
