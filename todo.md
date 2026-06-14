@@ -50,3 +50,4 @@
 - [x] Add relative countdown timer showing "Starts in X min" for next upcoming game in each division
 - [x] Add point differential indicator next to final scores of completed games (e.g. +12, -3)
 - [x] Persist collapsed division state in localStorage so parents' preferences are remembered across visits
+- [x] Automatically badge the game with the largest point differential (win) in each division with a trophy icon

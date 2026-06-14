@@ -126,7 +126,21 @@ export default function ThisWeekend() {
         const wins = sortedGames.filter((g) => g.result === "W").length;
         const losses = sortedGames.filter((g) => g.result === "L").length;
         const liveCount = sortedGames.filter((g) => isGameLive(g, now)).length;
-        return { ...config, games: sortedGames, wins, losses, liveCount };
+
+        // Find the biggest win (largest positive point differential)
+        let biggestWinId: string | null = null;
+        let biggestDiff = 0;
+        for (const g of sortedGames) {
+          if (g.result === "W" && g.legacyScore !== null && g.opponentScore !== null) {
+            const diff = g.legacyScore - g.opponentScore;
+            if (diff > biggestDiff) {
+              biggestDiff = diff;
+              biggestWinId = g.gameId;
+            }
+          }
+        }
+
+        return { ...config, games: sortedGames, wins, losses, liveCount, biggestWinId };
       });
   }, [liveData, now]);
 
@@ -241,12 +255,15 @@ export default function ThisWeekend() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-3">
                       {division.games.map((game: GameResult, i: number) => {
                         const gameLive = isGameLive(game, now);
+                        const isBiggestWin = division.biggestWinId === game.gameId;
                         return (
                           <div
                             key={i}
                             className={`bg-navy-light border rounded-lg px-3 py-2 md:px-4 md:py-3 relative ${
                               gameLive
                                 ? "border-red-500/40 bg-red-500/[0.04] ring-1 ring-red-500/20"
+                                : isBiggestWin
+                                ? "border-gold/40 bg-gold/[0.04] ring-1 ring-gold/20"
                                 : game.result === "W"
                                 ? "border-green-500/30 bg-green-500/[0.03]"
                                 : game.result === "L"
@@ -254,6 +271,15 @@ export default function ThisWeekend() {
                                 : "border-white/10"
                             }`}
                           >
+                            {/* Biggest Win trophy badge */}
+                            {isBiggestWin && (
+                              <div className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 flex items-center gap-1 px-1.5 py-0.5 bg-gold/20 border border-gold/40 rounded-full">
+                                <Trophy className="w-2.5 h-2.5 md:w-3 md:h-3 text-gold" />
+                                <span className="font-display font-800 text-[8px] md:text-[9px] uppercase tracking-wider text-gold hidden md:inline">
+                                  Best
+                                </span>
+                              </div>
+                            )}
                             {/* Top row: game ID + result/LIVE badge */}
                             <div className="flex items-center justify-between mb-1 md:mb-2">
                               <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
