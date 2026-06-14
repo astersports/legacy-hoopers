@@ -49,3 +49,4 @@
 - [x] Sort games chronologically within each division (next upcoming game first)
 - [x] Add relative countdown timer showing "Starts in X min" for next upcoming game in each division
 - [x] Add point differential indicator next to final scores of completed games (e.g. +12, -3)
+- [x] Persist collapsed division state in localStorage so parents' preferences are remembered across visits

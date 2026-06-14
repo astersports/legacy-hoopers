@@ -59,8 +59,16 @@ export default function ThisWeekend() {
 
   const liveTournament = links?.find((t) => t.status === "live");
 
-  // Track which divisions are collapsed (all expanded by default)
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  // Track which divisions are collapsed — initialized from localStorage
+  const STORAGE_KEY = "legacy-hoopers-collapsed-divisions";
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
   // Current time — updated every 30s to re-evaluate live status
   const [now, setNow] = useState(() => new Date());
 
@@ -70,7 +78,13 @@ export default function ThisWeekend() {
   }, []);
 
   const toggleDivision = (name: string) => {
-    setCollapsed((prev) => ({ ...prev, [name]: !prev[name] }));
+    setCollapsed((prev) => {
+      const next = { ...prev, [name]: !prev[name] };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch {}
+      return next;
+    });
   };
 
   // Group games by division using the division field from the API
