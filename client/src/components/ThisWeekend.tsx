@@ -1,10 +1,27 @@
 /**
  * ThisWeekend — Embedded tournament section showing live/upcoming games
+ * Grouped by team so parents can follow their kid's team
  * Fetches real-time data from Tourney Machine via the server-side scraper
- * Compact card design for mobile
  */
+import { useState, useMemo } from "react";
 import { trpc } from "@/lib/trpc";
-import { ExternalLink, Trophy, Clock, MapPin, Loader2 } from "lucide-react";
+import { ExternalLink, Trophy, Clock, MapPin, Loader2, Users } from "lucide-react";
+
+/** Extract short team label from full team name */
+function shortTeamLabel(fullName: string): string {
+  // "Legacy Hoopers 10U Boys Black (NY)" → "10U Black"
+  // "Legacy Hoopers 11U Girls (NY)" → "11U Girls"
+  const cleaned = fullName
+    .replace(/Legacy Hoopers\s*/i, "")
+    .replace(/\(NY\)/i, "")
+    .replace(/\[.*?\]/g, "")
+    .trim();
+  // Simplify "10U Boys Black" → "10U Black", "11U Girls" stays
+  return cleaned
+    .replace(/Boys\s+/i, "")
+    .replace(/Girls/i, "Girls")
+    .trim();
+}
 
 export default function ThisWeekend() {
   const { data: liveData, isLoading } = trpc.tournament.live.useQuery(undefined, {
@@ -13,6 +30,29 @@ export default function ThisWeekend() {
   const { data: links } = trpc.tournament.links.useQuery();
 
   const liveTournament = links?.find((t) => t.status === "live");
+  const [activeTeam, setActiveTeam] = useState<string | null>(null); // null = "All Teams"
+
+  // Group games by team
+  const teamGroups = useMemo(() => {
+    if (!liveData?.games) return [];
+    const map = new Map<string, typeof liveData.games>();
+    for (const game of liveData.games) {
+      const team = game.legacyTeam;
+      if (!map.has(team)) map.set(team, []);
+      map.get(team)!.push(game);
+    }
+    // Sort teams alphabetically
+    return Array.from(map.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([team, games]) => ({ team, label: shortTeamLabel(team), games }));
+  }, [liveData]);
+
+  // Filtered games based on active team
+  const displayGames = useMemo(() => {
+    if (!liveData?.games) return [];
+    if (!activeTeam) return liveData.games;
+    return liveData.games.filter((g) => g.legacyTeam === activeTeam);
+  }, [liveData, activeTeam]);
 
   if (!liveTournament) return null;
 
@@ -46,15 +86,56 @@ export default function ThisWeekend() {
           </a>
         </div>
 
+        {/* Team Filter Tabs */}
+        {teamGroups.length > 1 && !isLoading && (
+          <div className="flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5 overflow-x-auto pb-1 scrollbar-hide">
+            <button
+              onClick={() => setActiveTeam(null)}
+              className={`flex-shrink-0 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-display font-700 text-[10px] md:text-xs uppercase tracking-wider transition-all duration-200 ${
+                activeTeam === null
+                  ? "bg-cobalt text-white shadow-lg shadow-cobalt/30"
+                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80"
+              }`}
+            >
+              All Teams
+            </button>
+            {teamGroups.map(({ team, label, games }) => {
+              const wins = games.filter((g) => g.result === "W").length;
+              const losses = games.filter((g) => g.result === "L").length;
+              const hasResults = wins + losses > 0;
+              return (
+                <button
+                  key={team}
+                  onClick={() => setActiveTeam(team)}
+                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-display font-700 text-[10px] md:text-xs uppercase tracking-wider transition-all duration-200 ${
+                    activeTeam === team
+                      ? "bg-cobalt text-white shadow-lg shadow-cobalt/30"
+                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80"
+                  }`}
+                >
+                  {label}
+                  {hasResults && (
+                    <span className={`text-[9px] md:text-[10px] font-800 ${
+                      activeTeam === team ? "text-white/80" : "text-white/40"
+                    }`}>
+                      {wins}–{losses}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Games Grid */}
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 text-cobalt animate-spin" />
             <span className="ml-3 text-white/50 text-sm">Loading live scores...</span>
           </div>
-        ) : liveData && liveData.games.length > 0 ? (
+        ) : displayGames.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-            {liveData.games.map((game, i) => (
+            {displayGames.map((game, i) => (
               <div
                 key={i}
                 className={`bg-navy-light border rounded-lg md:rounded-xl px-3 py-2 md:p-4 ${
@@ -65,11 +146,19 @@ export default function ThisWeekend() {
                     : "border-white/10"
                 }`}
               >
-                {/* Game Header + Teams in one compact row on mobile */}
+                {/* Game Header */}
                 <div className="flex items-center justify-between mb-1 md:mb-3">
-                  <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
-                    {game.gameId}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
+                      {game.gameId}
+                    </span>
+                    {/* Show team badge when viewing "All Teams" */}
+                    {!activeTeam && (
+                      <span className="px-1.5 py-0.5 rounded bg-cobalt/10 text-cobalt text-[8px] md:text-[9px] font-700 uppercase">
+                        {shortTeamLabel(game.legacyTeam)}
+                      </span>
+                    )}
+                  </div>
                   {game.result !== "upcoming" ? (
                     <span
                       className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] font-display font-800 uppercase ${
@@ -87,7 +176,7 @@ export default function ThisWeekend() {
                   )}
                 </div>
 
-                {/* Teams & Score - compact */}
+                {/* Teams & Score */}
                 <div className="space-y-0.5 md:space-y-2">
                   <div className="flex items-center justify-between">
                     <span className={`text-xs md:text-sm font-700 ${game.legacyTeam.includes("Legacy") ? "text-cobalt" : "text-white/80"}`}>
@@ -107,7 +196,7 @@ export default function ThisWeekend() {
                   </div>
                 </div>
 
-                {/* Game Meta - single line on mobile */}
+                {/* Game Meta */}
                 <div className="mt-1.5 md:mt-3 pt-1.5 md:pt-3 border-t border-white/5 flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
                   <span className="flex items-center gap-1 flex-shrink-0">
                     <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
@@ -122,6 +211,12 @@ export default function ThisWeekend() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : liveData && liveData.games.length > 0 ? (
+          /* Active filter has no games */
+          <div className="bg-navy-light border border-white/10 rounded-xl p-6 text-center">
+            <Users className="w-6 h-6 text-cobalt mx-auto mb-2" />
+            <p className="text-white/60 text-sm">No games found for this team yet.</p>
           </div>
         ) : (
           <div className="bg-navy-light border border-white/10 rounded-xl p-6 md:p-8 text-center">

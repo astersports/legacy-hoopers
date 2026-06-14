@@ -41,3 +41,4 @@
 - [x] Auto-refresh live scores (60-second polling interval in ThisWeekend component)
 - [x] Win/Loss record per team aggregated in Tournament History section header
 - [x] Push notifications for game results (periodic check of Tourney Machine)
+- [x] Break up live scores (ThisWeekend) by team so parents can follow their kid's team
