@@ -25,6 +25,7 @@ export interface GameResult {
   opponentScore: number | null;
   opponent: string;
   result: "W" | "L" | "T" | "upcoming";
+  division?: string; // e.g. "Boys - 2nd/3rd", "Boys - 4th", "Girls - 5th"
 }
 
 export interface TournamentData {
@@ -151,6 +152,10 @@ export async function fetchTournamentData(config: TournamentConfig): Promise<Tou
 
       const html = await response.text();
       const games = parseGames(html, "Legacy");
+      // Tag each game with its division
+      for (const game of games) {
+        game.division = division.name;
+      }
       allGames.push(...games);
     } catch {
       // Skip failed divisions

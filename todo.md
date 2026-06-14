@@ -42,3 +42,4 @@
 - [x] Win/Loss record per team aggregated in Tournament History section header
 - [x] Push notifications for game results (periodic check of Tourney Machine)
 - [x] Break up live scores (ThisWeekend) by team so parents can follow their kid's team
+- [x] Redesign live scores grouping by division: 8U Boys (2nd/3rd grade), 11U Girls (5th grade), 10U Black (4th grade boys) with visually appealing section headers and compact cards

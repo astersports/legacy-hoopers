@@ -1,58 +1,64 @@
 /**
- * ThisWeekend — Embedded tournament section showing live/upcoming games
- * Grouped by team so parents can follow their kid's team
- * Fetches real-time data from Tourney Machine via the server-side scraper
+ * ThisWeekend — Live tournament scores grouped by division/team
+ * Three divisions: 8U Boys (2nd/3rd grade), 10U Black (4th grade), 11U Girls (5th grade)
+ * Uses the `division` field from the API to group games correctly
  */
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { trpc } from "@/lib/trpc";
-import { ExternalLink, Trophy, Clock, MapPin, Loader2, Users } from "lucide-react";
+import { ExternalLink, Trophy, Clock, MapPin, Loader2 } from "lucide-react";
 
-/** Extract short team label from full team name */
-function shortTeamLabel(fullName: string): string {
-  // "Legacy Hoopers 10U Boys Black (NY)" → "10U Black"
-  // "Legacy Hoopers 11U Girls (NY)" → "11U Girls"
-  const cleaned = fullName
-    .replace(/Legacy Hoopers\s*/i, "")
-    .replace(/\(NY\)/i, "")
-    .replace(/\[.*?\]/g, "")
-    .trim();
-  // Simplify "10U Boys Black" → "10U Black", "11U Girls" stays
-  return cleaned
-    .replace(/Boys\s+/i, "")
-    .replace(/Girls/i, "Girls")
-    .trim();
-}
+/** Division display config — keyed by the division name from Tourney Machine */
+const DIVISION_CONFIG: Record<string, { name: string; grade: string; color: string; order: number }> = {
+  "Boys - 2nd/3rd": { name: "8U Boys", grade: "2nd/3rd Grade", color: "#f59e0b", order: 1 },
+  "Boys - 2nd": { name: "8U Boys", grade: "2nd Grade", color: "#f59e0b", order: 1 },
+  "Boys - 4th": { name: "10U Black", grade: "4th Grade Boys", color: "#4a8fd4", order: 2 },
+  "Girls - 5th": { name: "11U Girls", grade: "5th Grade Girls", color: "#a78bfa", order: 3 },
+};
+
+type GameResult = {
+  gameId: string;
+  date: string;
+  location: string;
+  legacyTeam: string;
+  legacyScore: number | null;
+  opponentScore: number | null;
+  opponent: string;
+  result: "W" | "L" | "T" | "upcoming";
+  division?: string;
+};
 
 export default function ThisWeekend() {
   const { data: liveData, isLoading } = trpc.tournament.live.useQuery(undefined, {
-    refetchInterval: 60000, // Refresh every 60 seconds
+    refetchInterval: 60000,
   });
   const { data: links } = trpc.tournament.links.useQuery();
 
   const liveTournament = links?.find((t) => t.status === "live");
-  const [activeTeam, setActiveTeam] = useState<string | null>(null); // null = "All Teams"
 
-  // Group games by team
-  const teamGroups = useMemo(() => {
+  // Group games by division using the division field from the API
+  const grouped = useMemo(() => {
     if (!liveData?.games) return [];
-    const map = new Map<string, typeof liveData.games>();
-    for (const game of liveData.games) {
-      const team = game.legacyTeam;
-      if (!map.has(team)) map.set(team, []);
-      map.get(team)!.push(game);
+    const divMap = new Map<string, { config: typeof DIVISION_CONFIG[string]; games: GameResult[] }>();
+
+    for (const game of liveData.games as GameResult[]) {
+      const divKey = game.division || "Unknown";
+      const config = DIVISION_CONFIG[divKey];
+      if (!config) continue; // Skip unknown divisions
+
+      if (!divMap.has(divKey)) {
+        divMap.set(divKey, { config, games: [] });
+      }
+      divMap.get(divKey)!.games.push(game);
     }
-    // Sort teams alphabetically
-    return Array.from(map.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([team, games]) => ({ team, label: shortTeamLabel(team), games }));
-  }, [liveData]);
 
-  // Filtered games based on active team
-  const displayGames = useMemo(() => {
-    if (!liveData?.games) return [];
-    if (!activeTeam) return liveData.games;
-    return liveData.games.filter((g) => g.legacyTeam === activeTeam);
-  }, [liveData, activeTeam]);
+    return Array.from(divMap.values())
+      .sort((a, b) => a.config.order - b.config.order)
+      .map(({ config, games }) => {
+        const wins = games.filter((g) => g.result === "W").length;
+        const losses = games.filter((g) => g.result === "L").length;
+        return { ...config, games, wins, losses };
+      });
+  }, [liveData]);
 
   if (!liveTournament) return null;
 
@@ -60,7 +66,7 @@ export default function ThisWeekend() {
     <section className="py-8 md:py-20 relative overflow-hidden">
       <div className="container relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4 md:mb-8">
+        <div className="flex items-center justify-between mb-5 md:mb-8">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <span className="relative flex h-3 w-3">
@@ -86,137 +92,119 @@ export default function ThisWeekend() {
           </a>
         </div>
 
-        {/* Team Filter Tabs */}
-        {teamGroups.length > 1 && !isLoading && (
-          <div className="flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5 overflow-x-auto pb-1 scrollbar-hide">
-            <button
-              onClick={() => setActiveTeam(null)}
-              className={`flex-shrink-0 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-display font-700 text-[10px] md:text-xs uppercase tracking-wider transition-all duration-200 ${
-                activeTeam === null
-                  ? "bg-cobalt text-white shadow-lg shadow-cobalt/30"
-                  : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80"
-              }`}
-            >
-              All Teams
-            </button>
-            {teamGroups.map(({ team, label, games }) => {
-              const wins = games.filter((g) => g.result === "W").length;
-              const losses = games.filter((g) => g.result === "L").length;
-              const hasResults = wins + losses > 0;
-              return (
-                <button
-                  key={team}
-                  onClick={() => setActiveTeam(team)}
-                  className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-display font-700 text-[10px] md:text-xs uppercase tracking-wider transition-all duration-200 ${
-                    activeTeam === team
-                      ? "bg-cobalt text-white shadow-lg shadow-cobalt/30"
-                      : "bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80"
-                  }`}
-                >
-                  {label}
-                  {hasResults && (
-                    <span className={`text-[9px] md:text-[10px] font-800 ${
-                      activeTeam === team ? "text-white/80" : "text-white/40"
-                    }`}>
-                      {wins}–{losses}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Games Grid */}
+        {/* Loading State */}
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 text-cobalt animate-spin" />
             <span className="ml-3 text-white/50 text-sm">Loading live scores...</span>
           </div>
-        ) : displayGames.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-            {displayGames.map((game, i) => (
-              <div
-                key={i}
-                className={`bg-navy-light border rounded-lg md:rounded-xl px-3 py-2 md:p-4 ${
-                  game.result === "W"
-                    ? "border-green-500/30 bg-green-500/[0.03]"
-                    : game.result === "L"
-                    ? "border-red-500/20 bg-red-500/[0.02]"
-                    : "border-white/10"
-                }`}
-              >
-                {/* Game Header */}
-                <div className="flex items-center justify-between mb-1 md:mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
-                      {game.gameId}
-                    </span>
-                    {/* Show team badge when viewing "All Teams" */}
-                    {!activeTeam && (
-                      <span className="px-1.5 py-0.5 rounded bg-cobalt/10 text-cobalt text-[8px] md:text-[9px] font-700 uppercase">
-                        {shortTeamLabel(game.legacyTeam)}
+        ) : grouped.length > 0 ? (
+          <div className="space-y-5 md:space-y-8">
+            {grouped.map((division) => (
+              <div key={division.name}>
+                {/* Division Header */}
+                <div className="flex items-center gap-3 mb-2.5 md:mb-4">
+                  <div
+                    className="w-1 h-8 md:h-10 rounded-full"
+                    style={{ backgroundColor: division.color }}
+                  />
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <div>
+                      <h3 className="font-display font-800 text-sm md:text-lg uppercase text-white leading-tight">
+                        {division.name}
+                      </h3>
+                      <span className="text-[10px] md:text-xs text-white/40 font-600">
+                        {division.grade}
                       </span>
-                    )}
+                    </div>
+                    {/* Record badge */}
+                    <div
+                      className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
+                      style={{ backgroundColor: `${division.color}15`, border: `1px solid ${division.color}30` }}
+                    >
+                      <span
+                        className="font-display font-800 text-sm md:text-base"
+                        style={{ color: division.color }}
+                      >
+                        {division.wins}–{division.losses}
+                      </span>
+                    </div>
                   </div>
-                  {game.result !== "upcoming" ? (
-                    <span
-                      className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] font-display font-800 uppercase ${
+                </div>
+
+                {/* Games for this division */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-3">
+                  {division.games.map((game: GameResult, i: number) => (
+                    <div
+                      key={i}
+                      className={`bg-navy-light border rounded-lg px-3 py-2 md:px-4 md:py-3 ${
                         game.result === "W"
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-red-500/20 text-red-400"
+                          ? "border-green-500/30 bg-green-500/[0.03]"
+                          : game.result === "L"
+                          ? "border-red-500/20 bg-red-500/[0.02]"
+                          : "border-white/10"
                       }`}
                     >
-                      {game.result === "W" ? "Win" : "Loss"}
-                    </span>
-                  ) : (
-                    <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
-                      Upcoming
-                    </span>
-                  )}
-                </div>
+                      {/* Top row: game ID + result */}
+                      <div className="flex items-center justify-between mb-1 md:mb-2">
+                        <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
+                          {game.gameId}
+                        </span>
+                        {game.result !== "upcoming" ? (
+                          <span
+                            className={`px-1.5 md:px-2 py-0.5 rounded text-[9px] md:text-[10px] font-display font-800 uppercase ${
+                              game.result === "W"
+                                ? "bg-green-500/20 text-green-400"
+                                : "bg-red-500/20 text-red-400"
+                            }`}
+                          >
+                            {game.result === "W" ? "Win" : "Loss"}
+                          </span>
+                        ) : (
+                          <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
+                            Upcoming
+                          </span>
+                        )}
+                      </div>
 
-                {/* Teams & Score */}
-                <div className="space-y-0.5 md:space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className={`text-xs md:text-sm font-700 ${game.legacyTeam.includes("Legacy") ? "text-cobalt" : "text-white/80"}`}>
-                      {game.legacyTeam}
-                    </span>
-                    <span className="font-display font-800 text-base md:text-lg text-white">
-                      {game.legacyScore !== null ? game.legacyScore : "–"}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs md:text-sm font-600 text-white/60 truncate mr-2">
-                      {game.opponent}
-                    </span>
-                    <span className="font-display font-800 text-base md:text-lg text-white/60">
-                      {game.opponentScore !== null ? game.opponentScore : "–"}
-                    </span>
-                  </div>
-                </div>
+                      {/* Matchup: Legacy vs Opponent */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs md:text-sm font-700 text-cobalt truncate">
+                            Legacy
+                          </span>
+                          <span className="font-display font-800 text-base md:text-lg text-white ml-2">
+                            {game.legacyScore !== null ? game.legacyScore : "–"}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between mt-0.5">
+                          <span className="text-[11px] md:text-sm font-600 text-white/60 truncate mr-2">
+                            {game.opponent}
+                          </span>
+                          <span className="font-display font-800 text-base md:text-lg text-white/50 ml-2">
+                            {game.opponentScore !== null ? game.opponentScore : "–"}
+                          </span>
+                        </div>
+                      </div>
 
-                {/* Game Meta */}
-                <div className="mt-1.5 md:mt-3 pt-1.5 md:pt-3 border-t border-white/5 flex items-center gap-2 md:gap-3 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
-                  <span className="flex items-center gap-1 flex-shrink-0">
-                    <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                    {game.date}
-                  </span>
-                  {game.location && (
-                    <span className="flex items-center gap-1 truncate">
-                      <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
-                      <span className="truncate">{game.location}</span>
-                    </span>
-                  )}
+                      {/* Meta: time + location */}
+                      <div className="mt-1.5 md:mt-2.5 pt-1.5 md:pt-2 border-t border-white/5 flex items-center gap-2 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
+                        <span className="flex items-center gap-1 flex-shrink-0">
+                          <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                          {game.date}
+                        </span>
+                        {game.location && (
+                          <span className="flex items-center gap-1 truncate">
+                            <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
+                            <span className="truncate">{game.location}</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
-          </div>
-        ) : liveData && liveData.games.length > 0 ? (
-          /* Active filter has no games */
-          <div className="bg-navy-light border border-white/10 rounded-xl p-6 text-center">
-            <Users className="w-6 h-6 text-cobalt mx-auto mb-2" />
-            <p className="text-white/60 text-sm">No games found for this team yet.</p>
           </div>
         ) : (
           <div className="bg-navy-light border border-white/10 rounded-xl p-6 md:p-8 text-center">
@@ -235,7 +223,7 @@ export default function ThisWeekend() {
           </div>
         )}
 
-        {/* All Tournaments Link */}
+        {/* Tournament History */}
         <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-white/5">
           <h3 className="font-display font-800 text-xs uppercase tracking-wider text-white/40 mb-3 md:mb-4">
             Spring 2026 Tournament History
