@@ -129,7 +129,7 @@ export default function Home() {
           <div className="max-w-3xl">
             <div className="hero-tag inline-block px-4 py-1.5 bg-cobalt/20 border border-cobalt/40 rounded-full mb-6">
               <span className="font-display font-700 text-xs uppercase tracking-widest text-cobalt">
-                Spring / Summer 2025
+                Spring 2026 · Season In Progress
               </span>
             </div>
 
@@ -306,9 +306,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { name: "Westchester Community Center", teams: "10U Black · 11U Girls", city: "White Plains, NY" },
-              { name: "New Rochelle YMCA", teams: "9U · 8U", city: "New Rochelle, NY" },
-              { name: "Ardsley Middle School", teams: "10U Blue", city: "Ardsley, NY" },
+              { name: "St. Patrick's", teams: "Skills Lab · Mondays", city: "Armonk, NY" },
+              { name: "Rippowam Cisqua", teams: "All Teams · Tuesdays", city: "Bedford, NY" },
+              { name: "Westchester CC (PEB)", teams: "All Teams · Wednesdays", city: "Valhalla, NY" },
             ].map((loc, i) => (
               <Link
                 key={i}
@@ -340,7 +340,7 @@ export default function Home() {
             Ready to <span className="text-cobalt">Compete?</span>
           </h2>
           <p className="text-white/50 text-base max-w-md mx-auto mb-8">
-            Registration is open for Spring/Summer 2025. Limited roster spots available.
+            Spring 2026 season underway. 5 teams competing across AAU Circuit and League Play.
           </p>
           <a
             href="https://www.legacyhoopers.org/register"

@@ -15,13 +15,13 @@ interface Message {
 
 // Knowledge base for the AI assistant
 const KNOWLEDGE_BASE = {
-  registration: "Registration for Spring/Summer 2025 is currently open. Visit our registration page or the Aster Sports app to sign up. Roster spots are limited to 10 players per team.",
+  registration: "Spring 2026 season is currently underway with 5 teams competing. For registration inquiries for upcoming seasons, visit the Aster Sports app or email info@legacyhoopers.org. Roster spots are limited to 10 players per team.",
   teams: "Legacy Hoopers has 5 teams: 8U, 9U, 10U Black (elite), 10U Blue, and 11U Girls. Each team competes in AAU circuits and local leagues.",
-  schedule: "Practices are held twice per week (90-minute sessions). 10U Black & 11U Girls train at Westchester Community Center (Tue/Thu 6-7:30 PM). 9U & 8U at New Rochelle YMCA (Mon/Wed 5:30-7 PM). 10U Blue at Ardsley Middle School (Tue/Thu 5-6:30 PM).",
+  schedule: "Practices are held 3 days per week across our facilities. Mondays at St. Patrick's in Armonk (7:35–8:35 PM Skills Lab). Tuesdays at Rippowam Cisqua in Bedford (5:30–8:30 PM). Wednesdays at Westchester CC (PEB) in Valhalla (5:00–8:00 PM).",
   cost: "For current pricing and payment plans, please visit our registration page on the Aster Sports app or email info@legacyhoopers.org for details.",
   coaching: "Coach Kenny, our founder, holds a Master's degree in Education. He applies differentiated instruction and educational best practices to basketball development. Every session is structured with intentional pedagogy.",
   philosophy: "Legacy Hoopers operates as an academy, not a rec league. We emphasize teaching-first coaching, competitive excellence, small rosters (max 10), and 90-minute structured development labs.",
-  locations: "We train at 3 facilities: Westchester Community Center (White Plains), New Rochelle YMCA, and Ardsley Middle School. All have full-size courts.",
+  locations: "We train at 3 facilities in Northern Westchester: St. Patrick's (29 Cox Ave, Armonk), Rippowam Cisqua (439 Cantitoe St, Bedford), and Westchester Community College PEB (75 Grasslands Rd, Valhalla). Visit the Locations page for access instructions and navigation links.",
   age: "We serve players ages 7-11 across our 5 teams. Teams are organized by age group: 8U, 9U, 10U, and 11U.",
   tryouts: "Tryouts are held before each season. We evaluate skill level, coachability, and competitive drive. Contact us for upcoming tryout dates.",
   commitment: "We expect full commitment: 2+ unexcused absences per month triggers roster review. Players must arrive 10 minutes early, dressed and ready. Zero tolerance for disrespect.",
