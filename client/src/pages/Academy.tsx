@@ -5,7 +5,7 @@
 import { Link } from "wouter";
 import { Shield, Clock, BookOpen, Users, ChevronRight, AlertTriangle, CheckCircle } from "lucide-react";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/hero-academy-NCSGX238WLGJTTJZgPTK9y.webp";
+const HERO_IMG = "/manus-storage/knight-full-light_2dd8fe4f.jpeg";
 
 const policies = [
   { icon: <Clock className="w-5 h-5" />, title: "Attendance", desc: "2+ unexcused absences per month triggers roster review. Commitment is non-negotiable.", accent: "border-cobalt" },

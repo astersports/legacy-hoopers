@@ -4,7 +4,7 @@
  */
 import { Heart, Award, BookOpen, Users } from "lucide-react";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/hero-mission-MmroeaNZoUEVjqzZwKTkHB.webp";
+const HERO_IMG = "/manus-storage/knight-full-dark_1506ff44.jpeg";
 
 const values = [
   { icon: <Award className="w-6 h-6" />, title: "Excellence Over Participation", desc: "We don't hand out trophies for showing up. Every accolade is earned through effort, improvement, and competitive results." },

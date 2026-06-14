@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import AIChatbot from "./AIChatbot";
 import SeasonTicker from "./SeasonTicker";
 
-const LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/logo-mark-a5xwN5uw2NGWyagsGjFW4V.webp";
+const LOGO_URL = "/manus-storage/knight-helmet_f18ad2a1.png";
 
 const navLinks = [
   { href: "/", label: "Home" },

@@ -6,7 +6,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663756289268/nRxkftmdkigy3rgqBRonRk/hero-records-YxhsaSP2JmNcdvnL5U8ShT.webp";
+const HERO_IMG = "/manus-storage/girls-triple-threat_8866dbbd.jpeg";
 
 interface Game {
   date: string;
