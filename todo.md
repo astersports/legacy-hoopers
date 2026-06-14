@@ -9,3 +9,6 @@
 - [x] Fix AI chatbot LLM response normalization (handle string and array content formats)
 - [x] Write vitest for chatbot procedure (5 test cases, all passing)
 - [x] Verify chatbot end-to-end with real LLM queries
+- [x] Re-analyze all 4 highlight videos with AI focusing on Legacy #5 and #24
+- [x] Rebuild Film/Highlights page with accurate play-by-play data
+- [x] Verify Film page visually

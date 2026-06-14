@@ -5,7 +5,7 @@ interface PlayBreakdown {
   time: string;
   description: string;
   player?: string;
-  type: "score" | "rebound" | "drive" | "assist" | "shot" | "defense";
+  type: "score" | "rebound" | "drive" | "assist" | "shot" | "defense" | "steal" | "free-throw";
 }
 
 interface HighlightVideo {
@@ -25,103 +25,115 @@ interface HighlightVideo {
 const highlights: HighlightVideo[] = [
   {
     id: "1",
-    title: "11U Girls vs Castle — Offensive Showcase",
-    description: "Player #24 dominates with drives and mid-range jumpers. Player #14 orchestrates the offense with precision passing and scoring.",
+    title: "#5 & #24 — Scoring Clinic",
+    description: "#5 dominates with three-pointers, steals, and free throws while #24 adds drives and pull-up jumpers in a complete offensive showcase.",
     videoUrl: "/manus-storage/highlight-reel-1_a4969791.mov",
     team: "Legacy 11U Girls",
     opponent: "Castle",
     duration: "2:22",
-    aiSummary: "Legacy's 11U Girls showcase dominant offensive play against Castle. Player #24 is the focal point with aggressive drives and mid-range shooting. Player #14 runs the point, setting up plays and scoring on her own. The team excels in transition off defensive rebounds.",
-    keyPlayers: ["#24", "#14"],
-    tags: ["Scoring", "Transition", "Rebounding"],
+    aiSummary: "#5 is the star of this reel with 9 plays — three-pointers from the wing, aggressive on-ball defense leading to a steal-and-score, multiple free throws, and key defensive rebounds. #24 contributes a pull-up jumper and a baseline drive layup. Legacy's dark blue jerseys with light blue trim are on full display.",
+    keyPlayers: ["#5", "#24"],
+    tags: ["Scoring", "Three-Pointers", "Defense"],
     plays: [
-      { time: "0:05", description: "#24 receives pass, drives aggressively for the layup", player: "#24", type: "score" },
-      { time: "0:12", description: "#14 brings ball up, sets up the play, finds #24 cutting", player: "#14", type: "assist" },
-      { time: "0:20", description: "#24 hits mid-range jumper from the elbow", player: "#24", type: "score" },
-      { time: "0:35", description: "Defensive rebound secured, quick outlet pass to #14", player: "#14", type: "rebound" },
-      { time: "0:48", description: "#24 drives baseline, finishes through contact", player: "#24", type: "score" },
-      { time: "1:02", description: "#14 drives from the top, scores contested layup", player: "#14", type: "score" },
-      { time: "1:15", description: "#24 catches in the post, turns and scores", player: "#24", type: "score" },
-      { time: "1:30", description: "Fast break — #14 pushes tempo, dishes to #24 for the finish", player: "#24", type: "score" },
-      { time: "1:45", description: "#24 pulls up from mid-range, nothing but net", player: "#24", type: "score" },
-      { time: "2:00", description: "#14 weaves through defense, scores on the drive", player: "#14", type: "score" },
+      { time: "0:12", description: "#5 receives pass on right wing, sets feet, sinks a three-pointer", player: "#5", type: "score" },
+      { time: "0:22", description: "#24 catches pass on right wing, takes a dribble baseline, hits pull-up jumper", player: "#24", type: "score" },
+      { time: "0:28", description: "#24 brings ball up court, drives past defenders down right side, finishes layup", player: "#24", type: "score" },
+      { time: "0:35", description: "#5 secures defensive rebound after opponent's miss, pushes ball up court", player: "#5", type: "rebound" },
+      { time: "0:41", description: "#5 dribbles up left side, drives aggressively to basket, scores layup", player: "#5", type: "score" },
+      { time: "0:49", description: "#5 shoots and makes a free throw", player: "#5", type: "free-throw" },
+      { time: "0:58", description: "#5 shoots and makes another free throw", player: "#5", type: "free-throw" },
+      { time: "1:04", description: "#5 plays aggressive on-ball defense, pokes ball loose for steal, takes it coast-to-coast for fast-break layup", player: "#5", type: "steal" },
+      { time: "1:18", description: "#5 shoots and makes a three-pointer from the right wing", player: "#5", type: "score" },
+      { time: "1:25", description: "#5 receives ball, dribbles left, hits jump shot from just inside the arc", player: "#5", type: "score" },
+      { time: "1:44", description: "#5 grabs another defensive rebound in the paint", player: "#5", type: "rebound" },
+      { time: "1:56", description: "#5 shoots and makes a free throw", player: "#5", type: "free-throw" },
+      { time: "2:13", description: "#5 shoots and makes a free throw", player: "#5", type: "free-throw" },
     ],
   },
   {
     id: "2",
-    title: "11U Girls — Three-Point Barrage & Post Dominance",
-    description: "Player #14 hits from deep while #15 dominates the paint. Player #1 adds drives to the basket in a complete offensive performance.",
+    title: "#5 Fast-Break Masterclass",
+    description: "#5 dominates in transition with coast-to-coast layups, steals, and elite passing to #24. A two-player connection on full display.",
     videoUrl: "/manus-storage/highlight-reel-2_4335b14b.mov",
     team: "Legacy 11U Girls",
     opponent: "Teal Team",
     duration: "1:45",
-    aiSummary: "A dominant offensive display featuring three key contributors. #14 opens with a three-pointer and adds multiple mid-range shots. #15 controls the paint with post moves and finishes through contact. #1 provides slashing drives to complete the balanced attack.",
-    keyPlayers: ["#14", "#15", "#1"],
-    tags: ["Three-Pointers", "Post Play", "Driving"],
+    aiSummary: "#5 is the engine of this highlight reel — leading fast breaks, scoring in transition, and creating for #24 with two assists. The #5-to-#24 connection is lethal: #5 pushes pace and finds #24 cutting for layups. #24 also contributes a key defensive rebound. #5 records a steal in the opponent's paint and finishes multiple coast-to-coast drives.",
+    keyPlayers: ["#5", "#24"],
+    tags: ["Scoring", "Transition", "Driving"],
     plays: [
-      { time: "0:05", description: "Teal misses free throw, #15 secures the rebound", player: "#15", type: "rebound" },
-      { time: "0:10", description: "#14 sinks a three-pointer from the wing", player: "#14", type: "score" },
-      { time: "0:17", description: "#15 receives pass in the paint, strong move for the layup", player: "#15", type: "score" },
-      { time: "0:25", description: "#14 hits a mid-range jump shot after ball movement", player: "#14", type: "score" },
-      { time: "0:35", description: "#15 catches near the basket, scores while drawing the foul", player: "#15", type: "score" },
-      { time: "0:45", description: "#15 drives hard from the wing, finishes with a layup", player: "#15", type: "score" },
-      { time: "0:55", description: "#1 drives through the defense, scores a layup", player: "#1", type: "score" },
-      { time: "1:02", description: "#14 hits another jumper from just inside the arc", player: "#14", type: "score" },
-      { time: "1:10", description: "#14 drives past defender, scores contested layup", player: "#14", type: "score" },
-      { time: "1:20", description: "#15 scores off inbound pass under the basket", player: "#15", type: "score" },
-      { time: "1:30", description: "#1 drives from the top of the key for the layup", player: "#1", type: "score" },
-      { time: "1:40", description: "#1 drives baseline, finishes with another layup", player: "#1", type: "score" },
+      { time: "0:12", description: "#5 drives from left wing into the paint, scores right-handed layup", player: "#5", type: "score" },
+      { time: "0:22", description: "#5 receives pass on right wing, takes a dribble, sinks jump shot", player: "#5", type: "score" },
+      { time: "0:30", description: "#5 leads fast break up center, dishes assist to #24 who finishes layup on right side", player: "#5", type: "assist" },
+      { time: "0:41", description: "#5 takes ball coast-to-coast on fast break down left side, scores left-handed layup", player: "#5", type: "score" },
+      { time: "0:50", description: "#5 pushes ball up right side on fast break, scores right-handed layup", player: "#5", type: "score" },
+      { time: "0:59", description: "#24 secures defensive rebound following opponent's missed shot", player: "#24", type: "rebound" },
+      { time: "1:04", description: "#5 leads another fast break down left side, passes to #24 cutting down middle — #24 scores layup", player: "#5", type: "assist" },
+      { time: "1:14", description: "#5 intercepts pass in opponent's paint for the steal, passes out to teammate", player: "#5", type: "steal" },
+      { time: "1:20", description: "#5 drives down right side on fast break, scores right-handed layup", player: "#5", type: "score" },
+      { time: "1:30", description: "#5 dribbles down middle of court on fast break, scores right-handed layup", player: "#5", type: "score" },
+      { time: "1:37", description: "#5 drives down right side on fast break, scores right-handed layup", player: "#5", type: "score" },
     ],
   },
   {
     id: "3",
-    title: "11U Girls vs New Paltz — Defensive Battle",
-    description: "A gritty defensive battle where Legacy generates numerous scoring opportunities. Both teams lock down on defense in this physical matchup.",
+    title: "#5 Three-Point Shooting & #24 Drives",
+    description: "#5 hits multiple three-pointers including off offensive rebounds. #24 drives through traffic and converts a steal into a fast-break layup.",
     videoUrl: "/manus-storage/highlight-reel-3_147bea1e.mov",
     team: "Legacy 11U Girls",
     opponent: "New Paltz",
-    duration: "1:30",
-    aiSummary: "An intense defensive battle between Legacy and New Paltz. Legacy dominates possession and generates multiple scoring opportunities through aggressive drives and ball movement. New Paltz responds with strong defensive rebounding. A physical, competitive game showcasing both teams' defensive intensity.",
-    keyPlayers: ["Team Effort"],
-    tags: ["Defense", "Rebounding", "Intensity"],
+    duration: "1:38",
+    aiSummary: "#5 showcases elite shooting — hitting three-pointers off offensive rebounds and kick-out passes. She also grabs an offensive rebound and converts a putback. #24 contributes a strong drive through the lane for a layup and a steal-to-fast-break score. Multiple additional three-pointers from Legacy teammates round out a dominant shooting performance.",
+    keyPlayers: ["#5", "#24"],
+    tags: ["Three-Pointers", "Scoring", "Rebounding"],
     plays: [
-      { time: "0:05", description: "Legacy drives to the basket, contested by New Paltz defense", type: "drive" },
-      { time: "0:15", description: "New Paltz secures defensive rebound, clears the ball", type: "rebound" },
-      { time: "0:25", description: "Legacy generates open look off ball movement", type: "shot" },
-      { time: "0:35", description: "Strong defensive rotation by Legacy forces turnover", type: "defense" },
-      { time: "0:45", description: "Legacy drives baseline, draws multiple defenders", type: "drive" },
-      { time: "0:55", description: "New Paltz attempts jump shot, Legacy contests", type: "defense" },
-      { time: "1:05", description: "Legacy pushes in transition off the defensive stop", type: "drive" },
-      { time: "1:15", description: "Physical battle on the boards, both teams competing", type: "rebound" },
-      { time: "1:25", description: "Legacy generates another scoring opportunity off the drive", type: "drive" },
+      { time: "0:05", description: "#5 brings ball up, teammate misses — another teammate gets offensive rebound, kicks to #5 who drains a three-pointer", player: "#5", type: "score" },
+      { time: "0:18", description: "#5 grabs offensive rebound in the paint and scores on a putback layup", player: "#5", type: "rebound" },
+      { time: "0:26", description: "Teammate misses three, another Legacy player gets offensive rebound, kicks to #5 who sinks another three from the wing", player: "#5", type: "score" },
+      { time: "0:34", description: "#24 drives through the defense down center of the lane, scores a layup", player: "#24", type: "score" },
+      { time: "0:49", description: "Legacy player hits a three-pointer from the wing", type: "score" },
+      { time: "0:56", description: "Legacy player hits a three-pointer from the wing", type: "score" },
+      { time: "1:01", description: "Legacy player hits a three-pointer from the wing", type: "score" },
+      { time: "1:13", description: "#24 steals ball near mid-court, dribbles length of the floor for uncontested fast-break layup", player: "#24", type: "steal" },
+      { time: "1:26", description: "Legacy player hits a three-pointer from the wing", type: "score" },
+      { time: "1:33", description: "Legacy player hits a three-pointer from the wing", type: "score" },
     ],
   },
   {
     id: "4",
-    title: "11U Girls — #14 Scoring Machine",
-    description: "Player #14 dominates with fast-break layups, putbacks, and free throws. #24 facilitates with elite court vision and transition passing.",
+    title: "#14 Scoring Reel (ft. #5 & #24 Assists)",
+    description: "#14 dominates with 23 plays — fast-break layups, three-pointers, putbacks, and free throws. #5 and #24 facilitate with passes and court vision.",
     videoUrl: "/manus-storage/girls-14-highlights_de1bbacc.mov",
     team: "Legacy 11U Girls",
     opponent: "Multiple Opponents",
-    duration: "3:15",
-    aiSummary: "A highlight reel centered on #14 as the primary scorer. She excels in transition, consistently running the floor for fast-break layups off outlet passes from #24. Notable hustle play at 1:15 where she misses a layup, grabs her own offensive rebound, and converts the putback. #24 acts as the primary facilitator pushing pace, while #5 provides secondary ball-handling and assists.",
-    keyPlayers: ["#14", "#24", "#5", "#15"],
-    tags: ["Scoring", "Transition", "Rebounding", "Driving"],
+    duration: "2:45",
+    aiSummary: "A scoring showcase for #14 who converts from everywhere — fast-break layups, three-pointers from both wings and the top of the key, mid-range jumpers, putbacks off offensive rebounds, and free throws. #5 and #24 appear as facilitators: #5 feeds #14 at the free-throw line early, and #24 delivers a pass leading to a drive-and-score. #14's ability to steal and score in transition is also highlighted.",
+    keyPlayers: ["#14", "#5", "#24"],
+    tags: ["Scoring", "Three-Pointers", "Transition", "Driving"],
     plays: [
-      { time: "0:05", description: "#14 receives outlet pass from #24, finishes fast-break layup", player: "#14", type: "score" },
-      { time: "0:15", description: "#24 pushes tempo in transition, finds #14 sprinting ahead", player: "#24", type: "assist" },
-      { time: "0:25", description: "#14 drives through traffic, scores contested layup", player: "#14", type: "score" },
-      { time: "0:40", description: "#14 converts free throws confidently", player: "#14", type: "score" },
-      { time: "0:55", description: "#5 initiates offense, feeds #14 cutting to the basket", player: "#5", type: "assist" },
-      { time: "1:05", description: "#14 scores on fast break off defensive stop", player: "#14", type: "score" },
-      { time: "1:15", description: "#14 misses layup, grabs own rebound, scores putback", player: "#14", type: "rebound" },
-      { time: "1:30", description: "#24 delivers full-court outlet pass to #14 for the finish", player: "#14", type: "score" },
-      { time: "1:45", description: "#14 drives baseline, finishes through contact", player: "#14", type: "score" },
-      { time: "2:00", description: "#14 assists #15 for a score inside", player: "#14", type: "assist" },
-      { time: "2:15", description: "#24 finds #14 on another fast break for the layup", player: "#14", type: "score" },
-      { time: "2:30", description: "#14 hits free throws in second uniform set", player: "#14", type: "score" },
-      { time: "2:45", description: "#14 assists #24 for a basket off the drive", player: "#14", type: "assist" },
-      { time: "3:00", description: "#14 scores final fast-break layup to close the reel", player: "#14", type: "score" },
+      { time: "0:03", description: "#14 grabs offensive rebound, scores putback layup", player: "#14", type: "rebound" },
+      { time: "0:12", description: "#5 passes to #14, who hits jump shot from the free-throw line", player: "#14", type: "score" },
+      { time: "0:22", description: "#24 passes to #14, who drives to the basket for a layup", player: "#14", type: "score" },
+      { time: "0:30", description: "#14 drives the length of the court for a fast-break layup", player: "#14", type: "score" },
+      { time: "0:35", description: "#14 shoots and makes a free throw", player: "#14", type: "free-throw" },
+      { time: "0:40", description: "#14 steals ball from opponent, scores fast-break layup", player: "#14", type: "steal" },
+      { time: "0:49", description: "#14 hits a three-pointer from the left wing", player: "#14", type: "score" },
+      { time: "0:58", description: "#14 hits a three-pointer from the top of the key", player: "#14", type: "score" },
+      { time: "1:04", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "1:10", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "1:19", description: "#14 drives from the left side, scores a layup", player: "#14", type: "score" },
+      { time: "1:28", description: "#14 hits a three-pointer from the top of the key", player: "#14", type: "score" },
+      { time: "1:34", description: "#14 hits a three-pointer from the left wing", player: "#14", type: "score" },
+      { time: "1:39", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "1:44", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "1:49", description: "#14 hits a jump shot from the left wing", player: "#14", type: "score" },
+      { time: "1:57", description: "#14 hits a jump shot from the top of the key", player: "#14", type: "score" },
+      { time: "2:01", description: "#14 hits a jump shot from the left wing", player: "#14", type: "score" },
+      { time: "2:11", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "2:16", description: "#14 shoots and makes a free throw", player: "#14", type: "free-throw" },
+      { time: "2:20", description: "#14 hits a jump shot from the left wing", player: "#14", type: "score" },
+      { time: "2:26", description: "#14 hits a jump shot from the right wing", player: "#14", type: "score" },
+      { time: "2:36", description: "#14 hits a jump shot from the left wing", player: "#14", type: "score" },
     ],
   },
 ];
@@ -133,15 +145,19 @@ const typeColors: Record<string, string> = {
   assist: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   shot: "bg-orange-500/20 text-orange-400 border-orange-500/30",
   defense: "bg-red-500/20 text-red-400 border-red-500/30",
+  steal: "bg-red-500/20 text-red-400 border-red-500/30",
+  "free-throw": "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
 };
 
 const typeIcons: Record<string, string> = {
-  score: "🏀",
-  rebound: "💪",
-  drive: "⚡",
-  assist: "🎯",
-  shot: "🎯",
-  defense: "🛡️",
+  score: "\u{1F3C0}",
+  rebound: "\u{1F4AA}",
+  drive: "\u{26A1}",
+  assist: "\u{1F3AF}",
+  shot: "\u{1F3AF}",
+  defense: "\u{1F6E1}\u{FE0F}",
+  steal: "\u{1F6E1}\u{FE0F}",
+  "free-throw": "\u{2705}",
 };
 
 export default function Highlights() {
@@ -184,7 +200,7 @@ export default function Highlights() {
               Game <span className="text-cobalt">Film</span>
             </h1>
             <p className="text-white/60 text-lg max-w-xl leading-relaxed">
-              Watch highlight reels with AI-generated play-by-play breakdowns.
+              Watch highlight reels with AI-generated play-by-play breakdowns focused on #5 and #24.
               Every drive, every shot, every defensive stop — analyzed and timestamped.
             </p>
           </div>
@@ -270,7 +286,7 @@ export default function Highlights() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     {selectedVideo.tags.map(tag => (
                       <span
                         key={tag}
@@ -393,10 +409,10 @@ export default function Highlights() {
                   </span>
                 </div>
                 <p className="text-white/60 text-xs leading-relaxed mb-3">
-                  Every highlight reel is analyzed by AI to identify key plays, player contributions, and game patterns.
+                  Every highlight reel is analyzed by AI to identify key plays by #5, #24, and #14 — with timestamps and play classification.
                 </p>
                 <ul className="space-y-1.5">
-                  {["Play-by-play timestamps", "Player identification", "Shot type classification", "Game flow analysis"].map(feature => (
+                  {["Play-by-play timestamps", "Player #5 & #24 focus", "Shot type classification", "Steal & rebound tracking"].map(feature => (
                     <li key={feature} className="flex items-center gap-2 text-xs text-white/50">
                       <div className="w-1 h-1 rounded-full bg-cobalt" />
                       {feature}
