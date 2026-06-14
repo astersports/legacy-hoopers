@@ -116,3 +116,56 @@ describe("isGameLive", () => {
     expect(GAME_DURATION_MIN).toBe(75);
   });
 });
+
+describe("getCountdown (via parseGameDate)", () => {
+  // Test the countdown logic by computing it the same way the component does
+  function getCountdown(dateStr: string, result: "upcoming" | "W" | "L", now: Date): string | null {
+    if (result !== "upcoming") return null;
+    const startTime = parseGameDate(dateStr);
+    if (!startTime) return null;
+    const diffMs = startTime.getTime() - now.getTime();
+    if (diffMs <= 0) return null;
+    if (diffMs > 24 * 60 * 60 * 1000) return null;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 60) return `Starts in ${diffMin}m`;
+    const hours = Math.floor(diffMin / 60);
+    const mins = diffMin % 60;
+    if (mins === 0) return `Starts in ${hours}h`;
+    return `Starts in ${hours}h ${mins}m`;
+  }
+
+  it("shows minutes for games starting within the hour", () => {
+    // Game at 2:00 PM EDT = 18:00 UTC, now is 17:45 UTC (15 min before)
+    const result = getCountdown("Sun 06/14/26 2:00 PM", "upcoming", new Date("2026-06-14T17:45:00Z"));
+    expect(result).toBe("Starts in 15m");
+  });
+
+  it("shows hours and minutes for games starting in 1-24h", () => {
+    // Game at 2:00 PM EDT = 18:00 UTC, now is 16:30 UTC (1h 30m before)
+    const result = getCountdown("Sun 06/14/26 2:00 PM", "upcoming", new Date("2026-06-14T16:30:00Z"));
+    expect(result).toBe("Starts in 1h 30m");
+  });
+
+  it("shows just hours when minutes are 0", () => {
+    // Game at 2:00 PM EDT = 18:00 UTC, now is 16:00 UTC (exactly 2h before)
+    const result = getCountdown("Sun 06/14/26 2:00 PM", "upcoming", new Date("2026-06-14T16:00:00Z"));
+    expect(result).toBe("Starts in 2h");
+  });
+
+  it("returns null for games already started", () => {
+    // Game at 12:00 PM EDT = 16:00 UTC, now is 16:30 UTC
+    const result = getCountdown("Sun 06/14/26 12:00 PM", "upcoming", new Date("2026-06-14T16:30:00Z"));
+    expect(result).toBeNull();
+  });
+
+  it("returns null for games more than 24h away", () => {
+    // Game at 2:00 PM EDT tomorrow = 18:00 UTC Jun 15, now is 17:00 UTC Jun 14 (25h away)
+    const result = getCountdown("Mon 06/15/26 2:00 PM", "upcoming", new Date("2026-06-14T17:00:00Z"));
+    expect(result).toBeNull();
+  });
+
+  it("returns null for completed games", () => {
+    const result = getCountdown("Sun 06/14/26 2:00 PM", "W", new Date("2026-06-14T17:45:00Z"));
+    expect(result).toBeNull();
+  });
+});

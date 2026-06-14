@@ -30,6 +30,27 @@ type GameResult = {
   division?: string;
 };
 
+/**
+ * Get a human-readable countdown string for an upcoming game.
+ * Returns null if the game has already started or is more than 24h away.
+ */
+function getCountdown(game: GameResult, now: Date): string | null {
+  if (game.result !== "upcoming") return null;
+  const startTime = parseGameDate(game.date);
+  if (!startTime) return null;
+
+  const diffMs = startTime.getTime() - now.getTime();
+  if (diffMs <= 0) return null; // Already started
+  if (diffMs > 24 * 60 * 60 * 1000) return null; // More than 24h away
+
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 60) return `Starts in ${diffMin}m`;
+  const hours = Math.floor(diffMin / 60);
+  const mins = diffMin % 60;
+  if (mins === 0) return `Starts in ${hours}h`;
+  return `Starts in ${hours}h ${mins}m`;
+}
+
 export default function ThisWeekend() {
   const { data: liveData, isLoading } = trpc.tournament.live.useQuery(undefined, {
     refetchInterval: 60000,
@@ -244,11 +265,18 @@ export default function ThisWeekend() {
                                 >
                                   {game.result === "W" ? "Win" : "Loss"}
                                 </span>
-                              ) : (
-                                <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
-                                  Upcoming
-                                </span>
-                              )}
+                              ) : (() => {
+                                const countdown = getCountdown(game, now);
+                                return countdown ? (
+                                  <span className="px-1.5 md:px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[9px] md:text-[10px] font-display font-800 uppercase">
+                                    {countdown}
+                                  </span>
+                                ) : (
+                                  <span className="px-1.5 md:px-2 py-0.5 rounded bg-cobalt/20 text-cobalt text-[9px] md:text-[10px] font-display font-800 uppercase">
+                                    Upcoming
+                                  </span>
+                                );
+                              })()}
                             </div>
 
                             {/* Matchup: Legacy vs Opponent */}
