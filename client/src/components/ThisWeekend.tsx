@@ -252,14 +252,14 @@ export default function ThisWeekend() {
                       marginTop: isCollapsed ? "0px" : "0.5rem",
                     }}
                   >
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 md:gap-3 overflow-visible">
                       {division.games.map((game: GameResult, i: number) => {
                         const gameLive = isGameLive(game, now);
                         const isBiggestWin = division.biggestWinId === game.gameId;
                         return (
                           <div
                             key={i}
-                            className={`bg-navy-light border rounded-lg px-3 py-2 md:px-4 md:py-3 relative ${
+                            className={`bg-navy-light border rounded-lg px-2.5 py-1.5 md:px-4 md:py-3 relative ${
                               gameLive
                                 ? "border-red-500/40 bg-red-500/[0.04] ring-1 ring-red-500/20"
                                 : isBiggestWin
@@ -271,19 +271,20 @@ export default function ThisWeekend() {
                                 : "border-white/10"
                             }`}
                           >
-                            {/* Biggest Win trophy badge */}
-                            {isBiggestWin && (
-                              <div className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 flex items-center gap-1 px-1.5 py-0.5 bg-gold/20 border border-gold/40 rounded-full">
-                                <Trophy className="w-2.5 h-2.5 md:w-3 md:h-3 text-gold" />
-                                <span className="font-display font-800 text-[8px] md:text-[9px] uppercase tracking-wider text-gold hidden md:inline">
-                                  Best
+                            {/* Top row: game ID + best badge + result/LIVE badge */}
+                            <div className="flex items-center justify-between mb-0.5 md:mb-2">
+                              <span className="flex items-center gap-1.5">
+                                <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
+                                  {game.gameId}
                                 </span>
-                              </div>
-                            )}
-                            {/* Top row: game ID + result/LIVE badge */}
-                            <div className="flex items-center justify-between mb-1 md:mb-2">
-                              <span className="text-[9px] md:text-[10px] font-display font-700 uppercase tracking-wider text-white/40">
-                                {game.gameId}
+                                {isBiggestWin && (
+                                  <span className="flex items-center gap-0.5 px-1.5 py-0.5 bg-gold/20 border border-gold/40 rounded-full">
+                                    <Trophy className="w-2.5 h-2.5 md:w-3 md:h-3 text-gold" />
+                                    <span className="font-display font-800 text-[8px] md:text-[9px] uppercase tracking-wider text-gold hidden md:inline">
+                                      Best
+                                    </span>
+                                  </span>
+                                )}
                               </span>
                               {gameLive ? (
                                 <span className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-red-500/20 border border-red-500/30">
@@ -360,17 +361,11 @@ export default function ThisWeekend() {
                             </div>
 
                             {/* Meta: time + location */}
-                            <div className="mt-1.5 md:mt-2.5 pt-1.5 md:pt-2 border-t border-white/5 flex items-center gap-2 text-[9px] md:text-[10px] text-white/40 overflow-hidden">
-                              <span className="flex items-center gap-1 flex-shrink-0">
-                                <Clock className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                                {game.date}
+                            <div className="mt-1 md:mt-2.5 pt-1 md:pt-2 border-t border-white/5 flex items-center gap-1.5 text-[8px] md:text-[10px] text-white/40 overflow-hidden">
+                              <Clock className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
+                              <span className="truncate">
+                                {game.date}{game.location ? ` · ${game.location}` : ""}
                               </span>
-                              {game.location && (
-                                <span className="flex items-center gap-1 truncate">
-                                  <MapPin className="w-2.5 h-2.5 md:w-3 md:h-3 flex-shrink-0" />
-                                  <span className="truncate">{game.location}</span>
-                                </span>
-                              )}
                             </div>
                           </div>
                         );

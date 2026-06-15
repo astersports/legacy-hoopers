@@ -53,3 +53,5 @@
 - [x] Automatically badge the game with the largest point differential (win) in each division with a trophy icon
 - [x] Create compact season-long leaderboard showing cumulative stats (total wins, avg point differential, longest win streak) per team across all tournaments
 - [x] Make leaderboard team rows clickable to open a modal showing recent game history and upcoming schedule
+- [x] Fix "Best" badge cutoff on mobile (overflow clipping issue)
+- [x] Tighten game card height on mobile (reduce padding, spacing, and meta section)
