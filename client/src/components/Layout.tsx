@@ -6,6 +6,7 @@ const REGISTER_URL =
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/schedule", label: "Schedule" },
   { href: "/records", label: "Records" },
   { href: "/mission", label: "Mission" },
   { href: "/coach-kenny", label: "Coach Kenny" },
