@@ -1,0 +1,205 @@
+PUBLIC SCHEDULE PAGE — BUILD PLAN + SPEC REQUEST
+Surface: Legacy Hoopers site (first), then the AAU hub + any tenant site (same template)
+Date: 2026-06-26 · Lane: CC, for Architect render + final spec, relayed by Frank
+Companion to: AAU_HUB_ARCHITECTURE_BRIEF (astersports-web #125), aster-sports #1100
+  (D1–D5), #1101 (the read RPC this page consumes), #1102 (the scraper that fills it).
+This doc = everything CC can ground + a proposed design; the architect produces the
+render + the locked visual spec (the way they did for the AAU hub render).
+
+================================================================================
+0. OPERATOR DIRECTIVE (Frank, 2026-06-26)
+================================================================================
+"Build the schedule [for Legacy Hoopers, and the app]. Dynamic. Push. Next level.
+Accordion style, broken up — by teams, by age, by grade, whatever it is, all
+different types / all different views. Look at the Aster Sports app schedule page
+for inspiration."
+
+Read: a DYNAMIC, auto-updating public schedule that (a) auto-refreshes as games go
+live and scores land (push), (b) uses accordion/collapsible grouping, (c) lets the
+viewer slice the same data many ways — by team, by age group, by grade, by type
+(games / practices / tournaments) — and (d) carries the polish of the app's schedule
+page. Multi-team (a program has 5 teams), public, no login.
+
+================================================================================
+1. DATA CONTRACT — get_public_team_schedule(p_team_id)  (#1101, held to apply)
+================================================================================
+Per team, org-gated SECDEF, anon-readable. One row per event. Columns:
+  event_id, kind ('game' | 'tournament' | 'practice'), title,
+  start_at (tz), end_at (tz), status ('scheduled' | 'cancelled'),
+  opponent, home_away, tournament_name,
+  our_score, opponent_score, result ('W'|'L'|'T'|null),   -- published games only
+  location_name, location_address, location_lat, location_lon, location_maps_url
+Window: start_at >= now() - 6h (live + just-finished + all upcoming), asc.
+Records (final, past) already come from get_public_team_records (Legacy Records page,
+live). Teams list (id, name, team_color, age_group, gender) is an anon table read.
+
+GROUPING KEYS AVAILABLE (this is what powers Frank's "by team / age / grade / type"):
+  - team        → teams.name ("10U Black", "11U Girls")
+  - age group   → teams.age_group ("8U" … "11U")
+  - grade       → derived: 8U=2nd, 9U=3rd, 10U=4th, 11U=5th (the locked grade key)
+  - gender      → teams.gender (male/female) → "Boys" / "Girls"
+  - type        → kind (game | tournament | practice)
+  - time-state  → derived (see §3)
+  - date / week → start_at
+  - tournament  → tournament_name / tournament_id (a tournament groups many games)
+
+================================================================================
+2. THE APP SCHEDULE PATTERNS TO CARRY OVER  [GROUNDED — file:line in aster-sports]
+================================================================================
+The app's schedule (docs/SCHEDULE_L99_BUILD_SPEC_2026-06-12.txt; SchedulePage.jsx;
+src/components/schedule/*; src/lib/eventWindows.js) is the design parent. Reuse:
+
+2.1 TIME-STATE SPINE (eventWindows.js:21-41). One primitive eventTimeState(event, now):
+    'upcoming' (now < start) | 'happening_now' (start ≤ now ≤ end; end = end_at OR
+    start+2h default) | 'completed' (now > end). EVENT_DEFAULT_DURATION_MS = 2h covers
+    NULL end_at. This is the engine for the live/past treatment + the 60s tick.
+
+2.2 THREE-BAND LAYOUT (ScheduleListSections.jsx:17-67):
+    [HAPPENING NOW] (only if live) — green pulse dot + "Happening now"
+    [NEXT 7 DAYS]   — date-grouped; the next event is the "NOW slot", pinned top with
+                       accent border + a "Next up · in 35m" countdown tag
+    [LATER]         — beyond 7 days
+    [PAST 7 DAYS]   — COLLAPSED accordion by default; header "Past 7 days · N · W–L";
+                       expanded = newest-first, dimmed 0.55, W/L chip per game
+
+2.3 CARD ANATOMY (EventCard.jsx:27-149): team-color left stripe · time rail · title
+    (prefix+body, e.g. "10U Black vs. CT Hoops") · ONE status pill (priority:
+    Cancelled → W/L result → Live → Countdown → Today) · meta line (type badge + team
+    dot + team name + location) · location line (map deep-link via the map-URL
+    priority) · (app-only: facts/RSVP — DROPPED on public, see §4).
+
+2.4 STATE TREATMENTS: upcoming = full color + countdown; happening_now = green dot +
+    "Live" badge + pulse; completed = 0.55 opacity + W/L chip ("W 39–35"); cancelled =
+    struck-through + red pill + 0.55.
+
+2.5 TIME MATH: every toLocale* pinned timeZone:'America/New_York' (AP #18-equiv);
+    groupByDate + formatDateHeader ("Friday, Jun 26 · TODAY"); formatCountdown
+    ("in 35m" / "Tomorrow 6:30 PM" / ">2d"); 60s useNow() tick re-renders countdowns
+    and flips state. EventCard memoized (no per-tick cascade).
+
+2.6 SIMPLER PUBLIC PRECEDENT (PublicSchedulePage.jsx:19-128): the app already has a
+    read-only public schedule (upcoming-only, .ics download + subscribe + share/QR, no
+    RSVP). Good for the .ics/subscribe affordances; too thin for "dynamic / next level".
+
+================================================================================
+3. WHAT'S DIFFERENT FOR THE PUBLIC SITE (vs the app schedule)
+================================================================================
+DROP (no auth / no PII): RSVP controls, per-kid filters, ride/duty/coverage facts,
+  arrival callouts to families, roster denominators, coach/admin edit affordances.
+ADD / CHANGE:
+  - MULTI-TEAM by default (the app schedule is one viewer's teams; the public program
+    shows all 5 teams) → the grouping/segment controls in §5 are the headline feature.
+  - DATA SOURCE: get_public_team_schedule per team, fanned across the org's teams
+    (same fan-out pattern the Legacy Records page already uses successfully).
+  - PUBLIC payload only: team · opponent · time · venue+map · score · practices.
+  - DYNAMIC/PUSH: poll the RPC on an interval (e.g. 60–90s) so live scores + status
+    flips appear without reload; the 60s useNow tick drives countdowns/live state. (A
+    Supabase Realtime channel on game_results is a future upgrade; poll is the v1.)
+
+================================================================================
+4. PROPOSED DESIGN — the public schedule page  (CC's plan; architect renders/locks)
+================================================================================
+4.1 PAGE SKELETON
+    [Hero strip: "Schedule" + program eyebrow + the team color underline]
+    [SEGMENT CONTROL — the view switch] (Frank's "all different types/views"):
+        View by:  ( Team )  ( Age )  ( Grade )  ( Type )      ← primary slicer
+        + a quick "Boys / Girls / All" gender chip row (when View=Team/Age)
+    [Optional: a horizontal team rail/selector when View=Team — chips with team color]
+    [THE SPINE per the active grouping:]
+        Happening now  → live cards (always surfaced to the top, any group)
+        Upcoming       → ACCORDION groups (one collapsible per team / age / grade /
+                         type, per the active View), each showing its next-N events;
+                         the program's very next event pinned as the NOW slot at top
+        Past results   → COLLAPSED accordion (per group), W–L summary in each header
+
+4.2 THE ACCORDION ("accordion style, broken up") — TWO nestable axes:
+    (a) GROUP accordion: one collapsible section per Team (or Age / Grade / Type, per
+        the View). Header = group name + team color + a summary ("10U Black · 3 upcoming
+        · next Sat 9a" / "11U Girls · 12–3"). Open the groups with upcoming games by
+        default; collapse the empty/idle ones.
+    (b) TOURNAMENT accordion: a tournament (kind='tournament', shared tournament_name)
+        groups MANY games on one day/weekend → collapse those under a single
+        "ZG NY Hoop Festival · Sat–Sun · 4 games" header that expands to the game list
+        (this is the "broke up" cleanliness for a 10-game tournament day).
+    (c) PAST accordion: collapsed by default, per group, W–L in the header (§2.2).
+
+4.3 CARD ANATOMY (public, adapted from EventCard):
+    team stripe · date+time (NY) · title ("10U Black vs. CT Hoops" / "Practice" /
+    "Tournament: ZG NY Hoop Festival") · ONE status pill (Cancelled → W/L → Live →
+    Countdown → Today) · type badge + team dot + team name · venue line → Apple/Google
+    map deep-link (map-URL priority; "Location TBD" non-link when absent) · score line
+    on completed games. Practices show the recurring slot + gym; no opponent/score.
+
+4.4 DYNAMIC / PUSH behaviors:
+    - 60s tick: countdowns recompute, upcoming→live→completed flips live.
+    - Poll the RPC every ~60–90s: a game that goes final or a live score change appears
+      without reload (the operator pastes a link / the scraper ingests → next poll shows
+      it). Live cards get the pulse + "Live · Q3" treatment.
+    - "Updated just now" affordance + a subtle refresh pulse when new data lands.
+
+4.5 EMPTY / LOADING / BRAND: shape-matched skeletons; brand-voice empty states
+    ("No games on the board yet — Coach Kenny's cooking something up"); clean & light
+    (Legacy's chosen look); cobalt accent; the same polish as the rebuilt Records page.
+
+================================================================================
+5. OPEN DESIGN DECISIONS FOR THE ARCHITECT (the render + spec)
+================================================================================
+D-S1  DEFAULT VIEW + ordering. By Team (each team its own accordion, date-sorted
+      inside) vs By Date (one timeline, team-tagged). CC lean: default "By Team"
+      accordion (matches "broken up by teams"), with a "By Date" timeline as a second
+      view. Which is the default, and which views ship v1 (Team / Age / Grade / Type /
+      Date — all, or a subset)?
+D-S2  TOURNAMENT GROUPING. Collapse a tournament's many games under one accordion
+      header (CC lean: yes — it's the "broke up" win for a 10-game day) vs list each
+      game flat. Confirm + define the tournament-header summary.
+D-S3  PAST DEPTH. App shows "past 7 days" then links to Records. Public site has a full
+      Records page already → CC lean: schedule shows "recent results (last ~14 days)"
+      collapsed, with a "full records →" link to /records. Confirm the window.
+D-S4  PUSH MECHANISM. Poll interval (CC lean: 60–90s) for v1; Supabase Realtime on
+      game_results as a phase-2 upgrade. Confirm the interval + whether Realtime is in
+      scope now.
+D-S5  PRACTICES PLACEMENT. Mixed into the team's timeline (CC lean: yes, with a
+      distinct "Practice" type badge + muted treatment) vs a separate "Practices" tab.
+      (D6 already ruled practices public.)
+D-S6  THE SEGMENT CONTROL UX. Pills vs dropdown vs tabs for the View switch; how the
+      gender chip composes with Age/Team. Architect's render call.
+D-S7  LIVE TILE. Should "Happening now" hoist a single hero live card (like the AAU hub
+      render's pulsing live game) above the accordions, across all teams? CC lean: yes.
+
+================================================================================
+6. CC BUILD PLAN / SEQUENCE (once #1101 applied + render locked)
+================================================================================
+PR-1  Data layer: getTeamSchedule(team_id) + getProgramSchedule() fan-out (mirrors the
+      existing lib/aster.ts getProgramRecords pattern); time-state + grouping helpers
+      (port eventWindows.js logic to the site; NY-tz formatters).
+PR-2  The Schedule page shell + segment control (Team/Age/Grade/Type views) + the
+      group accordion + the spine (Happening now / Upcoming / Past).
+PR-3  Card + tournament accordion + map deep-links + live/countdown/score treatments.
+PR-4  Dynamic polling + 60s tick + "updated" affordance; empty/loading/skeletons.
+PR-5  Wire into nav (Home · Records · SCHEDULE · Mission · Coach Kenny); cross-link
+      Records ⇄ Schedule.
+(The identical page is then reused for the AAU hub showcase + future tenant sites —
+per-tenant by org_id + team set, no rebuild.)
+
+================================================================================
+7. DEPENDENCIES / HOLDS
+================================================================================
+- BLOCKER: get_public_team_schedule (#1101) must be APPLIED to prod (owner approval) —
+  it's the page's only data source. CC validated the query read-only against live data
+  (real upcoming games + practices + venues), so it's ready to apply.
+- DYNAMIC LIVE SCORES depend on the scraper (#1102) actually ingesting game_results —
+  until a real INGEST runs, the page shows schedule + final records but not live AAU
+  scores. The page renders correctly regardless (live tile simply stays empty).
+- Schema/RLS holds for owner approval; no *_LIVE flips; the cross-project uploader auth
+  (AAU hub step 4) is a separate held track and does NOT gate this read-only page.
+
+================================================================================
+8. INSPIRATION REFERENCE (app schedule, for the architect's render)
+================================================================================
+aster-sports: docs/SCHEDULE_L99_BUILD_SPEC_2026-06-12.txt · src/pages/SchedulePage.jsx ·
+src/components/schedule/{ScheduleListSections,EventCard,PastEventsSection,
+DateGroupedList,FilterBar}.jsx · src/lib/eventWindows.js · src/pages/PublicSchedulePage.jsx
+(the read-only public precedent + .ics/subscribe affordances).
+
+END — awaiting the architect's render + locked spec, and the apply of #1101. CC builds
+PR-1..PR-5 on the locked render; nothing here touches schema/RLS or the held auth.
