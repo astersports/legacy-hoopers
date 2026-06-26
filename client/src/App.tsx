@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Records from "./pages/Records";
+import Schedule from "./pages/Schedule";
 import Mission from "./pages/Mission";
 import CoachKenny from "./pages/CoachKenny";
 import Layout from "./components/Layout";
@@ -15,6 +16,7 @@ function Router() {
     <Layout>
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/schedule" component={Schedule} />
         <Route path="/records" component={Records} />
         <Route path="/mission" component={Mission} />
         <Route path="/coach-kenny" component={CoachKenny} />
