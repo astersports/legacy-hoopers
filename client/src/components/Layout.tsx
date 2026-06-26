@@ -14,9 +14,7 @@ const NAV = [
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary font-extrabold tracking-tight text-primary-foreground">
-        LH
-      </span>
+      <img src="/legacy-logo.png" alt="Legacy Hoopers" className="h-10 w-auto" />
       <span className="flex flex-col leading-none">
         <span className="text-[15px] font-bold tracking-tight text-foreground">Legacy Hoopers</span>
         <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
