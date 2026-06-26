@@ -48,11 +48,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border shadow-md">
+          <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border shadow-md lg:max-w-md">
             <img
               src="/photos/hero.jpg"
-              alt="Legacy Hoopers in action"
-              className="aspect-[3/2] w-full object-cover"
+              alt="Legacy Hoopers player on the court"
+              className="aspect-[3/4] w-full object-cover"
               loading="eager"
             />
           </div>
