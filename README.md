@@ -35,6 +35,25 @@ cp .env.example .env   # DATABASE_URL — file may need creating
 pnpm dev
 ```
 
+## Access restriction (owner-only)
+
+The whole site (static pages **and** the tRPC API) is gated behind HTTP Basic Auth
+so only the owner can reach it — see `server/_core/accessGate.ts`. Configure it with
+two environment variables on the host (Railway):
+
+| Env var | Required | Default | Purpose |
+|---|---|---|---|
+| `SITE_ACCESS_PASSWORD` | **yes** | — | Password the browser must supply. |
+| `SITE_ACCESS_EMAIL` | no | `frank@astersports.co` | Username (an email) the browser must supply. |
+
+When prompted by the browser, sign in with the email as the **username** and
+`SITE_ACCESS_PASSWORD` as the **password**.
+
+**Fail-closed:** if `SITE_ACCESS_PASSWORD` is unset the site denies *everyone*
+(HTTP 503), so a misconfiguration can never leave it open to the public. The
+self-authenticated cron endpoint (`/api/scheduled/game-check`) is exempt because it
+verifies its own signed cron token.
+
 ## Scripts (from package.json)
 
 ```bash
