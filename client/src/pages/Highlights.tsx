@@ -24,6 +24,7 @@ import {
   EmptyReel,
   ReelMeta,
 } from "@/components/highlights/sections";
+import { AiFilmRoomSection } from "@/components/ai/highlights/AiFilmRoomSection";
 
 export default function Highlights() {
   const [active, setActive] = useState("All");
@@ -118,6 +119,11 @@ export default function Highlights() {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           This reel is a template preview — clips wire to live stream + film once connected.
         </p>
+      </Section>
+
+      {/* AI Film Lab — cosmetic computer-vision showcase (the star of the film room) */}
+      <Section tone="muted">
+        <AiFilmRoomSection />
       </Section>
 
       {/* 6 — Playlists / channels */}

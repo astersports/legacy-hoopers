@@ -3,7 +3,7 @@
  * navy PlayerPanel + clip details. Closes on Esc and backdrop click; restores
  * focus and locks body scroll while open. Smooth fade/scale transitions.
  */
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { X, Share2, Plus } from "lucide-react";
 import { btnGhostDark } from "@/components/kit";
 import { PlayerPanel } from "@/components/highlights/PlayerPanel";
@@ -16,6 +16,8 @@ export function HighlightLightbox({
   clip: EnrichedHighlight | null;
   onClose: () => void;
 }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!clip) return;
     const onKey = (e: KeyboardEvent) => {
@@ -24,9 +26,13 @@ export function HighlightLightbox({
     document.addEventListener("keydown", onKey);
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Move focus into the dialog; restore it to the trigger on close.
+    const prevFocus = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
+      prevFocus?.focus?.();
     };
   }, [clip, onClose]);
 
@@ -49,6 +55,7 @@ export function HighlightLightbox({
             Film room
           </span>
           <button
+            ref={closeRef}
             type="button"
             onClick={onClose}
             aria-label="Close"

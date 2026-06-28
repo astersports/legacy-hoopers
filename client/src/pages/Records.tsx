@@ -15,6 +15,7 @@ import { RecordsControls } from "@/components/records/RecordsControls";
 import { HighlightCallout } from "@/components/records/HighlightCallout";
 import { WinRateChart } from "@/components/records/WinRateChart";
 import { sortRecords, topTeam, hottestTeam, type SortKey } from "@/components/records/recordsUtils";
+import { AiRecordsSection } from "@/components/ai/records/AiRecordsSection";
 
 export default function Records() {
   const { records, loading, error } = useProgramRecords();
@@ -96,6 +97,9 @@ export default function Records() {
                 <TeamCard key={team.name} team={team} rank={i + 1} />
               ))}
             </div>
+
+            {/* ── Cosmetic AI showcase — derived from the live records above ── */}
+            <AiRecordsSection records={sorted} />
           </>
         )}
       </div>

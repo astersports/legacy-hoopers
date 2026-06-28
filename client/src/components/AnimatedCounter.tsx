@@ -22,40 +22,44 @@ export default function AnimatedCounter({
   className = "",
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
+  const hasAnimatedRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
+    mountedRef.current = true;
+
+    const animateCount = () => {
+      const startTime = performance.now();
+      const animate = (currentTime: number) => {
+        if (!mountedRef.current) return;
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        setCount(progress < 1 ? eased * end : end);
+        if (progress < 1) rafRef.current = requestAnimationFrame(animate);
+      };
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated) {
-          setHasAnimated(true);
+        if (entry.isIntersecting && !hasAnimatedRef.current) {
+          hasAnimatedRef.current = true;
           animateCount();
         }
       },
       { threshold: 0.3 }
     );
-
     if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [hasAnimated]);
 
-  const animateCount = () => {
-    const startTime = performance.now();
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(eased * end);
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setCount(end);
-      }
+    return () => {
+      mountedRef.current = false;
+      observer.disconnect();
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
-    requestAnimationFrame(animate);
-  };
+  }, [end, duration]);
 
   return (
     <span ref={ref} className={className}>

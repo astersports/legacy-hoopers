@@ -3,7 +3,7 @@
  * one place. Live program record blended with the showcase content model.
  */
 import { Link } from "wouter";
-import { ArrowRight, Star, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Star, ShieldCheck, Sparkles, Brain } from "lucide-react";
 import { useProgramRecords } from "@/hooks/useProgramRecords";
 import { programTotals } from "@/lib/aster";
 import { BRAND, REGISTER_URL } from "@/lib/brand";
@@ -24,6 +24,11 @@ import { TestimonialCard } from "@/components/home/TestimonialCard";
 import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { LocationsTeaser } from "@/components/home/LocationsTeaser";
 import { InterestCapture } from "@/components/home/InterestCapture";
+import { AskAsterBar } from "@/components/ai/home/AskAsterBar";
+import { AsterIntelligence } from "@/components/ai/home/AsterIntelligence";
+import { AiInsightsTicker } from "@/components/ai/home/AiInsightsTicker";
+import { AiProgramMatchTeaser } from "@/components/ai/home/AiProgramMatchTeaser";
+import { AiTrustNote } from "@/components/ai/home/AiTrustNote";
 
 /** Hardcoded near-future next-game tip-off (drives the live countdown chip). */
 const NEXT_GAME = "2026-07-04T18:30:00";
@@ -114,6 +119,50 @@ export default function Home() {
               <ServiceCard s={s} compact />
             </ScrollReveal>
           ))}
+        </div>
+      </Section>
+
+      {/* ── Aster Intelligence (AI showcase) ── */}
+      <Section>
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="Aster Intelligence"
+            title={
+              <span className="inline-flex flex-wrap items-center gap-3">
+                The AI behind every season.
+                <Pill icon={Brain}>AI</Pill>
+              </span>
+            }
+            subtitle="A premium intelligence layer that matches athletes, predicts development, reads film and plans your season — built into the platform."
+          />
+        </ScrollReveal>
+
+        <ScrollReveal delay={60}>
+          <AskAsterBar />
+        </ScrollReveal>
+
+        <ScrollReveal delay={120}>
+          <div className="mt-6">
+            <AiInsightsTicker />
+          </div>
+        </ScrollReveal>
+
+        <div className="mt-10">
+          <ScrollReveal delay={60}>
+            <AsterIntelligence />
+          </ScrollReveal>
+        </div>
+
+        <div className="mt-12">
+          <ScrollReveal delay={60}>
+            <AiProgramMatchTeaser />
+          </ScrollReveal>
+        </div>
+
+        <div className="mt-10">
+          <ScrollReveal delay={60}>
+            <AiTrustNote />
+          </ScrollReveal>
         </div>
       </Section>
 
