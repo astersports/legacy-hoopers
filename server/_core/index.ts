@@ -3,7 +3,9 @@ import express from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerAccessGate } from "./accessGate";
+// Owner-only Basic Auth gate is temporarily disabled while the site is in
+// active redesign review. Re-enable by restoring registerAccessGate(app) below.
+// import { registerAccessGate } from "./accessGate";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
@@ -33,8 +35,8 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
-  // Gate the entire site (static pages + API) to the owner before anything else.
-  registerAccessGate(app);
+  // Owner-only access gate temporarily disabled (site open for redesign review).
+  // registerAccessGate(app);
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));

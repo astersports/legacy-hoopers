@@ -89,8 +89,18 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* Larger base type — scales the rem-based type scale up ~9% site-wide. */
+  html {
+    font-size: 17.5px;
+  }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
   body {
     @apply bg-background text-foreground font-body;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
