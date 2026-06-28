@@ -16,6 +16,8 @@ import { HighlightCallout } from "@/components/records/HighlightCallout";
 import { WinRateChart } from "@/components/records/WinRateChart";
 import { sortRecords, topTeam, hottestTeam, type SortKey } from "@/components/records/recordsUtils";
 import { AiRecordsSection } from "@/components/ai/records/AiRecordsSection";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { RECORDS_SCAN } from "@/lib/agentScans";
 
 export default function Records() {
   const { records, loading, error } = useProgramRecords();
@@ -52,6 +54,7 @@ export default function Records() {
               <StatTile value={totals.teams} label="Teams" onDark />
             </div>
           )}
+          <AgentScanConsole scan={RECORDS_SCAN} className="mt-8 max-w-2xl" />
         </div>
       </section>
 

@@ -3,6 +3,8 @@
  * (operator to confirm credentials/bio specifics).
  */
 import { Award, GraduationCap, Heart, Target } from "lucide-react";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { COACH_SCAN } from "@/lib/agentScans";
 
 const credentials = [
   { icon: GraduationCap, title: "Master's in Education", desc: "Differentiated instruction and learning theory applied to basketball development." },
@@ -29,6 +31,7 @@ export default function CoachKenny() {
           <p className="mt-4 max-w-lg text-lg text-muted-foreground">
             Founder, head coach, and the driving force behind Aster Sports AAU's teaching-first philosophy.
           </p>
+          <AgentScanConsole scan={COACH_SCAN} className="mt-8 max-w-2xl" />
         </div>
       </section>
 

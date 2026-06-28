@@ -25,6 +25,8 @@ import {
   ReelMeta,
 } from "@/components/highlights/sections";
 import { AiFilmRoomSection } from "@/components/ai/highlights/AiFilmRoomSection";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { HIGHLIGHTS_SCAN } from "@/lib/agentScans";
 
 export default function Highlights() {
   const [active, setActive] = useState("All");
@@ -53,6 +55,7 @@ export default function Highlights() {
               Get film access
             </a>
           </div>
+          <AgentScanConsole scan={HIGHLIGHTS_SCAN} className="mt-10 max-w-2xl" />
         </div>
       </section>
 

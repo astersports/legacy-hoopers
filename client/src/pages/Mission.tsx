@@ -3,6 +3,8 @@
  * (operator to confirm the historical specifics).
  */
 import { Award, BookOpen, Heart, Users } from "lucide-react";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { MISSION_SCAN } from "@/lib/agentScans";
 
 const values = [
   { icon: Award, title: "Excellence over participation", desc: "We don't hand out trophies for showing up. Every accolade is earned through effort, improvement, and competitive results." },
@@ -30,6 +32,7 @@ export default function Mission() {
           <p className="mt-4 max-w-xl text-lg text-muted-foreground">
             Building complete basketball players and complete young people — one rep, one lesson, one season at a time.
           </p>
+          <AgentScanConsole scan={MISSION_SCAN} className="mt-8 max-w-2xl" />
         </div>
       </section>
 
