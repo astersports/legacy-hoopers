@@ -344,3 +344,69 @@
 @keyframes pulse-glow { 0%,100% { opacity: .6; } 50% { opacity: 1; } }
 .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .animate-pulse-glow { animation: none; } }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Light Celestial — light-base variant of the landing design system.
+   Same constellation language (gold→orange gradient, Space Grotesk, soft
+   star glows) on a cool-white canvas instead of dark navy. The gradient and
+   font tokens (--brand-grad, --font-space) are shared with the dark system.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* light hero/contact backdrop — warm radial glows over a near-white wash */
+.aster-sky-light {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 440px at 80% -12%, rgba(224, 99, 28, 0.10), transparent 60%),
+    radial-gradient(720px 400px at 10% 0%, rgba(246, 204, 85, 0.16), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f2f5fa 100%);
+}
+
+/* soft constellation dots for the light hero (slate-tinted, low opacity) */
+.aster-stars-light span {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c9952e;
+  opacity: 0.35;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .aster-stars-light span.tw { animation: aster-tw 3.6s ease-in-out infinite; }
+  .aster-stars-light span.tw:nth-child(2n) { animation-duration: 4.8s; }
+  .aster-stars-light span.tw:nth-child(3n) { animation-duration: 5.6s; }
+}
+
+.aster-hero-logo-light { filter: drop-shadow(0 12px 36px rgba(224, 99, 28, 0.22)); }
+
+/* white card — light counterpart of .aster-node / .aster-panel */
+.aster-card {
+  background: #ffffff;
+  border: 1px solid #e6e9f0;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(20, 23, 40, 0.05);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.aster-card:hover {
+  border-color: rgba(224, 99, 28, 0.30);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px rgba(20, 23, 40, 0.10);
+}
+
+/* icon chip — light counterpart of .aster-star (off = light gray, on = gradient) */
+.aster-chip {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: #eef1f6;
+  color: #6b7689;
+  border: 1px solid #e2e7f0;
+}
+.aster-chip.on {
+  background: var(--brand-grad);
+  color: #1a0e05;
+  border-color: transparent;
+  box-shadow: 0 6px 18px -6px rgba(224, 99, 28, 0.5);
+}
