@@ -15,7 +15,7 @@ const NAV = [
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <img src="/aster-mark.png" alt="Aster AAU" className="h-10 w-auto" />
+      <img src="/aster-mark.png" alt="" className="h-10 w-auto" />
       <span className="flex flex-col leading-none">
         <span className="text-[15px] font-bold tracking-tight text-foreground">Aster AAU</span>
         <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
