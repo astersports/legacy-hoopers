@@ -24,7 +24,7 @@ export default function CoachKenny() {
     <div>
       <section className="border-b border-border bg-gradient-to-b from-secondary/50 to-background">
         <div className="container py-16">
-          <span className="text-xs font-semibold uppercase tracking-wider text-primary">Program leadership</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-text">Program leadership</span>
           <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">Coach Kenny</h1>
           <p className="mt-4 max-w-lg text-lg text-muted-foreground">
             Founder, head coach, and the driving force behind Aster AAU's teaching-first philosophy.
