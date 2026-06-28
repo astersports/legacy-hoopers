@@ -51,7 +51,7 @@ export default function Home() {
           <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border shadow-md lg:max-w-md">
             <img
               src="/photos/hero.jpg"
-              alt="Legacy Hoopers player on the court"
+              alt="Youth basketball player driving to the basket during a game"
               className="aspect-[3/4] w-full object-cover"
               loading="eager"
             />
@@ -138,7 +138,7 @@ export default function Home() {
               <div key={name} className="overflow-hidden rounded-xl border border-border shadow-sm">
                 <img
                   src={`/photos/${name}.jpg`}
-                  alt="Legacy Hoopers game action"
+                  alt={`Youth basketball game action — ${name.replace(/-/g, " ")}`}
                   className="aspect-square w-full object-cover transition-transform duration-300 hover:scale-105"
                   loading="lazy"
                 />
