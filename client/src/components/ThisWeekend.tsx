@@ -320,11 +320,11 @@ export default function ThisWeekend() {
                               })()}
                             </div>
 
-                            {/* Matchup: Legacy vs Opponent */}
+                            {/* Matchup: Aster vs Opponent */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs md:text-sm font-700 text-cobalt truncate">
-                                  Legacy
+                                  Aster
                                 </span>
                                 <span className="font-display font-800 text-base md:text-lg text-white ml-2">
                                   {game.legacyScore !== null ? game.legacyScore : "\u2013"}

@@ -8,7 +8,7 @@ interface State {
 }
 
 /**
- * Loads every Legacy team's published records from the Aster platform.
+ * Loads every Aster team's published records from the Aster platform.
  * Read-only public data; no auth. Shared by Home + Records.
  */
 export function useProgramRecords(): State {

@@ -175,7 +175,7 @@ export async function fetchTournamentData(config: TournamentConfig): Promise<Tou
 function parseGames(html: string, teamFilter: string): GameResult[] {
   const games: GameResult[] = [];
 
-  // Match table rows containing Legacy teams
+  // Match rows for our team — matches the org name as registered on TourneyMachine (official); displayed as "Aster"
   const tableRowRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
   let match;
 

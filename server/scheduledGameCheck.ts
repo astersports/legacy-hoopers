@@ -28,8 +28,8 @@ function formatNotification(newResults: GameResult[]): { title: string; content:
     const emoji = g.result === "W" ? "🏆" : "📊";
     const resultWord = g.result === "W" ? "WIN" : "LOSS";
     return {
-      title: `${emoji} Legacy ${resultWord}: ${g.legacyTeam.replace("Legacy Hoopers", "Legacy").replace("(NY)", "").trim()}`,
-      content: `${g.legacyTeam.replace("[", "").replace("]", "").trim()} ${g.result === "W" ? "defeated" : "lost to"} ${g.opponent.replace("[", "").replace("]", "").trim()} ${formatScore(g)} (Game ${g.gameId})`,
+      title: `${emoji} Aster ${resultWord}: ${g.legacyTeam.replace("Legacy Hoopers", "Aster").replace("(NY)", "").trim()}`,
+      content: `${g.legacyTeam.replace("Legacy Hoopers", "Aster").replace("[", "").replace("]", "").trim()} ${g.result === "W" ? "defeated" : "lost to"} ${g.opponent.replace("[", "").replace("]", "").trim()} ${formatScore(g)} (Game ${g.gameId})`,
     };
   }
 
@@ -38,7 +38,7 @@ function formatNotification(newResults: GameResult[]): { title: string; content:
   const losses = newResults.filter((g) => g.result === "L").length;
   const lines = newResults.map((g) => {
     const emoji = g.result === "W" ? "W" : "L";
-    return `[${emoji}] ${g.legacyTeam.replace("Legacy Hoopers", "Legacy").replace("(NY)", "").trim()} vs ${g.opponent.replace("[", "").replace("]", "").trim()} — ${formatScore(g)}`;
+    return `[${emoji}] ${g.legacyTeam.replace("Legacy Hoopers", "Aster").replace("(NY)", "").trim()} vs ${g.opponent.replace("[", "").replace("]", "").trim()} — ${formatScore(g)}`;
   });
 
   return {

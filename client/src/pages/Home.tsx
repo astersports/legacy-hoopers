@@ -6,9 +6,6 @@ import { ArrowRight, Trophy } from "lucide-react";
 import { useProgramRecords } from "@/hooks/useProgramRecords";
 import { programTotals } from "@/lib/aster";
 
-const REGISTER_URL =
-  "https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list";
-
 export default function Home() {
   const { records, loading, error } = useProgramRecords();
   const totals = programTotals(records);
@@ -37,22 +34,20 @@ export default function Home() {
               >
                 See the records <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href={REGISTER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/schedule"
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-secondary"
               >
-                Register your player
-              </a>
+                View the schedule
+              </Link>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border shadow-md lg:max-w-md">
+          <div className="relative mx-auto flex aspect-[3/4] w-full max-w-sm items-center justify-center overflow-hidden rounded-2xl border border-border bg-[#151525] p-10 shadow-md lg:max-w-md">
             <img
-              src="/photos/hero.jpg"
-              alt="Youth basketball player driving to the basket during a game"
-              className="aspect-[3/4] w-full object-cover"
+              src="/aster-mark.png"
+              alt="Aster AAU"
+              className="w-2/3 max-w-[260px]"
               loading="eager"
             />
           </div>
@@ -127,25 +122,6 @@ export default function Home() {
             ))}
           </div>
         )}
-      </section>
-
-      {/* Gallery */}
-      <section className="border-t border-border bg-secondary/30">
-        <div className="container py-14">
-          <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-foreground">On the court</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {["legacy-jersey", "action-1", "action-2", "action-3"].map((name) => (
-              <div key={name} className="overflow-hidden rounded-xl border border-border shadow-sm">
-                <img
-                  src={`/photos/${name}.jpg`}
-                  alt={`Youth basketball game action — ${name.replace(/-/g, " ")}`}
-                  className="aspect-square w-full object-cover transition-transform duration-300 hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
     </div>
   );
