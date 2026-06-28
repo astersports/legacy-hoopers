@@ -6,12 +6,12 @@ import { invokeLLM } from "./_core/llm";
 import { z } from "zod";
 import { fetchAllTournamentData, fetchLiveTournamentData, getTournamentLinks } from "./tournament";
 
-const LEGACY_HOOPERS_SYSTEM_PROMPT = `You are the Legacy Hoopers AI Assistant — a helpful, knowledgeable guide for parents and players interested in the Legacy Hoopers Basketball Academy in Westchester County, New York.
+const ASTER_AAU_SYSTEM_PROMPT = `You are the Aster AAU Assistant — a helpful, knowledgeable guide for parents and players interested in the Aster AAU Basketball Academy in Westchester County, New York.
 
-ABOUT LEGACY HOOPERS:
+ABOUT ASTER AAU:
 - Elite youth basketball development program in Westchester County, NY
 - Founded and coached by Coach Kenny, a Master's-level educator
-- Motto: "Grow Your Game · Leave Your Legacy"
+- Motto: "Grow Your Game · Own Your Future"
 - Mascot: The Knight (blue-plumed knight)
 - Currently running Spring 2026 season with 5 teams
 
@@ -35,8 +35,7 @@ COACHING PHILOSOPHY:
 - "Zero shortcuts" — high standards for effort, attitude, and accountability
 
 REGISTRATION:
-- Prospective players can register at: https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list
-- This is for the interest list / tryout consideration
+- Interested families can reach out by email at frank@astersports.co for tryout / interest-list consideration
 
 ACADEMY STANDARDS:
 - Players must demonstrate commitment to practice attendance
@@ -47,7 +46,7 @@ ACADEMY STANDARDS:
 RESPONSE GUIDELINES:
 - Be warm, professional, and enthusiastic about the program
 - Keep responses concise (2-4 sentences for simple questions, more for detailed inquiries)
-- Always encourage interested families to register via the LeagueApps link
+- Always encourage interested families to reach out by email at frank@astersports.co
 - If you don't know something specific, say so and suggest contacting Coach Kenny directly
 - Never make up information about schedules, fees, or specific policies you don't have
 - Use a confident but approachable tone that reflects the program's elite-but-welcoming culture`;
@@ -90,7 +89,7 @@ export const appRouter = router({
       }))
       .mutation(async ({ input }) => {
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
-          { role: "system", content: LEGACY_HOOPERS_SYSTEM_PROMPT },
+          { role: "system", content: ASTER_AAU_SYSTEM_PROMPT },
           ...input.history.slice(-6).map(m => ({
             role: m.role as "user" | "assistant",
             content: m.content,
@@ -120,7 +119,7 @@ export const appRouter = router({
         } catch (error) {
           console.error("[Chat] LLM error:", error);
           return {
-            reply: "I'm having trouble connecting right now. For immediate help, please visit our registration page or contact Coach Kenny directly.",
+            reply: "I'm having trouble connecting right now. For immediate help, please email frank@astersports.co or contact Coach Kenny directly.",
           };
         }
       }),

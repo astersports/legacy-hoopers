@@ -92,12 +92,15 @@ describe("scheduledGameCheck", () => {
   });
 
   it("does not re-notify for already-notified games", async () => {
+    // Self-contained: a unique gameId so this test doesn't depend on the
+    // in-module notifiedGames cache being populated by a prior test. First
+    // call notifies (cache miss); second call must not (cache hit).
     (sdk.authenticateRequest as any).mockResolvedValue({ isCron: true, taskUid: "test-uid" });
     (fetchLiveTournamentData as any).mockResolvedValue({
       tournament: { name: "Test Tournament" },
       games: [
         {
-          gameId: "P101",
+          gameId: "P777",
           legacyTeam: "Legacy Hoopers 10U Black",
           opponent: "Other Team",
           legacyScore: 32,
@@ -114,10 +117,15 @@ describe("scheduledGameCheck", () => {
       lastFetched: new Date().toISOString(),
     });
     (notifyOwner as any).mockResolvedValue(true);
-    const req = mockReq();
+
+    // First call — new game, should notify.
+    await handleGameCheck(mockReq(), mockRes());
+    expect(notifyOwner).toHaveBeenCalledTimes(1);
+
+    // Second call — same game should not re-notify.
+    (notifyOwner as any).mockClear();
     const res = mockRes();
-    // Second call — same game should not re-notify
-    await handleGameCheck(req, res);
+    await handleGameCheck(mockReq(), res);
     expect(notifyOwner).not.toHaveBeenCalled();
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({ ok: true, newResults: 0 })

@@ -1,9 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useEffect, type ReactNode } from "react";
 
-const REGISTER_URL =
-  "https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list";
-
 const NAV = [
   { href: "/", label: "Home" },
   { href: "/schedule", label: "Schedule" },
@@ -54,14 +51,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </Link>
               );
             })}
-            <a
-              href={REGISTER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:opacity-90"
-            >
-              Register
-            </a>
           </nav>
         </div>
       </header>
@@ -71,7 +60,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="mt-20 border-t border-border bg-secondary/40">
         <div className="container flex flex-col items-center justify-between gap-3 py-8 text-sm text-muted-foreground sm:flex-row">
           <span className="font-semibold text-foreground">Aster AAU</span>
-          <span>Live scores &amp; records · powered by Aster Sports</span>
+          <a href="mailto:frank@astersports.co" className="hover:text-foreground transition-colors">frank@astersports.co</a>
           <span>© {new Date().getFullYear()} Aster Sports</span>
         </div>
       </footer>

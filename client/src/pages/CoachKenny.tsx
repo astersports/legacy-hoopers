@@ -2,10 +2,7 @@
  * Coach Kenny — clean & light. Copy carried over from the prior site
  * (operator to confirm credentials/bio specifics).
  */
-import { Award, GraduationCap, Heart, Target, ArrowRight } from "lucide-react";
-
-const REGISTER_URL =
-  "https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list";
+import { Award, GraduationCap, Heart, Target } from "lucide-react";
 
 const credentials = [
   { icon: GraduationCap, title: "Master's in Education", desc: "Differentiated instruction and learning theory applied to basketball development." },
@@ -96,21 +93,6 @@ export default function CoachKenny() {
             ))}
           </div>
         </div>
-      </section>
-
-      <section className="container py-16 text-center">
-        <h2 className="text-3xl font-extrabold tracking-tight text-foreground">Experience the difference</h2>
-        <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-          See firsthand how teaching-first coaching transforms young athletes.
-        </p>
-        <a
-          href={REGISTER_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-7 inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:opacity-90"
-        >
-          Join the program <ArrowRight className="h-4 w-4" />
-        </a>
       </section>
     </div>
   );
