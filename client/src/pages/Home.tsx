@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { BRAND, REGISTER_URL } from "@/lib/brand";
 import { JOURNEY } from "@/lib/content";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { FRONTIER_SCAN } from "@/lib/agentScans";
 
 const LOGO_URL = BRAND.logo;
 const DISPLAY = { fontFamily: "var(--font-space)" } as const;
@@ -177,6 +179,9 @@ function HeroSection() {
           </div>
           <div className={`flex items-center gap-2 text-slate-500 text-sm delay-500 ${rise}`}>
             <MapPin className="w-4 h-4 text-[#E0631C]/70" /> <span>Based in Westchester, NY · {BRAND.region}</span>
+          </div>
+          <div className={`mt-8 delay-500 ${rise}`}>
+            <AgentScanConsole scan={FRONTIER_SCAN} />
           </div>
         </div>
       </div>

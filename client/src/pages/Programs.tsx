@@ -20,6 +20,8 @@ import { AiProgramMatcher } from "@/components/ai/programs/AiProgramMatcher";
 import { AiDevelopmentPath } from "@/components/ai/programs/AiDevelopmentPath";
 import { AiPlanBuilder } from "@/components/ai/programs/AiPlanBuilder";
 import { AiProgramAdvisor } from "@/components/ai/programs/AiProgramAdvisor";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { PROGRAMS_SCAN } from "@/lib/agentScans";
 
 const INCLUDED = [
   { icon: ClipboardCheck, title: "A real development plan", desc: "Every athlete gets a tracked plan — not a one-size-fits-all practice." },
@@ -46,6 +48,7 @@ export default function Programs() {
             </a>
             <a href="#programs" className={btnGhostDark}>Compare programs</a>
           </div>
+          <AgentScanConsole scan={PROGRAMS_SCAN} className="mt-10 max-w-2xl" />
         </div>
       </section>
 

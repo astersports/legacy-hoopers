@@ -25,6 +25,8 @@ import { GrowthProjectionChart } from "@/components/ai/dashboard/GrowthProjectio
 import { AiTrainingPlan } from "@/components/ai/dashboard/AiTrainingPlan";
 import { LoadManagementGauge } from "@/components/ai/dashboard/LoadManagementGauge";
 import { AskAboutAthlete } from "@/components/ai/dashboard/AskAboutAthlete";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { DASHBOARD_SCAN } from "@/lib/agentScans";
 
 const ATTENDANCE = [100, 100, 80, 100, 100, 60, 100, 100];
 const SKILLS = [
@@ -46,6 +48,11 @@ export default function Dashboard() {
       <CommandBar />
       {/* KPI band (still navy) — AnimatedCounter (#10) */}
       <KpiCards />
+
+      {/* Live athlete agent — the ASTER-AGENT scan console */}
+      <div className="container mt-8">
+        <AgentScanConsole scan={DASHBOARD_SCAN} className="max-w-2xl" />
+      </div>
 
       {/* Goals & milestones + achievements (#2, #3) */}
       <Section className="!py-12">

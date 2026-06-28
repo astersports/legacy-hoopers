@@ -23,6 +23,8 @@ import { AIAttendancePredictor } from "@/components/ai/schedule/AIAttendancePred
 import { AITravelETA } from "@/components/ai/schedule/AITravelETA";
 import { AIScheduleAsk } from "@/components/ai/schedule/AIScheduleAsk";
 import { Sparkles, ChevronDown } from "lucide-react";
+import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { SCHEDULE_SCAN } from "@/lib/agentScans";
 
 const SLICERS: { key: Slicer; label: string }[] = [
   { key: "team", label: "By Team" }, { key: "age", label: "Age / Grade" }, { key: "date", label: "By Date" },
@@ -103,6 +105,7 @@ export default function Schedule() {
               <Share2 className="h-3.5 w-3.5" /> Share
             </button>
           </div>
+          <AgentScanConsole scan={SCHEDULE_SCAN} className="mt-6 max-w-2xl" />
         </div>
       </section>
 
