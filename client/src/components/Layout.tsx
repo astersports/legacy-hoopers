@@ -14,7 +14,7 @@ function Brand() {
     <Link href="/" className="flex items-center gap-2.5">
       <img src="/aster-mark.png" alt="" className="h-10 w-auto" />
       <span className="flex flex-col leading-none">
-        <span className="text-[15px] font-bold tracking-tight text-foreground">Aster AAU</span>
+        <span className="text-[15px] font-bold tracking-tight text-foreground">Aster Sports AAU</span>
         <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
           AAU Basketball
         </span>
@@ -59,7 +59,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <footer className="mt-20 border-t border-border bg-secondary/40">
         <div className="container flex flex-col items-center justify-between gap-3 py-8 text-sm text-muted-foreground sm:flex-row">
-          <span className="font-semibold text-foreground">Aster AAU</span>
+          <span className="font-semibold text-foreground">Aster Sports AAU</span>
           <a href="mailto:frank@astersports.co" className="hover:text-foreground transition-colors">frank@astersports.co</a>
           <span>© {new Date().getFullYear()} Aster Sports</span>
         </div>

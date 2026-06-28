@@ -1,5 +1,5 @@
 /*
- * Records — live team records for Aster AAU, read from the Aster Sports
+ * Records — live team records for Aster Sports AAU, read from the Aster Sports
  * platform's public API (get_public_team_records). Clean & light.
  */
 import { useState } from "react";
