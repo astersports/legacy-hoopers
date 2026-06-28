@@ -18,6 +18,11 @@ import { TypeLegend } from "@/components/schedule/TypeLegend";
 import { SubscribeCTA } from "@/components/schedule/SubscribeCTA";
 import { EmptyState } from "@/components/schedule/EmptyState";
 import { ScheduleSkeleton } from "@/components/schedule/ScheduleSkeleton";
+import { AIGameDayBrief } from "@/components/ai/schedule/AIGameDayBrief";
+import { AIAttendancePredictor } from "@/components/ai/schedule/AIAttendancePredictor";
+import { AITravelETA } from "@/components/ai/schedule/AITravelETA";
+import { AIScheduleAsk } from "@/components/ai/schedule/AIScheduleAsk";
+import { Sparkles, ChevronDown } from "lucide-react";
 
 const SLICERS: { key: Slicer; label: string }[] = [
   { key: "team", label: "By Team" }, { key: "age", label: "Age / Grade" }, { key: "date", label: "By Date" },
@@ -66,6 +71,7 @@ export default function Schedule() {
   const [slicer, setSlicer] = useState<Slicer>("team");
   const [type, setType] = useState<TypeFilter>("all");
   const [gender, setGender] = useState<GenderFilter>("all");
+  const [aiOpen, setAiOpen] = useState(true);
 
   const { live, upcoming, recent, groups, next, dateGroups } = useMemo(() => {
     const filtered = applyFilters(events, type, gender);
@@ -82,9 +88,9 @@ export default function Schedule() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-[#0F1119] to-[#222538] text-white">
-        <div className="container py-8">
-          <div className="font-mono text-[11px] uppercase tracking-wider text-white/60">Aster Sports AAU · AAU + League</div>
+      <section className="hero-navy text-white">
+        <div className="container py-10">
+          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold-light">Aster Sports · AAU + League</div>
           <h1 className="mt-1 text-4xl font-extrabold tracking-tight">Schedule</h1>
           <div className="mt-4">
             <HeroWeatherChip />
@@ -108,6 +114,40 @@ export default function Schedule() {
           <>
             <CountdownCard next={next} now={now} />
             <SeasonSummary live={live} upcoming={upcoming} recent={recent} now={now} />
+
+            {/* ── AI Insights band (cosmetic / mock — NO live API calls). ──
+                Showcases Aster's next-gen AI surfaces alongside the live
+                schedule. Each card is clearly labeled "AI" and wired later. */}
+            {next && (
+              <section className="mb-5" aria-label="AI insights for your next game">
+                <div className="mb-2 flex items-center justify-between">
+                  <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-gold-text">
+                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> Aster AI · Game-day insights
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setAiOpen((o) => !o)}
+                    aria-expanded={aiOpen}
+                    className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-1 text-xs font-semibold text-muted-foreground transition-colors hover:bg-secondary"
+                  >
+                    {aiOpen ? "Hide" : "Show"}
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform ${aiOpen ? "rotate-180" : ""}`}
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+                {aiOpen && (
+                  <div className="space-y-3">
+                    <AIGameDayBrief next={next} now={now} />
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <AIAttendancePredictor next={next} />
+                      <AITravelETA next={next} />
+                    </div>
+                  </div>
+                )}
+              </section>
+            )}
           </>
         )}
 
@@ -137,6 +177,14 @@ export default function Schedule() {
             <TypeLegend />
           </div>
         </div>
+
+        {/* AI natural-language assistant (cosmetic / mock — answers composed
+            locally from already-computed arrays, no model call). */}
+        {ready && !isEmpty && (
+          <div className="mt-4">
+            <AIScheduleAsk upcoming={upcoming} recent={recent} next={next} now={now} />
+          </div>
+        )}
 
         {loading && <ScheduleSkeleton />}
         {error && <div className="mt-4 rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">Couldn't reach the schedule. Try again in a moment.</div>}

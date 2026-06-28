@@ -20,6 +20,11 @@ import { PaymentsCard } from "@/components/dashboard/PaymentsCard";
 import { ShootingChart } from "@/components/dashboard/ShootingChart";
 import { Sparklines } from "@/components/dashboard/Sparklines";
 import { QuickActions } from "@/components/dashboard/QuickActions";
+import { AiDevelopmentInsights } from "@/components/ai/dashboard/AiDevelopmentInsights";
+import { GrowthProjectionChart } from "@/components/ai/dashboard/GrowthProjectionChart";
+import { AiTrainingPlan } from "@/components/ai/dashboard/AiTrainingPlan";
+import { LoadManagementGauge } from "@/components/ai/dashboard/LoadManagementGauge";
+import { AskAboutAthlete } from "@/components/ai/dashboard/AskAboutAthlete";
 
 const ATTENDANCE = [100, 100, 80, 100, 100, 60, 100, 100];
 const SKILLS = [
@@ -94,6 +99,24 @@ export default function Dashboard() {
         {/* Mini KPI sparklines (#9) */}
         <div className="mt-5">
           <Sparklines />
+        </div>
+      </Section>
+
+      {/* Aster Intelligence — premium AI/ML showcase (cosmetic, labeled AI) */}
+      <Section className="!py-12">
+        <SectionHeading
+          eyebrow="Aster Intelligence"
+          title="Your athlete, understood by AI"
+          subtitle="Premium AI features — a generated read on Maya's trajectory, what's next, and how to keep her healthy. Illustrative previews, reviewed by a coach."
+        />
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <AiDevelopmentInsights />
+          <GrowthProjectionChart />
+          <AiTrainingPlan />
+          <LoadManagementGauge />
+        </div>
+        <div className="mt-5">
+          <AskAboutAthlete />
         </div>
       </Section>
 

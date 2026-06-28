@@ -2,7 +2,7 @@
  * Programs — the services hub: camps, clinics, 1:1, AAU teams, small groups,
  * elite academy. Aspirational/cosmetic; checkout wires to Aster later.
  */
-import { ArrowRight, Check, Users, Calendar, ClipboardCheck } from "lucide-react";
+import { ArrowRight, Check, Users, Calendar, ClipboardCheck, Sparkles } from "lucide-react";
 import { REGISTER_URL } from "@/lib/brand";
 import { COACHES } from "@/lib/content";
 import { Section, SectionHeading, Pill, btnGold, btnGhostDark } from "@/components/kit";
@@ -16,6 +16,10 @@ import { QuizCta } from "@/components/programs/QuizCta";
 import { ProgramTestimonials } from "@/components/programs/ProgramTestimonials";
 import { ProgramFaq } from "@/components/programs/ProgramFaq";
 import { EligibilityGrid } from "@/components/programs/EligibilityGrid";
+import { AiProgramMatcher } from "@/components/ai/programs/AiProgramMatcher";
+import { AiDevelopmentPath } from "@/components/ai/programs/AiDevelopmentPath";
+import { AiPlanBuilder } from "@/components/ai/programs/AiPlanBuilder";
+import { AiProgramAdvisor } from "@/components/ai/programs/AiProgramAdvisor";
 
 const INCLUDED = [
   { icon: ClipboardCheck, title: "A real development plan", desc: "Every athlete gets a tracked plan — not a one-size-fits-all practice." },
@@ -73,6 +77,38 @@ export default function Programs() {
         <ScrollReveal>
           <ProgramComparison />
         </ScrollReveal>
+      </Section>
+
+      {/* AI / ML — premium, clearly-labeled AI surfaces (cosmetic; wired later) */}
+      <Section tone="muted" className="scroll-mt-20">
+        <div id="ai" />
+        <SectionHeading
+          eyebrow="Powered by Aster AI"
+          title={
+            <span className="inline-flex flex-wrap items-center gap-2">
+              <Sparkles className="h-7 w-7 text-gold-text" /> Let AI find the perfect path.
+            </span>
+          }
+          subtitle="Answer a few questions and Aster's match engine recommends a program, maps the development path, and drafts a custom plan — a preview of the intelligence behind every Aster program."
+        />
+        <div className="grid items-start gap-6 lg:grid-cols-2">
+          <ScrollReveal>
+            <AiProgramMatcher />
+          </ScrollReveal>
+          <ScrollReveal delay={60}>
+            <AiDevelopmentPath />
+          </ScrollReveal>
+          <ScrollReveal delay={120}>
+            <AiPlanBuilder />
+          </ScrollReveal>
+          <ScrollReveal delay={180}>
+            <AiProgramAdvisor />
+          </ScrollReveal>
+        </div>
+        <p className="mt-6 flex items-center justify-center gap-2 text-center text-xs text-muted-foreground">
+          <Sparkles className="h-3.5 w-3.5 text-gold-text" />
+          AI features shown are an illustrative preview. No athlete data leaves your device — recommendations confirm with a coach.
+        </p>
       </Section>
 
       {/* #9 — age / grade eligibility quick reference */}

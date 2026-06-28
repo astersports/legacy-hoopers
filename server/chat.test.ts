@@ -29,7 +29,7 @@ describe("chat.ask", () => {
       choices: [
         {
           message: {
-            content: "You can register through the Aster Sports app!",
+            content: "You can register at our LeagueApps page!",
           },
         },
       ],
@@ -41,7 +41,7 @@ describe("chat.ask", () => {
       history: [],
     });
 
-    expect(result.reply).toBe("You can register through the Aster Sports app!");
+    expect(result.reply).toBe("You can register at our LeagueApps page!");
   });
 
   it("normalizes structured content array into a plain string", async () => {

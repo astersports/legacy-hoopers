@@ -1,5 +1,5 @@
 /*
- * AI Chatbot Widget — Aster Sports AAU Assistant
+ * AI Chatbot Widget — Aster Sports Assistant
  * Connected to real LLM via tRPC backend for intelligent conversational responses.
  */
 import { useState, useRef, useEffect } from "react";
@@ -19,7 +19,7 @@ export default function AIChatbot() {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hey! I'm the Aster Sports AAU AI assistant. Ask me anything about our program — teams, schedules, registration, coaching philosophy, or locations. I'm powered by AI so I can have a real conversation with you.",
+      content: "Hey! I'm the Aster Sports AI assistant. Ask me anything about our program — teams, schedules, registration, coaching philosophy, or locations. I'm powered by AI so I can have a real conversation with you.",
       timestamp: new Date(),
     },
   ]);
@@ -105,7 +105,7 @@ export default function AIChatbot() {
                 <Bot className="w-4 h-4 text-cobalt" />
               </div>
               <div>
-                <h3 className="font-display font-800 text-sm uppercase text-white">Aster Sports AAU Assistant</h3>
+                <h3 className="font-display font-800 text-sm uppercase text-white">Aster Sports Assistant</h3>
                 <div className="flex items-center gap-1.5">
                   <Zap className="w-2.5 h-2.5 text-cobalt" />
                   <p className="text-cobalt text-[10px] font-600">AI-Powered · Real Conversations</p>
@@ -182,7 +182,7 @@ export default function AIChatbot() {
               </button>
             </div>
             <p className="text-white/20 text-[10px] mt-2 text-center">
-              Powered by AI · Trained on Aster Sports AAU program info
+              Powered by AI · Trained on Aster Sports program info
             </p>
           </div>
         </div>

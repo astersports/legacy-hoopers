@@ -1,6 +1,8 @@
 /*
- * Records — live team records for Aster Sports AAU, read from the Aster Sports
- * platform's public API (get_public_team_records). Clean & light.
+ * Records — live team records for Aster Sports, read from the Aster Sports
+ * platform's public API (get_public_team_records). Navy hero on top, everything
+ * else light. Presentation is enhanced here; the live data (useProgramRecords /
+ * programTotals) is passed straight through and never mutated.
  */
 import { useMemo, useState } from "react";
 import { Trophy, Sparkles } from "lucide-react";
@@ -13,6 +15,7 @@ import { RecordsControls } from "@/components/records/RecordsControls";
 import { HighlightCallout } from "@/components/records/HighlightCallout";
 import { WinRateChart } from "@/components/records/WinRateChart";
 import { sortRecords, topTeam, hottestTeam, type SortKey } from "@/components/records/recordsUtils";
+import { AiRecordsSection } from "@/components/ai/records/AiRecordsSection";
 
 export default function Records() {
   const { records, loading, error } = useProgramRecords();
@@ -94,6 +97,9 @@ export default function Records() {
                 <TeamCard key={team.name} team={team} rank={i + 1} />
               ))}
             </div>
+
+            {/* ── Cosmetic AI showcase — derived from the live records above ── */}
+            <AiRecordsSection records={sorted} />
           </>
         )}
       </div>

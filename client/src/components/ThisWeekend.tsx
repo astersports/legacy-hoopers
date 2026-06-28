@@ -14,7 +14,7 @@ import { isGameLive, parseGameDate } from "@shared/gameTime";
 const DIVISION_CONFIG: Record<string, { name: string; grade: string; color: string; order: number }> = {
   "Boys - 2nd/3rd": { name: "8U Boys", grade: "2nd/3rd Grade", color: "#f59e0b", order: 1 },
   "Boys - 2nd": { name: "8U Boys", grade: "2nd Grade", color: "#f59e0b", order: 1 },
-  "Boys - 4th": { name: "10U Black", grade: "4th Grade Boys", color: "#C9952E", order: 2 },
+  "Boys - 4th": { name: "10U Black", grade: "4th Grade Boys", color: "#4a8fd4", order: 2 },
   "Girls - 5th": { name: "11U Girls", grade: "5th Grade Girls", color: "#a78bfa", order: 3 },
 };
 
