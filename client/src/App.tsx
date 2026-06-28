@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -15,10 +15,13 @@ import CoachKenny from "./pages/CoachKenny";
 import Layout from "./components/Layout";
 
 function Router() {
+  const [path] = useLocation();
+  // The celestial landing page is self-contained (own dark header + footer);
+  // it renders outside the light Layout chrome used by the inner pages.
+  if (path === "/") return <Home />;
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={Home} />
         <Route path="/programs" component={Programs} />
         <Route path="/schedule" component={Schedule} />
         <Route path="/records" component={Records} />
