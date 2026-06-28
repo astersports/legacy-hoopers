@@ -1,13 +1,20 @@
 /*
- * Home — clean & light. Live program record from the Aster Sports platform.
+ * Home — Aster AAU. Live program record from the Aster Sports platform.
+ * Dark-highlight hero anchored by the constellation-arrow mark (no photos).
  */
 import { Link } from "wouter";
-import { ArrowRight, Trophy } from "lucide-react";
+import { ArrowRight, Trophy, Target, BookOpen, Users } from "lucide-react";
 import { useProgramRecords } from "@/hooks/useProgramRecords";
 import { programTotals } from "@/lib/aster";
+import { BRAND, REGISTER_URL } from "@/lib/brand";
+import { Logo } from "@/components/Logo";
 
-const REGISTER_URL =
-  "https://legacyhoopers.leagueapps.com/camps/4945182-legacy-hoopers-prospective-player-interest-list";
+const PILLARS = [
+  { icon: BookOpen, title: "Teaching-first", desc: "Every session designed with intentional pedagogy." },
+  { icon: Target, title: "Player development", desc: "Individual growth plans, tracked across seasons." },
+  { icon: Trophy, title: "Real competition", desc: "AAU + league play, every game on the record." },
+  { icon: Users, title: "Family partnership", desc: "Parents are partners, not spectators." },
+];
 
 export default function Home() {
   const { records, loading, error } = useProgramRecords();
@@ -16,24 +23,24 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="border-b border-border bg-gradient-to-b from-secondary/50 to-background">
-        <div className="container grid items-center gap-10 py-14 lg:grid-cols-2 lg:py-20">
-          <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-              <Trophy className="h-3.5 w-3.5" /> Westchester AAU · Zero Gravity
+      {/* Hero — dark highlight band, anchored by the logo */}
+      <section className="hero-navy relative overflow-hidden text-white">
+        <div className="container grid items-center gap-10 py-16 lg:grid-cols-2 lg:py-24">
+          <div className="min-w-0">
+            <span className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gold-light ring-1 ring-white/10">
+              <Trophy className="h-3.5 w-3.5" /> {BRAND.region} · Zero Gravity
             </span>
-            <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl xl:text-6xl">
-              Five teams. One standard. Zero shortcuts.
+            <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl xl:text-6xl">
+              {BRAND.tagline}
             </h1>
-            <p className="mt-4 max-w-xl text-lg text-muted-foreground">
+            <p className="mt-4 max-w-xl text-lg text-white/70">
               Westchester County youth basketball development — elite coaching, real competition,
               and every game on the record.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
                 href="/records"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-lg bg-gold px-5 py-3 text-sm font-semibold text-navy shadow-sm transition-colors hover:bg-gold-light"
               >
                 See the records <ArrowRight className="h-4 w-4" />
               </Link>
@@ -41,25 +48,22 @@ export default function Home() {
                 href={REGISTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-secondary"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
               >
                 Register your player
               </a>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border shadow-md lg:max-w-md">
-            <img
-              src="/photos/hero.jpg"
-              alt="Youth basketball player driving to the basket during a game"
-              className="aspect-[3/4] w-full object-cover"
-              loading="eager"
-            />
+          {/* Logo medallion replaces the hero photo */}
+          <div className="relative mx-auto grid w-full max-w-sm place-items-center">
+            <div className="absolute h-64 w-64 rounded-full bg-gold/20 blur-3xl" aria-hidden />
+            <Logo className="relative h-56 w-56 drop-shadow-[0_8px_40px_rgba(201,149,46,0.35)] sm:h-64 sm:w-64" />
           </div>
         </div>
 
         {/* Live program stat line */}
-        <div className="container pb-14">
+        <div className="container pb-16">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
               { label: "Wins", value: ready ? totals.wins : "—" },
@@ -67,9 +71,9 @@ export default function Home() {
               { label: "Win %", value: ready ? `${Math.round(totals.pct * 100)}%` : "—" },
               { label: "Games", value: ready ? totals.games : "—" },
             ].map((s) => (
-              <div key={s.label} className="rounded-xl border border-border bg-card p-4 shadow-sm">
-                <div className="text-3xl font-extrabold tabular-nums text-foreground">{s.value}</div>
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">{s.label}</div>
+              <div key={s.label} className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                <div className="text-3xl font-extrabold tabular-nums text-white">{s.value}</div>
+                <div className="text-xs uppercase tracking-wider text-white/60">{s.label}</div>
               </div>
             ))}
           </div>
@@ -83,7 +87,7 @@ export default function Home() {
             <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Our teams</h2>
             <p className="text-sm text-muted-foreground">Tap a team on the records page for its full game log.</p>
           </div>
-          <Link href="/records" className="text-sm font-semibold text-primary hover:underline">
+          <Link href="/records" className="text-sm font-semibold text-gold-text hover:underline">
             All records →
           </Link>
         </div>
@@ -129,21 +133,32 @@ export default function Home() {
         )}
       </section>
 
-      {/* Gallery */}
-      <section className="border-t border-border bg-secondary/30">
-        <div className="container py-14">
-          <h2 className="mb-6 text-2xl font-extrabold tracking-tight text-foreground">On the court</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {["legacy-jersey", "action-1", "action-2", "action-3"].map((name) => (
-              <div key={name} className="overflow-hidden rounded-xl border border-border shadow-sm">
-                <img
-                  src={`/photos/${name}.jpg`}
-                  alt={`Youth basketball game action — ${name.replace(/-/g, " ")}`}
-                  className="aspect-square w-full object-cover transition-transform duration-300 hover:scale-105"
-                  loading="lazy"
-                />
+      {/* What we stand for — replaces the photo gallery */}
+      <section className="relative overflow-hidden border-t border-border bg-secondary/30">
+        <span className="watermark left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">ASTER</span>
+        <div className="container relative py-14">
+          <div className="mb-6 flex items-center gap-3">
+            <Logo className="h-8 w-8" />
+            <h2 className="text-2xl font-extrabold tracking-tight text-foreground">What we stand for</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {PILLARS.map((p) => (
+              <div key={p.title} className="rounded-xl border border-border bg-card p-6 shadow-sm">
+                <span className="grid h-11 w-11 place-items-center rounded-lg bg-gold-soft text-gold-text">
+                  <p.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-4 font-bold text-foreground">{p.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/mission"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-secondary"
+            >
+              Read our mission <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

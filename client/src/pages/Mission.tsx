@@ -23,7 +23,7 @@ export default function Mission() {
     <div>
       <section className="border-b border-border bg-gradient-to-b from-secondary/50 to-background">
         <div className="container py-16">
-          <span className="text-xs font-semibold uppercase tracking-wider text-primary">Our purpose</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-text">Our purpose</span>
           <h1 className="mt-3 max-w-3xl text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
             Our mission &amp; history
           </h1>
@@ -34,7 +34,7 @@ export default function Mission() {
       </section>
 
       <section className="container py-14">
-        <blockquote className="mx-auto max-w-3xl border-l-4 border-primary pl-6 text-xl font-semibold leading-snug text-foreground sm:text-2xl">
+        <blockquote className="mx-auto max-w-3xl border-l-4 border-gold pl-6 text-xl font-semibold leading-snug text-foreground sm:text-2xl">
           "We exist to develop elite basketball players through teaching-first coaching, structured
           competition, and uncompromising standards — preparing young athletes for the next level of the
           game and life."

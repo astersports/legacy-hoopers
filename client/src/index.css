@@ -32,56 +32,57 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  /* Custom brand colors — Aster gold + navy.
-     The legacy `cobalt` token names are retained (used widely across pages) but
-     now hold Aster gold values, so every existing accent reads gold. */
-  --color-cobalt: oklch(0.72 0.13 80);
-  --color-cobalt-light: oklch(0.82 0.13 86);
-  --color-cobalt-glow: oklch(0.78 0.14 82 / 35%);
-  --color-navy: oklch(0.15 0.02 285);
-  --color-navy-light: oklch(0.21 0.025 285);
-  --color-gold: oklch(0.78 0.17 75);
-  --color-gold-light: oklch(0.88 0.12 85);
-  --color-success: oklch(0.72 0.19 145);
-  --color-arena: oklch(0.10 0.02 285);
+
+  /* ─── Aster brand: navy ink + gold (the constellation-arrow mark) ─── */
+  --color-navy: #151525;       /* the dark highlight */
+  --color-navy-light: #23233a;
+  --color-navy-soft: #2b2b44;
+  --color-gold: #c9952e;       /* logo gold — the one warm accent */
+  --color-gold-light: #d4a843;
+  --color-gold-soft: #f6edd6;
+  --color-gold-text: #8f6708;
+  --color-ink: #1a1d23;
+  --color-success: #16a34a;
+
   /* Light section colors */
-  --color-light-bg: oklch(0.97 0.005 250);
-  --color-light-card: oklch(1 0 0);
-  --color-light-text: oklch(0.15 0.02 250);
-  --color-light-muted: oklch(0.45 0.02 250);
-  --color-light-border: oklch(0.88 0.01 250);
+  --color-light-bg: #f7f8fa;
+  --color-light-card: #ffffff;
+  --color-light-text: #1a1d23;
+  --color-light-muted: #5a6472;
+  --color-light-border: #e4e8ee;
   --font-display: 'Barlow Condensed', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
 
 :root {
-  /* Clean & light — white surfaces, cool-slate text, Aster gold as the one
-     brand accent (deep gold for AA contrast on white). */
+  /* Aster light theme — cool-gray surfaces, navy ink, gold accent.
+     Navy is the dark *highlight* (headers, primary buttons, hero bands);
+     gold is the single warm accent, matching the constellation-arrow logo. */
   --radius: 0.625rem;
-  --background: oklch(0.99 0.002 250);
-  --foreground: oklch(0.22 0.02 255);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.02 255);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.02 255);
-  --primary: oklch(0.52 0.11 78);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0.005 250);
-  --secondary-foreground: oklch(0.30 0.02 255);
-  --muted: oklch(0.97 0.004 250);
-  --muted-foreground: oklch(0.52 0.02 255);
-  --accent: oklch(0.95 0.02 250);
-  --accent-foreground: oklch(0.30 0.04 255);
-  --destructive: oklch(0.58 0.21 27);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.91 0.006 255);
-  --input: oklch(0.91 0.006 255);
-  --ring: oklch(0.52 0.11 78);
-  --chart-1: oklch(0.52 0.11 78);
-  --chart-2: oklch(0.72 0.19 145);
-  --chart-3: oklch(0.70 0.15 50);
-  --chart-4: oklch(0.55 0.2 300);
-  --chart-5: oklch(0.78 0.17 75);
+  --background: #f7f8fa;
+  --foreground: #1a1d23;
+  --card: #ffffff;
+  --card-foreground: #1a1d23;
+  --popover: #ffffff;
+  --popover-foreground: #1a1d23;
+  --primary: #151525;          /* navy — dark highlight */
+  --primary-foreground: #f5f0e8;
+  --secondary: #f1f3f5;
+  --secondary-foreground: #2a2e37;
+  --muted: #f1f3f5;
+  --muted-foreground: #5a6472;
+  --accent: #f6edd6;           /* soft gold tint for accent surfaces */
+  --accent-foreground: #6e5410;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e4e8ee;
+  --input: #e4e8ee;
+  --ring: #c9952e;             /* gold focus ring */
+  --chart-1: #151525;
+  --chart-2: #16a34a;
+  --chart-3: #c9952e;
+  --chart-4: #3b82f6;
+  --chart-5: #d4a843;
 }
 
 @layer base {
@@ -153,11 +154,18 @@
     font-family: var(--font-body);
   }
 
-  /* Glow line accent */
+  /* Gold glow line accent */
   .glow-line {
     height: 3px;
-    background: linear-gradient(90deg, transparent, var(--color-cobalt), transparent);
-    box-shadow: 0 0 12px var(--color-cobalt-glow);
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    box-shadow: 0 0 12px rgba(201, 149, 46, 0.35);
+  }
+
+  /* Navy hero band — the dark highlight surface */
+  .hero-navy {
+    background:
+      radial-gradient(120% 120% at 85% -10%, rgba(201, 149, 46, 0.18), transparent 55%),
+      linear-gradient(160deg, var(--color-navy) 0%, var(--color-navy-light) 100%);
   }
 
   /* Watermark text */
@@ -167,19 +175,16 @@
     font-weight: 800;
     font-size: clamp(80px, 15vw, 200px);
     text-transform: uppercase;
-    color: oklch(0.72 0.13 80 / 6%);
+    color: rgba(21, 21, 37, 0.04);
     pointer-events: none;
     user-select: none;
     white-space: nowrap;
     line-height: 1;
   }
-  .section-light .watermark {
-    color: oklch(0.72 0.13 80 / 9%);
-  }
 
-  /* Stat number animation */
+  /* Stat number accent */
   .stat-glow {
-    text-shadow: 0 0 20px var(--color-cobalt-glow);
+    text-shadow: 0 0 18px rgba(201, 149, 46, 0.25);
   }
 
   /* Card hover effect */
@@ -188,7 +193,7 @@
   }
   .card-hover:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px oklch(0.72 0.13 80 / 18%);
+    box-shadow: 0 12px 40px rgba(21, 21, 37, 0.12);
   }
 
   /* Light card style */
@@ -196,26 +201,39 @@
     background: var(--color-light-card);
     border: 1px solid var(--color-light-border);
     border-radius: 0.75rem;
-    box-shadow: 0 2px 8px oklch(0.2 0.02 250 / 6%);
+    box-shadow: 0 2px 8px rgba(26, 29, 35, 0.06);
     transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
   .light-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px oklch(0.2 0.02 250 / 12%);
+    box-shadow: 0 8px 24px rgba(26, 29, 35, 0.12);
   }
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling — light theme */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: oklch(0.1 0.02 285);
+  background: #eef0f4;
 }
 ::-webkit-scrollbar-thumb {
-  background: oklch(0.25 0.03 285);
-  border-radius: 4px;
+  background: #cfd5de;
+  border-radius: 5px;
+  border: 2px solid #eef0f4;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.35 0.03 285);
+  background: #b6bdc8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
