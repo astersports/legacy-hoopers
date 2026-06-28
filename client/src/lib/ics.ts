@@ -8,7 +8,7 @@ function esc(s: string): string {
 }
 
 /** Build + download an .ics of upcoming events (games + tournaments; practices optional). */
-export function downloadSchedule(events: ScheduleEvent[], filename = "aster-aau-schedule.ics") {
+export function downloadSchedule(events: ScheduleEvent[], filename = "aster-sports-aau-schedule.ics") {
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Aster Sports AAU//Schedule//EN", "CALSCALE:GREGORIAN"];
   for (const e of events) {
     const title = e.kind === "practice" ? e.title || "Practice" : `${e.team_name}${e.opponent ? ` vs. ${e.opponent}` : ""}`;

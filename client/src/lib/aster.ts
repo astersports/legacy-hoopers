@@ -59,7 +59,7 @@ export interface TeamRecord {
   games: GameRecord[];
 }
 
-const DEFAULT_ACCENT = "#C9952E"; // Aster cobalt (org brand)
+const DEFAULT_ACCENT = "#C9952E"; // Aster gold (org brand)
 
 // Camp / lab / placeholder teams never appear on the public site.
 const NON_COMPETITIVE = /roster lab|day camp|summer/i;
