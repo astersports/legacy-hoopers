@@ -9,9 +9,9 @@ function Brand() {
     <Link href="/" className="flex items-center gap-2.5">
       <Logo className="h-9 w-9" />
       <span className="flex flex-col leading-none">
-        <span className="text-[15px] font-extrabold tracking-tight text-foreground">{BRAND.name}</span>
-        <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-          {BRAND.region}
+        <span className="text-[15px] font-bold tracking-tight text-foreground">Aster Sports AAU</span>
+        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+          AAU Basketball
         </span>
       </span>
     </Link>
@@ -146,44 +146,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <main className="flex-1">{children}</main>
 
-      {/* Mega footer */}
-      <footer className="mt-20 border-t border-border bg-secondary/40 text-foreground">
-        <div className="container grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <Logo className="h-9 w-9" />
-              <span className="text-lg font-extrabold tracking-tight">{BRAND.name}</span>
-            </div>
-            <p className="mt-3 max-w-xs text-sm text-muted-foreground">{BRAND.subtag}</p>
-            <a
-              href={REGISTER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gold px-4 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light"
-            >
-              <Smartphone className="h-4 w-4" /> Get the app
-            </a>
-          </div>
-          {FOOTER_COLS.map((col) => (
-            <div key={col.title}>
-              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-text">{col.title}</div>
-              <ul className="mt-3 space-y-2">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <Link href={l.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="border-t border-border">
-          <div className="container flex flex-col items-center justify-between gap-2 py-5 text-xs text-muted-foreground sm:flex-row">
-            <span>© {new Date().getFullYear()} {BRAND.name} · Powered by Aster Sports</span>
-            <span>Built for programs that take development seriously.</span>
-          </div>
+      <footer className="mt-20 border-t border-border bg-secondary/40">
+        <div className="container flex flex-col items-center justify-between gap-3 py-8 text-sm text-muted-foreground sm:flex-row">
+          <span className="font-semibold text-foreground">Aster Sports AAU</span>
+          <a href="mailto:frank@astersports.co" className="hover:text-foreground transition-colors">frank@astersports.co</a>
+          <span>© {new Date().getFullYear()} Aster Sports</span>
         </div>
       </footer>
     </div>

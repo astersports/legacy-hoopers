@@ -1,5 +1,5 @@
 /**
- * Public schedule — data + helpers for the Aster Sports schedule page.
+ * Public schedule — data + helpers for the Aster Sports AAU schedule page.
  * Reads get_public_team_schedule (org-gated SECDEF) fanned across the org's teams,
  * per the architect-locked spec (SCHEDULE_PAGE_SPEC_2026-06-26).
  *
@@ -37,7 +37,7 @@ export interface ScheduleEvent {
   gender: string | null;
 }
 
-const DEFAULT_ACCENT = "#4a8fd4";
+const DEFAULT_ACCENT = "#C9952E";
 const TZ = "America/New_York";
 export const DEFAULT_DURATION_MS = 2 * 60 * 60 * 1000; // app parity: 2h
 

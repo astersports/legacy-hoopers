@@ -1,7 +1,7 @@
 /**
- * Aster Sports platform — public read client for the Aster Sports site.
+ * Aster Sports platform — public read client for the Aster Sports AAU site.
  *
- * The Aster Sports website is a THIN PUBLIC CONSUMER of the Aster Sports
+ * The Aster Sports AAU website is a THIN PUBLIC CONSUMER of the Aster Sports
  * platform (charter Q4/Q5): it reads org-gated public data straight from the
  * platform's Supabase via the publishable anon key. No server, no data clone,
  * no tenant facts hardcoded beyond the org id below.
@@ -17,7 +17,7 @@ import { createClient } from "@supabase/supabase-js";
 const SUPABASE_URL = "https://vrwwpsbfbnveawqwbdmj.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_8semOyZSkr_QGr2hwmjDdQ_-U8KRtw4";
 
-/** Aster Sports org on the Aster Sports platform. */
+/** Aster Sports AAU org on the Aster Sports platform. */
 export const ORG_ID = "e3e95e21-3571-4e9a-985a-d5d01480d4a6";
 
 export const aster = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -59,7 +59,7 @@ export interface TeamRecord {
   games: GameRecord[];
 }
 
-const DEFAULT_ACCENT = "#4a8fd4"; // Aster cobalt (org brand)
+const DEFAULT_ACCENT = "#C9952E"; // Aster gold (org brand)
 
 // Camp / lab / placeholder teams never appear on the public site.
 const NON_COMPETITIVE = /roster lab|day camp|summer/i;

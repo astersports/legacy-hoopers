@@ -22,7 +22,7 @@ const DEFAULT_EMAIL = "frank@astersports.co";
 // MUST be ASCII-only: this string goes into the WWW-Authenticate HTTP header,
 // and Node throws ERR_INVALID_CHAR on any non-ASCII byte (e.g. an em dash),
 // which would suppress the browser's Basic Auth prompt entirely.
-const REALM = "Aster AAU private site";
+const REALM = "Aster Sports AAU private site";
 
 function allowedEmail(): string {
   return (process.env.SITE_ACCESS_EMAIL ?? DEFAULT_EMAIL).trim().toLowerCase();

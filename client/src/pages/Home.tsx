@@ -68,10 +68,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative mx-auto grid w-full max-w-md place-items-center">
-            <Starfield />
-            <div className="absolute h-72 w-72 rounded-full bg-gold/20 blur-3xl" aria-hidden />
-            <Logo className="relative h-60 w-60 drop-shadow-[0_8px_40px_rgba(201,149,46,0.4)] sm:h-72 sm:w-72" />
+          <div className="relative mx-auto flex aspect-[3/4] w-full max-w-sm items-center justify-center overflow-hidden rounded-2xl border border-border bg-[#151525] p-10 shadow-md lg:max-w-md">
+            <img
+              src="/aster-mark.png"
+              alt="Aster Sports AAU"
+              className="w-2/3 max-w-[260px]"
+              loading="eager"
+            />
           </div>
         </div>
 
