@@ -1,134 +1,103 @@
 /*
- * Records — live team records for Aster AAU, read from the Aster Sports
- * platform's public API (get_public_team_records). Clean & light.
+ * Records — live team records for Aster Sports, read from the Aster Sports
+ * platform's public API (get_public_team_records). Navy hero on top, everything
+ * else light. Presentation is enhanced here; the live data (useProgramRecords /
+ * programTotals) is passed straight through and never mutated.
  */
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Trophy, Sparkles } from "lucide-react";
 import { useProgramRecords } from "@/hooks/useProgramRecords";
-import { programTotals, type GameRecord, type TeamRecord } from "@/lib/aster";
-
-function fmtDate(iso: string): string {
-  const d = new Date(iso);
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" });
-}
-
-function ResultChip({ result }: { result: GameRecord["result"] }) {
-  const map = {
-    W: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-    L: "bg-rose-50 text-rose-700 ring-rose-600/20",
-    T: "bg-slate-100 text-slate-600 ring-slate-500/20",
-  } as const;
-  const cls = result ? map[result] : "bg-slate-100 text-slate-500 ring-slate-500/20";
-  return (
-    <span className={`inline-flex h-6 w-6 items-center justify-center rounded-md text-xs font-bold ring-1 ring-inset ${cls}`}>
-      {result ?? "·"}
-    </span>
-  );
-}
-
-function TeamCard({ team }: { team: TeamRecord }) {
-  const [open, setOpen] = useState(false);
-  const total = team.wins + team.losses + team.ties;
-  return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-secondary/50"
-        aria-expanded={open}
-      >
-        <div className="flex items-center gap-3">
-          <span className="h-9 w-1.5 rounded-full" style={{ backgroundColor: team.color }} />
-          <div>
-            <div className="text-base font-bold tracking-tight text-foreground">{team.name}</div>
-            <div className="text-xs text-muted-foreground">{total} games played</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <div className="text-lg font-extrabold tabular-nums text-foreground">
-              {team.wins}<span className="text-muted-foreground">–</span>{team.losses}
-              {team.ties > 0 && <span className="text-muted-foreground">–{team.ties}</span>}
-            </div>
-            <div className="text-[11px] uppercase tracking-wider text-muted-foreground">W–L</div>
-          </div>
-          <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
-        </div>
-      </button>
-
-      {open && (
-        <div className="border-t border-border">
-          {team.games.map((g) => (
-            <div key={g.game_id} className="flex items-center gap-3 border-b border-border/60 px-5 py-2.5 last:border-0">
-              <ResultChip result={g.result} />
-              <span className="w-12 shrink-0 text-xs text-muted-foreground">{fmtDate(g.played_at)}</span>
-              <span className="min-w-0 flex-1 truncate text-sm text-foreground">{g.opponent}</span>
-              {g.our_score != null && g.opponent_score != null ? (
-                <span className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
-                  {g.our_score}–{g.opponent_score}
-                </span>
-              ) : (
-                <span className="shrink-0 text-xs text-muted-foreground">—</span>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
+import { programTotals } from "@/lib/aster";
+import { StatTile, Pill } from "@/components/kit";
+import { Logo } from "@/components/Logo";
+import { TeamCard } from "@/components/records/TeamCard";
+import { RecordsControls } from "@/components/records/RecordsControls";
+import { HighlightCallout } from "@/components/records/HighlightCallout";
+import { WinRateChart } from "@/components/records/WinRateChart";
+import { sortRecords, topTeam, hottestTeam, type SortKey } from "@/components/records/recordsUtils";
 
 export default function Records() {
   const { records, loading, error } = useProgramRecords();
   const totals = programTotals(records);
+  const [sort, setSort] = useState<SortKey>("pct");
+
+  const ready = !loading && !error && records.length > 0;
+
+  // A SORTED COPY — the source `records` array is never mutated.
+  const sorted = useMemo(() => sortRecords(records, sort), [records, sort]);
+  const top = useMemo(() => topTeam(records), [records]);
+  const hottest = useMemo(() => hottestTeam(records), [records]);
 
   return (
-    <div className="container py-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">Team Records</h1>
-        <p className="mt-1 text-muted-foreground">Every published game across the program — updated from the live platform.</p>
-      </header>
+    <div>
+      {/* ── Navy hero with program-wide totals ── */}
+      <section className="hero-navy relative overflow-hidden text-white">
+        <div className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-gold/10 blur-3xl" aria-hidden />
+        <div className="container relative py-12 sm:py-16">
+          <div className="flex flex-wrap items-center gap-3">
+            <Pill icon={Trophy} onDark>Program records</Pill>
+            <Pill icon={Sparkles} onDark>Live from the platform</Pill>
+          </div>
+          <h1 className="mt-5 text-3xl font-extrabold tracking-tight sm:text-5xl">Team Records</h1>
+          <p className="mt-3 max-w-2xl text-base text-white/70">
+            Every published game across the program, updated straight from the live Aster Sports platform.
+          </p>
 
-      {!loading && !error && records.length > 0 && (
-        <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { label: "Wins", value: totals.wins },
-            { label: "Losses", value: totals.losses },
-            { label: "Win %", value: `${Math.round(totals.pct * 100)}%` },
-            { label: "Teams", value: totals.teams },
-          ].map((s) => (
-            <div key={s.label} className="rounded-xl border border-border bg-card p-4 shadow-sm">
-              <div className="text-2xl font-extrabold tabular-nums text-foreground">{s.value}</div>
-              <div className="text-xs uppercase tracking-wider text-muted-foreground">{s.label}</div>
+          {ready && (
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <StatTile value={totals.wins} label="Wins" onDark />
+              <StatTile value={totals.losses} label="Losses" onDark />
+              <StatTile value={Math.round(totals.pct * 100)} suffix="%" label="Win %" onDark />
+              <StatTile value={totals.teams} label="Teams" onDark />
             </div>
-          ))}
+          )}
         </div>
-      )}
+      </section>
 
-      {loading && (
-        <div className="space-y-3">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl border border-border bg-secondary/60" />
-          ))}
-        </div>
-      )}
+      {/* ── Light body ── */}
+      <div className="container py-10">
+        {loading && (
+          <div className="space-y-3">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-20 animate-pulse rounded-2xl border border-border bg-secondary/60" />
+            ))}
+          </div>
+        )}
 
-      {error && (
-        <div className="rounded-xl border border-border bg-card p-8 text-center">
-          <p className="font-medium text-foreground">Couldn't load records right now.</p>
-          <p className="mt-1 text-sm text-muted-foreground">Give it a moment and refresh — the scoreboard will be back.</p>
-        </div>
-      )}
+        {error && (
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-10 text-center shadow-sm">
+            <Logo className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 opacity-[0.06]" tone="plain" />
+            <p className="text-lg font-bold text-foreground">Couldn't load records right now.</p>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+              Give it a moment and refresh — the scoreboard will be back before the next tip-off.
+            </p>
+          </div>
+        )}
 
-      {!loading && !error && records.length === 0 && (
-        <div className="rounded-xl border border-border bg-card p-8 text-center text-muted-foreground">
-          No published games yet — but Coach Kenny is plotting something good.
-        </div>
-      )}
+        {!loading && !error && records.length === 0 && (
+          <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
+            <Logo className="pointer-events-none absolute -right-8 -bottom-8 h-40 w-40 opacity-[0.06]" tone="plain" />
+            <p className="text-lg font-bold text-foreground">No published games yet.</p>
+            <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+              The board is empty for now — but Coach Kenny is plotting something good. Check back after the next slate.
+            </p>
+          </div>
+        )}
 
-      <div className="space-y-3">
-        {records.map((team) => (
-          <TeamCard key={team.name} team={team} />
-        ))}
+        {ready && (
+          <>
+            <HighlightCallout top={top} hottest={hottest} />
+            <div className="mb-6">
+              <WinRateChart records={sorted} />
+            </div>
+            <RecordsControls sort={sort} onSort={setSort} />
+            <div className="space-y-3">
+              {sorted.map((team, i) => (
+                <TeamCard key={team.name} team={team} rank={i + 1} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

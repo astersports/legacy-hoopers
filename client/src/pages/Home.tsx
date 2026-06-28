@@ -1,5 +1,5 @@
 /*
- * Home — flagship Aster AAU landing. Aspirational, dynamic, every service in
+ * Home — flagship Aster Sports landing. Aspirational, dynamic, every service in
  * one place. Live program record blended with the showcase content model.
  */
 import { Link } from "wouter";
@@ -15,6 +15,26 @@ import { HighlightsReel } from "@/components/HighlightsReel";
 import { AppHub } from "@/components/AppHub";
 import { WeatherStrip } from "@/components/WeatherStrip";
 import ScrollReveal from "@/components/ScrollReveal";
+import { NextGameChip } from "@/components/home/NextGameChip";
+import { Starfield } from "@/components/home/Starfield";
+import { CredibilityStrip } from "@/components/home/CredibilityStrip";
+import { ProgramFinder } from "@/components/home/ProgramFinder";
+import { ComparisonTable } from "@/components/home/ComparisonTable";
+import { TestimonialCard } from "@/components/home/TestimonialCard";
+import { FaqAccordion } from "@/components/home/FaqAccordion";
+import { LocationsTeaser } from "@/components/home/LocationsTeaser";
+import { InterestCapture } from "@/components/home/InterestCapture";
+
+/** Hardcoded near-future next-game tip-off (drives the live countdown chip). */
+const NEXT_GAME = "2026-07-04T18:30:00";
+
+/** Outcome stats for the light outcomes band. */
+const OUTCOMES = [
+  { value: 92, suffix: "%", label: "Athletes who return" },
+  { value: 30, suffix: "+", label: "College commits" },
+  { value: 4.9, decimals: 1, suffix: "/5", label: "Family rating" },
+  { value: 15, suffix: "+", label: "Seasons coaching" },
+];
 
 export default function Home() {
   const { records, loading, error } = useProgramRecords();
@@ -27,7 +47,10 @@ export default function Home() {
       <section className="hero-navy relative overflow-hidden text-white">
         <div className="container grid items-center gap-12 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-28">
           <div className="min-w-0">
-            <Pill icon={Sparkles} onDark>{BRAND.region}</Pill>
+            <div className="flex flex-wrap items-center gap-3">
+              <Pill icon={Sparkles} onDark>{BRAND.region}</Pill>
+              <NextGameChip date={NEXT_GAME} />
+            </div>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.03] tracking-tight sm:text-6xl xl:text-7xl">
               {BRAND.tagline}
             </h1>
@@ -46,13 +69,14 @@ export default function Home() {
           </div>
 
           <div className="relative mx-auto grid w-full max-w-md place-items-center">
+            <Starfield />
             <div className="absolute h-72 w-72 rounded-full bg-gold/20 blur-3xl" aria-hidden />
             <Logo className="relative h-60 w-60 drop-shadow-[0_8px_40px_rgba(201,149,46,0.4)] sm:h-72 sm:w-72" />
           </div>
         </div>
 
         {/* Metrics band */}
-        <div className="container pb-16">
+        <div className="container pb-10">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {PROGRAM_METRICS.map((m) => (
               <StatTile
@@ -66,6 +90,11 @@ export default function Home() {
               />
             ))}
           </div>
+        </div>
+
+        {/* Credibility strip */}
+        <div className="container pb-16">
+          <CredibilityStrip />
         </div>
       </section>
 
@@ -83,6 +112,51 @@ export default function Home() {
           {SERVICES.map((s, i) => (
             <ScrollReveal key={s.key} delay={i * 60}>
               <ServiceCard s={s} compact />
+            </ScrollReveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* ── Find your program ── */}
+      <Section tone="muted">
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="Find your program"
+            title="Not sure where to start? Let's match you."
+            subtitle="Tell us the athlete's age and what they're chasing — we'll point you to the best-fit program."
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={80}>
+          <ProgramFinder />
+        </ScrollReveal>
+      </Section>
+
+      {/* ── Why Aster vs. a typical rec league ── */}
+      <Section>
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="The difference"
+            title="Why Aster, not a typical rec league."
+            subtitle="Same court. A completely different standard of development, communication and care."
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={80}>
+          <ComparisonTable />
+        </ScrollReveal>
+      </Section>
+
+      {/* ── Outcomes band ── */}
+      <Section tone="muted">
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="The results"
+            title="Development you can measure."
+          />
+        </ScrollReveal>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {OUTCOMES.map((o, i) => (
+            <ScrollReveal key={o.label} delay={i * 60}>
+              <StatTile value={o.value} label={o.label} suffix={o.suffix} decimals={o.decimals} />
             </ScrollReveal>
           ))}
         </div>
@@ -130,33 +204,63 @@ export default function Home() {
       <Section tone="muted">
         <SectionHeading eyebrow="How it works" title="From sign-up to standout in four steps." />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {JOURNEY.map((step) => (
-            <div key={step.n} className="relative rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <span className="font-display text-5xl font-extrabold text-gold/30">{step.n}</span>
-              <h3 className="mt-2 font-bold text-foreground">{step.title}</h3>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
-            </div>
+          {JOURNEY.map((step, i) => (
+            <ScrollReveal key={step.n} delay={i * 60}>
+              <div className="relative rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+                <span className="font-display text-5xl font-extrabold text-gold/30">{step.n}</span>
+                <h3 className="mt-2 font-bold text-foreground">{step.title}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </Section>
 
-      {/* ── Testimonials ── */}
+      {/* ── Locations teaser ── */}
       <Section>
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="Where we play"
+            title="Gyms across the tri-state."
+            subtitle="Home courts, tournament sites and training facilities — with directions in your pocket."
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={80}>
+          <LocationsTeaser />
+        </ScrollReveal>
+      </Section>
+
+      {/* ── Testimonials ── */}
+      <Section tone="muted">
         <SectionHeading eyebrow="Families & partners" title="Trusted across Westchester." />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          {TESTIMONIALS.map((t) => (
-            <figure key={t.name} className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-sm">
-              <div className="flex gap-0.5 text-gold">
-                {[0, 1, 2, 3, 4].map((i) => <Star key={i} className="h-4 w-4 fill-gold text-gold" />)}
-              </div>
-              <blockquote className="mt-3 flex-1 text-[15px] leading-relaxed text-foreground">"{t.quote}"</blockquote>
-              <figcaption className="mt-4 text-sm">
-                <span className="font-bold text-foreground">{t.name}</span>
-                <span className="block text-muted-foreground">{t.role}</span>
-              </figcaption>
-            </figure>
+          {TESTIMONIALS.map((t, i) => (
+            <ScrollReveal key={t.name} delay={i * 60}>
+              <TestimonialCard t={t} />
+            </ScrollReveal>
           ))}
         </div>
+      </Section>
+
+      {/* ── FAQ ── */}
+      <Section>
+        <ScrollReveal>
+          <SectionHeading
+            eyebrow="Good to know"
+            title="Questions, answered."
+            subtitle="The things families ask us most before their first season."
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={80}>
+          <FaqAccordion />
+        </ScrollReveal>
+      </Section>
+
+      {/* ── Interest capture ── */}
+      <Section tone="muted">
+        <ScrollReveal>
+          <InterestCapture />
+        </ScrollReveal>
       </Section>
 
       {/* ── Final CTA ── */}
