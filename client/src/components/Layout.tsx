@@ -15,11 +15,11 @@ const NAV = [
 function Brand() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <img src="/legacy-logo.png" alt="Legacy Hoopers" className="h-10 w-auto" />
+      <img src="/aster-mark.png" alt="Aster AAU" className="h-10 w-auto" />
       <span className="flex flex-col leading-none">
-        <span className="text-[15px] font-bold tracking-tight text-foreground">Legacy Hoopers</span>
+        <span className="text-[15px] font-bold tracking-tight text-foreground">Aster AAU</span>
         <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-          Westchester AAU
+          AAU Basketball
         </span>
       </span>
     </Link>
@@ -70,9 +70,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <footer className="mt-20 border-t border-border bg-secondary/40">
         <div className="container flex flex-col items-center justify-between gap-3 py-8 text-sm text-muted-foreground sm:flex-row">
-          <span className="font-semibold text-foreground">Legacy Hoopers</span>
+          <span className="font-semibold text-foreground">Aster AAU</span>
           <span>Live scores &amp; records · powered by Aster Sports</span>
-          <span>© {new Date().getFullYear()} Legacy Hoopers LLC</span>
+          <span>© {new Date().getFullYear()} Aster Sports</span>
         </div>
       </footer>
     </div>

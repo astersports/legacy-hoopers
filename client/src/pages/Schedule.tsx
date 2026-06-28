@@ -52,9 +52,9 @@ export default function Schedule() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-[#1d2430] to-[#27406e] text-white">
+      <section className="bg-gradient-to-br from-[#0F1119] to-[#222538] text-white">
         <div className="container py-8">
-          <div className="font-mono text-[11px] uppercase tracking-wider text-white/60">Legacy Hoopers · AAU + League</div>
+          <div className="font-mono text-[11px] uppercase tracking-wider text-white/60">Aster AAU · AAU + League</div>
           <h1 className="mt-1 text-4xl font-extrabold tracking-tight">Schedule</h1>
           <div className="mt-4 flex gap-2">
             <button onClick={() => downloadSchedule(upcoming)} className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-white/90 hover:bg-white/15">

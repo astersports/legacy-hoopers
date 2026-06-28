@@ -9,7 +9,7 @@ function esc(s: string): string {
 
 /** Build + download an .ics of upcoming events (games + tournaments; practices optional). */
 export function downloadSchedule(events: ScheduleEvent[], filename = "legacy-hoopers-schedule.ics") {
-  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Legacy Hoopers//Schedule//EN", "CALSCALE:GREGORIAN"];
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Aster AAU//Schedule//EN", "CALSCALE:GREGORIAN"];
   for (const e of events) {
     const title = e.kind === "practice" ? e.title || "Practice" : `${e.team_name}${e.opponent ? ` vs. ${e.opponent}` : ""}`;
     const loc = [e.location_name, e.location_address].filter(Boolean).join(", ");
@@ -35,7 +35,7 @@ export function downloadSchedule(events: ScheduleEvent[], filename = "legacy-hoo
 export async function shareSchedule() {
   const url = window.location.href;
   if (navigator.share) {
-    try { await navigator.share({ title: "Legacy Hoopers Schedule", url }); return; } catch { /* cancelled */ }
+    try { await navigator.share({ title: "Aster AAU Schedule", url }); return; } catch { /* cancelled */ }
   }
   try { await navigator.clipboard.writeText(url); } catch { /* no-op */ }
 }

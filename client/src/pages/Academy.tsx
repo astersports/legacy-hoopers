@@ -43,7 +43,7 @@ export default function Academy() {
             Academy<br /><span className="text-cobalt">Standards</span>
           </h1>
           <p className="text-white/60 text-base mt-4 max-w-lg">
-            The expectations, structure, and development system that define every Legacy Hooper.
+            The expectations, structure, and development system that define every Aster AAU player.
           </p>
         </div>
       </section>
@@ -151,7 +151,7 @@ export default function Academy() {
                 <h3 className="font-display font-800 text-xl uppercase text-white">Player Expectations</h3>
               </div>
               <ul className="space-y-3">
-                {["Arrive on time, ready to compete", "Respect all coaches, teammates, and opponents", "Give maximum effort in every drill and rep", "Accept coaching without excuses", "Represent Legacy Hoopers with class — on and off the court"].map((item, i) => (
+                {["Arrive on time, ready to compete", "Respect all coaches, teammates, and opponents", "Give maximum effort in every drill and rep", "Accept coaching without excuses", "Represent Aster AAU with class — on and off the court"].map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle className="w-4 h-4 text-cobalt flex-shrink-0 mt-0.5" />
                     <span className="text-white/70 text-sm">{item}</span>

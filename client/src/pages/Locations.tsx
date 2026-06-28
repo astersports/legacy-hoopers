@@ -185,7 +185,7 @@ export default function Locations() {
           <div className="mt-16 bg-gradient-to-br from-navy-light to-[#142f56] border border-cobalt/15 rounded-xl p-6 md:p-8">
             <h3 className="font-display font-800 text-lg uppercase text-white mb-4">Coverage Area</h3>
             <p className="text-white/60 text-sm mb-4">
-              Legacy Hoopers serves families across Northern Westchester and surrounding communities.
+              Aster AAU serves families across Northern Westchester and surrounding communities.
             </p>
             <div className="flex flex-wrap gap-2">
               {["Armonk", "Bedford", "Valhalla", "Mount Kisco", "Chappaqua", "Pleasantville", "Ossining", "Yorktown", "Katonah", "White Plains", "Scarsdale", "Briarcliff Manor"].map((town) => (
