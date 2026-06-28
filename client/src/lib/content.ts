@@ -1,5 +1,5 @@
 /*
- * Marketing + aspirational content for the Aster Sports template.
+ * Marketing + aspirational content for the Aster Sports AAU template.
  * All cosmetic — wired to live services later. Icons are lucide-react names.
  */
 import {

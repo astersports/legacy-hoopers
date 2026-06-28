@@ -1,5 +1,5 @@
 /*
- * Home — flagship Aster Sports landing. Aspirational, dynamic, every service in
+ * Home — flagship Aster Sports AAU landing. Aspirational, dynamic, every service in
  * one place. Live program record blended with the showcase content model.
  */
 import { Link } from "wouter";

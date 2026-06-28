@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 export const BRAND = {
-  name: "Aster Sports",
+  name: "Aster Sports AAU",
   short: "Aster",
   region: "Every team, every sport",
   tagline: "The most complete youth basketball program in the country.",
