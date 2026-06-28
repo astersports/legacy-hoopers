@@ -19,7 +19,10 @@ import type { Express, NextFunction, Request, Response } from "express";
  */
 
 const DEFAULT_EMAIL = "frank@astersports.co";
-const REALM = "Legacy Hoopers — private";
+// MUST be ASCII-only: this string goes into the WWW-Authenticate HTTP header,
+// and Node throws ERR_INVALID_CHAR on any non-ASCII byte (e.g. an em dash),
+// which would suppress the browser's Basic Auth prompt entirely.
+const REALM = "Legacy Hoopers private site";
 
 function allowedEmail(): string {
   return (process.env.SITE_ACCESS_EMAIL ?? DEFAULT_EMAIL).trim().toLowerCase();
