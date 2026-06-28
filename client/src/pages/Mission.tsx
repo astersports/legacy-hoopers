@@ -12,7 +12,7 @@ const values = [
 ];
 
 const timeline = [
-  { year: "2022", title: "Founded", desc: "Aster AAU launches with a single 10U team in Westchester County." },
+  { year: "2022", title: "Founded", desc: "Aster Sports launches with a single 10U team in Westchester County." },
   { year: "2023", title: "Expansion", desc: "Program grows to three teams (8U, 9U, 10U). First AAU tournament appearances." },
   { year: "2024", title: "Girls program", desc: "11U Girls team added — five teams competing across multiple circuits." },
   { year: "2025", title: "Academy model", desc: "Full academy structure: development labs, film review, and the Aster Sports platform." },
@@ -85,14 +85,14 @@ export default function Mission() {
 
       <section className="container py-14">
         <div className="mx-auto max-w-3xl rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Why Aster AAU?</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground">Why Aster Sports?</h2>
           <div className="mt-5 space-y-4 leading-relaxed text-muted-foreground">
             <p>
               Most youth basketball programs are glorified rec leagues with matching jerseys — participation
               over development, equal time over earned minutes, parent satisfaction over player growth.
             </p>
             <p>
-              <span className="font-semibold text-foreground">Aster AAU is different.</span> We operate as
+              <span className="font-semibold text-foreground">Aster Sports is different.</span> We operate as
               an academy — with standards, structure, and accountability that mirror the best high school and
               college programs in the country.
             </p>

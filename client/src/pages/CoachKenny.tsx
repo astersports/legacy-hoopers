@@ -27,7 +27,7 @@ export default function CoachKenny() {
           <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-text">Program leadership</span>
           <h1 className="mt-3 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">Coach Kenny</h1>
           <p className="mt-4 max-w-lg text-lg text-muted-foreground">
-            Founder, head coach, and the driving force behind Aster AAU's teaching-first philosophy.
+            Founder, head coach, and the driving force behind Aster Sports's teaching-first philosophy.
           </p>
         </div>
       </section>
@@ -39,7 +39,7 @@ export default function CoachKenny() {
               <h2 className="text-xl font-extrabold tracking-tight text-foreground">The educator-coach</h2>
               <div className="mt-5 space-y-4 leading-relaxed text-muted-foreground">
                 <p>
-                  Coach Kenny founded Aster AAU with a simple conviction: youth basketball coaching should
+                  Coach Kenny founded Aster Sports with a simple conviction: youth basketball coaching should
                   be held to the same standard as classroom teaching. With a{" "}
                   <span className="font-semibold text-foreground">Master's degree in Education</span>, he brings
                   pedagogical expertise most youth coaches simply don't have.
@@ -50,12 +50,12 @@ export default function CoachKenny() {
                   level, and developmental stage.
                 </p>
                 <p>
-                  Before founding Aster AAU, Coach Kenny spent years studying what separates elite
+                  Before founding Aster Sports, Coach Kenny spent years studying what separates elite
                   development programs from recreational leagues. The answer wasn't talent — it was structure,
                   accountability, and intentional teaching.
                 </p>
                 <p>
-                  That's what Aster AAU delivers. Not a rec league with better jerseys — a genuine academy
+                  That's what Aster Sports delivers. Not a rec league with better jerseys — a genuine academy
                   where every minute of practice is designed and every player's growth is tracked.
                 </p>
               </div>
