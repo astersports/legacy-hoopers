@@ -26,10 +26,10 @@ function aggregateTeamRecords(
       // Normalize team name
       let teamName = game.legacyTeam
         .replace(/\[\d+\]\s*/, "")
-        .replace("Legacy Hoopers (NY)", "Legacy")
-        .replace("Legacy Hoopers", "Legacy")
+        .replace("Legacy Hoopers (NY)", "Aster")
+        .replace("Legacy Hoopers", "Aster")
         .trim();
-      if (!teamName || teamName === "Legacy") teamName = "Legacy";
+      if (!teamName || teamName === "Aster") teamName = "Aster";
 
       if (!map.has(teamName)) {
         map.set(teamName, { team: teamName, wins: 0, losses: 0, ties: 0 });
@@ -209,7 +209,7 @@ export default function TournamentHistory() {
                         : "TBD"}
                     </span>
                     <span className="text-[10px] text-white/30 w-20 text-right hidden sm:block truncate">
-                      {game.legacyTeam.replace("Legacy Hoopers", "").replace("Legacy Hoopers (NY)", "").trim() || "Legacy"}
+                      {game.legacyTeam.replace("Legacy Hoopers", "").replace("Legacy Hoopers (NY)", "").trim() || "Aster"}
                     </span>
                   </div>
                 ))}
