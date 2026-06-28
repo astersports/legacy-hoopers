@@ -30,7 +30,7 @@ export function RecordsControls({
     const url = typeof window !== "undefined" ? window.location.href : "";
     try {
       if (typeof navigator !== "undefined" && navigator.share) {
-        await navigator.share({ title: "Aster Sports — Team Records", url });
+        await navigator.share({ title: "Aster Sports AAU — Team Records", url });
         return;
       }
       if (typeof navigator !== "undefined" && navigator.clipboard) {

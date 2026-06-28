@@ -1,5 +1,5 @@
 /**
- * Public schedule — data + helpers for the Aster Sports schedule page.
+ * Public schedule — data + helpers for the Aster Sports AAU schedule page.
  * Reads get_public_team_schedule (org-gated SECDEF) fanned across the org's teams,
  * per the architect-locked spec (SCHEDULE_PAGE_SPEC_2026-06-26).
  *

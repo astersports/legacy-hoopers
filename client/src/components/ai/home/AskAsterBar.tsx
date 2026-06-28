@@ -116,7 +116,7 @@ export function AskAsterBar() {
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Ask anything about Aster Sports…"
+              placeholder="Ask anything about Aster Sports AAU…"
               className="min-h-[44px] flex-1 bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
             <button

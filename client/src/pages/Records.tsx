@@ -1,5 +1,5 @@
 /*
- * Records — live team records for Aster Sports, read from the Aster Sports
+ * Records — live team records for Aster Sports AAU, read from the Aster Sports AAU
  * platform's public API (get_public_team_records). Navy hero on top, everything
  * else light. Presentation is enhanced here; the live data (useProgramRecords /
  * programTotals) is passed straight through and never mutated.

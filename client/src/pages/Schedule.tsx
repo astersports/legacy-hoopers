@@ -90,7 +90,7 @@ export default function Schedule() {
     <div>
       <section className="hero-navy text-white">
         <div className="container py-10">
-          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold-light">Aster Sports · AAU + League</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-gold-light">Aster Sports AAU · Travel + League</div>
           <h1 className="mt-1 text-4xl font-extrabold tracking-tight">Schedule</h1>
           <div className="mt-4">
             <HeroWeatherChip />
