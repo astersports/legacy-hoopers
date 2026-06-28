@@ -1,0 +1,169 @@
+ASTER — NEXT-LEVEL TECH SCOUTING PASS
+Pillar: Aster Basketball website (legacy-hoopers @ main)
+Date: 2026-06-28 · Architect-scoped research (not a build) · re-runnable
+Author: CC. Nothing here flips dark→live. Architect ratifies; Frank owns every go/no-go.
+
+═══════════════════════════════════════════════════════════════════════════
+PILLAR HEADER
+═══════════════════════════════════════════════════════════════════════════
+REPO / BRANCH: astersports/legacy-hoopers @ main
+WHAT THIS PILLAR IS FOR: Public program site for the Aster Sports AAU basketball
+  program — live records/scores/schedule, highlights, a programs/marketing surface,
+  and a (cosmetic) AI showcase. It is a THIN PUBLIC CONSUMER of the Aster platform.
+HARD INVARIANTS THAT APPLY TO THIS PILLAR (copied — only the ones that apply):
+  · HONEST CLAIMS — labels/copy/UI must never contradict the data. The AI features
+    here are cosmetic and MUST stay labeled "preview / illustrative"; mock output
+    must never be presented as a live model result or as real program data.
+    [GROUNDED: disclaimers e.g. client/src/components/ai/programs/AiProgramAdvisor.tsx:122,
+     AiProgramMatcher.tsx:273, AiPlanBuilder.tsx:103]
+  · THIN-CONSUMER DATA BOUNDARY — read program data ONLY through the org-gated public
+    SECDEF RPCs (get_public_team_records / get_public_team_schedule); never re-harden
+    tenant facts, never clone data, public youth data = first name + jersey only.
+    [GROUNDED: client/src/lib/aster.ts:15-23,77,83]
+NOT APPLICABLE TO THIS PILLAR (belong to the App / Hub / Studio): Stripe-webhook money
+  path, COPPA child-data/film gate, deterministic byte-stable Studio ops, owner-applied
+  schema migrations. This site has no money path, no child PII/film, and no schema of
+  its own. Any candidate touching those is out of scope here and flagged REJECT.
+
+═══════════════════════════════════════════════════════════════════════════
+STEP 1 — GROUND AGAINST THE REAL CODE
+═══════════════════════════════════════════════════════════════════════════
+STACK [GROUNDED: package.json]
+  · Frontend: React 19.2 + Vite 7.3 + Tailwind v4.1 + wouter 3.3 (SPA).
+  · Server: Express 4.21 + tRPC 11.6 — but mostly dead Manus scaffolding; the deployed
+    runtime is static file serving + a scheduled game-check. (server/_core/index.ts)
+  · Data: @supabase/supabase-js 2.108 → org-gated SECDEF RPCs. (client/src/lib/aster.ts)
+  · Charts: recharts 2.15. Motion/extras present: gsap 3.15, framer-motion 12.23,
+    streamdown 1.4 (LLM-markdown). Deploy: Railway, auto from main.
+
+CORE FLOWS
+  · Data path [GROUNDED lib/aster.ts]: anon Supabase client → rpc("get_public_team_records")
+    / public team schedule, ORG_ID-scoped (e3e95e21…). No money path, no auth-gated PII.
+  · User surfaces: Home (AI-showcase landing), Programs, Schedule (live), Records (live),
+    Highlights (cosmetic film room), Dashboard (cosmetic), Mission/CoachKenny.
+  · Privacy boundary: the only data leaving the browser is anon reads of already-public
+    program data. The AI features make NO network calls (faux/canned). [GROUNDED]
+
+WEAKEST / SLOWEST / FRAGILE [GROUNDED: pnpm build output 2026-06-28]
+  W1. Bundle: a single entry chunk index.js = 1,467 kB (384 kB gz); Vite warns ">500 kB".
+      NO code-splitting anywhere (no React.lazy / Suspense / manualChunks). recharts +
+      the whole ai/* tree ship in the entry chunk even on routes that don't use them.
+  W2. index.html = 368 kB (105 kB gz) — abnormally heavy for an SPA shell; the
+      vite-plugin-manus-runtime inlines a large debug/runtime blob. [GROUNDED: build]
+  W3. Images: ~5 MB of unoptimized PNGs — aster-logo-dark.png 2.19 MB, aster-logo.png /
+      aster-mark.png / favicon.png 1.04 MB each (three are byte-identical copies of the
+      same mark). The logo renders at ≤256 px. [GROUNDED: ls client/public/*.png]
+  W4. CSR-only: the server returns an empty shell; a curl of "/" has no rendered content,
+      so a marketing/records site gets poor SEO + slow first paint. [GROUNDED this session]
+  W5. Possibly-dead heavy deps after the redesign: gsap, framer-motion, streamdown may no
+      longer be imported by live routes. [FIT — needs a grep before removal]
+  W6. The "agentic AI" surfaces (AskAsterBar / AsterIntelligence) are faux-streamed canned
+      text — great as a demo, not yet a real assistant. [GROUNDED]
+
+═══════════════════════════════════════════════════════════════════════════
+STEP 2/3 — SCOUTED CANDIDATES (each: what · where it fits · win · cost ·
+privacy · gate · invariant-collision · lean)
+═══════════════════════════════════════════════════════════════════════════
+
+C1. ROUTE-LEVEL CODE-SPLITTING + manualChunks  [GROUNDED technique]
+  What: React.lazy + <Suspense> per route in App.tsx, and Vite build.rollupOptions.output
+    .manualChunks to peel recharts and components/ai/* into async chunks.
+  Fits: App.tsx Router; the recharts-heavy Dashboard/Records and the ai/* tree (W1).
+  Win: entry JS 1.47 MB → estimated 300–500 kB; FCP/TTI drop materially on 4G; the build
+    warning clears. (Re-measure as the acceptance number.)
+  Cost: low (a day); no new dep; no data movement.
+  Privacy: none.
+  Gate: 🟢 ROUTINE. Invariant collision: none. Lean: PROTOTYPE → ship.
+
+C2. IMAGE OPTIMIZATION (WebP/AVIF + dedupe + dimensions)  [GROUNDED]
+  What: convert the PNG marks to WebP/AVIF, serve one shared asset (drop the 3 duplicate
+    1 MB copies + the 2.19 MB dark variant), add width/height to stop layout shift.
+  Fits: W3 (client/public/*.png used by Logo.tsx, og/apple-touch icons, index.html).
+  Win: ~5 MB → <200 kB of image weight; faster paint; lower bandwidth; better CLS.
+  Cost: low, one-time — BUT no image tool exists in this build env; do it in CI (sharp/
+    squoosh) or as a one-time local conversion. (No code refactor.)
+  Privacy: none. Gate: 🟢 ROUTINE. Collision: none. Lean: ship.
+
+C3. DEPENDENCY PRUNE  [FIT — verify first]
+  What: grep live routes for gsap / framer-motion / streamdown; remove if unused.
+  Fits: W5; also helps the repo's 85 open Dependabot alerts (2 critical / 28 high).
+  Win: smaller bundle + smaller vuln surface. Cost: low. Privacy: none.
+  Gate: 🟢 ROUTINE (a dep bump/removal). Collision: none. Lean: verify usage, then ship.
+
+C4. REAL "ASK ASTER" ASSISTANT (Claude API + RAG over PUBLIC program data)  [GROUNDED fit]
+  What: wire the cosmetic AskAsterBar / AsterIntelligence to the Anthropic API, grounded
+    (RAG) ONLY on this program's PUBLIC data — records, schedule, FAQ pulled from the same
+    SECDEF RPCs the site already reads. This is the "agentic AI" you liked, made real:
+    "when's 10U Black's next game?", "what's our record vs Rivertown?".
+  Fits: client/src/components/ai/home/AskAsterBar.tsx (+ the program advisor).
+  Win: a genuinely useful, on-brand program concierge instead of canned text.
+  Cost: Anthropic API key + a spend ceiling; ~1–3 s latency; NEW SUB-PROCESSOR (Anthropic).
+  Privacy / sub-processor: a real user's typed question + PUBLIC program data would leave
+    to Anthropic. NO child PII, NO auth data, NO money data on this path. BEFORE any prod
+    flag: (a) publish an AI/sub-processor disclosure line, (b) add an input guard that
+    refuses/strips PII, (c) keep it behind its OWN gated flag, fully quarantined from the
+    records/schedule render path. Honest-claims: relabel "preview" → live only once real.
+  Gate: 🔴 HUMAN — new sub-processor + spend + it changes user-visible output. Also 🟡 BENCH.
+  ACCEPTANCE BAR (declare before the run): on a fixed 30-question eval set built from the
+    program's public data, ≥90% answers factually correct AND ZERO fabricated games/scores/
+    dates (a single hallucinated fact = fail). Re-run the canned baseline in the same pass.
+  Collision: would break HONEST-CLAIMS and the thin-consumer boundary IF wired into the
+    records/schedule display or fed non-public data — so it must stay a quarantined, gated,
+    public-data-only feature. Lean: PILOT in an offline eval harness first; gated flag after.
+
+C5. PRERENDER / SSG FOR THE MARKETING ROUTES  [GROUNDED technique]
+  What: prerender static routes (Home/Programs/Mission/CoachKenny) to real HTML at build
+    (vite-plugin-prerender, or move the marketing shell to Astro); keep Schedule/Records/
+    Dashboard client-hydrated against the live RPCs.
+  Fits: W4 (CSR-only shell). Win: crawlable HTML + near-instant FCP for the entry pages;
+    better share/preview cards. Cost: medium (build-pipeline change). Privacy: none.
+  Gate: 🟢/🟡 (build infra). Collision: none (data routes stay live). Lean: PROTOTYPE.
+
+C6. EDGE-CACHE THE PUBLIC RPC READS  [FIT]
+  What: a short-TTL cache (Supabase edge function or a thin cache layer) in front of
+    get_public_team_records / schedule, instead of every client hitting the RPC directly.
+  Fits: lib/aster.ts read path. Win: lower latency + fewer anon RPC hits + resilience to
+    a slow DB. Cost: low-med. Privacy: stays inside Supabase — NO new sub-processor.
+  Gate: 🟢 ROUTINE. Collision: none (read-only public data). Lean: PROTOTYPE.
+
+C7. WEB-VITALS + PRODUCT ANALYTICS  [FIT — PostHog already exists org-wide]
+  What: instrument FCP/LCP/TTI + basic engagement (PostHog is already an org dependency).
+  Win: measured baselines to justify/verify C1/C2/C5. Cost: low. Privacy: PostHog already
+    a platform sub-processor; respect the existing geo/PII minimization posture — no new
+    PII from a public marketing site. Gate: 🟢. Lean: ship.
+
+C8. a11y AUTOMATION IN CI (axe-core) + finish the audit a11y items  [GROUNDED]
+  What: add @axe-core/cli to CI; close the open a11y items from the bug audit (lightbox
+    focus already fixed; share-button nested-interactive, motion-safe on a few pings).
+  Win: keeps the parent-facing site accessible + regression-proof. Cost: low.
+  Gate: 🟢 ROUTINE. Collision: none. Lean: ship.
+
+REJECTED ON THIS PILLAR
+  R1. Real computer-vision film analysis (the cosmetic AiAutoClip): genuine CV is a large
+      build AND it touches CHILD FILM → COPPA child-gate. That belongs to the App/Hub
+      pillar, never the public marketing site. REJECT here; keep it cosmetic + labeled.
+  R2. Any generative/nondeterministic content wired INTO the records/schedule display:
+      breaks HONEST-CLAIMS + the thin-consumer boundary. REJECT on the data path; AI stays
+      quarantined in its own clearly-labeled section.
+
+═══════════════════════════════════════════════════════════════════════════
+STEP 4 — PRIORITIZATION (sequenced: highest ROI / lowest risk first)
+═══════════════════════════════════════════════════════════════════════════
+  P1  C1 Code-split + manualChunks   🟢  — unblocks the perf budget; biggest single win.
+  P2  C2 Image optimization          🟢  — ~5 MB → <200 kB; pairs with P1 for fast paint.
+  P3  C3 Dependency prune            🟢  — smaller bundle + cuts Dependabot surface.
+  P4  C4 Real "Ask Aster" assistant  🔴🟡 — the headline agentic-AI; OFFLINE EVAL first,
+          gated public-data-only flag after ratify + key/spend ceiling. Gates the rest of
+          the "make the AI real" arc.
+  P5  C5 Prerender/SSG               🟢/🟡 — SEO + FCP for the marketing entry pages.
+  P6  C6 Edge-cache public reads     🟢  — latency + resilience on the data path.
+  P7  C7 Web-vitals/analytics        🟢  — measurement to verify P1/P2/P5.
+  P8  C8 a11y CI + audit closeouts   🟢  — accessibility regression guard.
+
+P1–P3 + P5–P8 are routine perf/quality and can proceed as normal PRs once ratified.
+P4 is the only gated item: it must clear the declared offline acceptance bar AND land a
+sub-processor disclosure + PII input-guard BEFORE any prod flag, and stay quarantined from
+the deterministic public-data render path. Frank owns the Anthropic key + spend ceiling.
+
+RE-RUN: re-runnable per pillar on cadence/request. This pass = a doc only; code lands later
+as a normal dark-flagged gated PR after the Architect ratifies.
