@@ -1,0 +1,55 @@
+name: CI
+
+# Runs the same gates we run locally — typecheck, tests, production build —
+# on every PR to main and on pushes to main. A red check blocks the merge
+# button so a type error, a broken test, or a broken build can't ride into
+# main unnoticed. This is the "green CI" the repo workflow relies on.
+#
+# Package manager is pnpm (pnpm-lock.yaml; version pinned by package.json
+# "packageManager"). There is no `lint` script in package.json, so the gate
+# is: pnpm check (tsc --noEmit) -> pnpm test (vitest run) -> pnpm build
+# (vite build + esbuild server bundle).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: check · test · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        # Version comes from package.json "packageManager".
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check
+        run: pnpm check
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
