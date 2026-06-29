@@ -15,6 +15,7 @@ import {
 import { BRAND, REGISTER_URL } from "@/lib/brand";
 import { JOURNEY } from "@/lib/content";
 import { AgentScanConsole } from "@/components/agent/AgentScanConsole";
+import { AskAsterScout } from "@/components/agent/AskAsterScout";
 import { FRONTIER_SCAN } from "@/lib/agentScans";
 
 const LOGO_URL = BRAND.logo;
@@ -182,6 +183,10 @@ function HeroSection() {
           </div>
           <div className={`mt-8 delay-500 ${rise}`}>
             <AgentScanConsole scan={FRONTIER_SCAN} />
+          </div>
+          {/* Live concierge — mounts only when VITE_SCOUT_ENDPOINT is wired */}
+          <div className={`mt-3.5 delay-500 ${rise}`}>
+            <AskAsterScout />
           </div>
         </div>
       </div>
